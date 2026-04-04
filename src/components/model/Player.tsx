@@ -1,21 +1,22 @@
 import { useKeyboardControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { CapsuleCollider, RigidBody, useRapier } from '@react-three/rapier';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 type PlayerProps = {
   active?: boolean;
+  initialPosition?: [number, number, number];
 };
 
-function Player({ active = true }: PlayerProps) {
+function Player({ active = true, initialPosition = [-6, 0, 0] }: PlayerProps) {
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
   const body = useRef<any>(null);
   const { rapier, world } = useRapier();
   const { camera } = useThree();
   /**
-   * Movement vectors (giống BaseCharacter)
+   * Movement vectors
    */
   const direction = new THREE.Vector3();
   const frontVector = new THREE.Vector3();
@@ -26,7 +27,7 @@ function Player({ active = true }: PlayerProps) {
   /**
    * Jump logic
    */
-  const jump = () => {
+  const jump = useCallback(() => {
     if (!body.current) return;
 
     const origin = body.current.translation();
@@ -38,7 +39,7 @@ function Player({ active = true }: PlayerProps) {
     if (hit && hit.timeOfImpact < 0.15) {
       body.current.applyImpulse({ x: 0, y: 1, z: 0 });
     }
-  };
+  }, [rapier.Ray, world]);
 
   useEffect(() => {
     if (!active) return;
@@ -47,7 +48,7 @@ function Player({ active = true }: PlayerProps) {
       (value) => value && jump(),
     );
     return () => unsubscribeJump();
-  }, [active, subscribeKeys]);
+  }, [active, jump, subscribeKeys]);
 
   useFrame((state) => {
     if (!active || !body.current) return;
@@ -91,14 +92,13 @@ function Player({ active = true }: PlayerProps) {
 
   return (
     <>
-      {/* Player */}
       <RigidBody
         ref={body}
         colliders={false}
         enabledRotations={[false, false, false]}
         linearDamping={0.5}
         angularDamping={0.5}
-        position={[-6, 0, 0]}
+        position={initialPosition}
         friction={1}>
         <CapsuleCollider args={[0.5, 0.2]} />
       </RigidBody>

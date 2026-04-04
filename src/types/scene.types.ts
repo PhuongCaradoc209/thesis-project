@@ -1,0 +1,63 @@
+// 1. SCENES
+export interface Scene {
+  sceneId: string;
+  environmentConfig: { sunPosition: number[]; fogColor: string; fogNear: number; fogFar: number };
+  playerConfig: { position: number[]; };
+  floorConfig: { texture: string[]; args: number[]; position: number[] };
+}
+
+// 2. SCENE ASSETS (Low-poly models)
+export interface SceneAsset {
+  assetId: string;
+  url: string; // Firebase Storage URL
+  collisionId?: string | null;
+}
+
+// 3. COLLISION MODELS (Physics bounding boxes)
+export interface CollisionModel {
+  collisionId: string;
+  url: string;
+  position: number[];
+}
+
+// 4. SCENE PLACEMENTS (Instancing assets into scenes)
+export interface ScenePlacement {
+  placementId: string;
+  sceneId: string;
+  assetId: string;
+  position: number[];
+  rotation: number[];
+  scale: number;
+}
+
+// 5. ARTIFACTS (High-poly models & i18n Data for Review Mode)
+export interface Artifact {
+  artifactId: string;
+  title: string;
+  type?: string;
+  subtitle: string;
+  modelUrl: string;
+  cameraPosition: number[];
+  dynasty?: string;
+  material?: string;
+  year?: number | string;
+  history: string;
+}
+
+// 6. INTERACTION POINTS (Hotspots attached to placements)
+export interface InteractionPoint {
+  pointId: string;
+  placementId: string;
+  artifactId: string;
+  positionOffset: number[];
+}
+
+// 7. TELEPORT POINTS (Fast travel locations)
+export interface TeleportPoint {
+  teleportId: string;
+  sceneId: string;
+  associatedPlacementId?: string | null;
+  position: number[];
+  lookAt: number[];
+  label: string;
+}
