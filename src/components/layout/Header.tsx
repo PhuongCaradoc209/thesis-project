@@ -52,7 +52,7 @@ const Header = () => {
           VIETNAM VIRTUAL
         </NavLink>
 
-        <div className='relative hidden items-center gap-8 md:flex' onMouseLeave={() => setHoveredKey(null)}>
+        <div className='absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex' onMouseLeave={() => setHoveredKey(null)}>
           {navItems.map((item) => {
             const isActive = activeKey === item.key;
             const showUnderline = hoveredKey === item.key || (!hoveredKey && isActive);

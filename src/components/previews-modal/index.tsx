@@ -114,18 +114,18 @@ function InspectModal() {
                           <InfoIcon size={20} className='text-primary' />
                           <p className='title text-primary text-xl'>Thống kê di vật</p>
                         </div>
-                        <p className='text-subtle mt-1 text-sm uppercase'>
-                          Cổ vật <span>{previewConfig.dynasty ?? 'Chưa rõ'}</span>
+                        <p className='text-secondary mt-1 text-sm uppercase'>
+                          Cổ vật triều <span>{previewConfig.dynasty ?? 'Chưa rõ'}</span>
                         </p>
 
-                        <div className='border-l-contrast mt-6 border-l-4 pl-2'>
+                        <div className='border-l-primary mt-6 border-l-4 pl-2'>
                           <p className='text-neutral-900'>
                             Chất liệu: <span>{previewConfig.material ?? 'Chưa rõ'}</span>
                           </p>
                         </div>
-                        <div className='border-l-contrast mt-6 border-l-4 pl-2'>
+                        <div className='border-l-primary mt-6 border-l-4 pl-2'>
                           <p className='text-neutral-900'>
-                            Năm <span>{previewConfig.year ?? 'Chưa rõ'}</span>
+                            Năm: <span>{previewConfig.year ?? 'Chưa rõ'}</span>
                           </p>
                         </div>
 

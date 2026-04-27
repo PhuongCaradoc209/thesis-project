@@ -41,11 +41,11 @@ function LoadingPage({ initialProgress = 0, statusText = 'Preparing 3D Experienc
 
   // Navigate to tour when data fetching succeeds
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && sceneId) {
       setProgress(100);
       setCurrentStatus('Finalizing Scene...');
       const timer = setTimeout(() => {
-        navigate(NAV_PATH.TOUR.replace(':sceneId', sceneId || ''));
+        navigate(NAV_PATH.TOUR.replace(':sceneId', sceneId), { replace: true });
       }, 1000); // reduced wait time
       return () => clearTimeout(timer);
     }
@@ -71,11 +71,6 @@ function LoadingPage({ initialProgress = 0, statusText = 'Preparing 3D Experienc
 
         <p className='text-secondary text-lg font-medium tabular-nums'>{currentStatus}</p>
       </div>
-
-      {/* Subtle Hint */}
-      {/* <p className='animate-pulse text-xs text-gray-500'>
-        {progress < 100 ? 'Please wait while we render the virtual landscape' : 'Initialization Complete'}
-      </p> */}
 
       <p className='text-md animate-pulse text-gray-500 italic'>Bạn có biết?</p>
     </div>

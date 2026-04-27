@@ -5,10 +5,10 @@ import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { useEffect, type ReactNode } from 'react';
 import { useTourismStore } from '../../store/useTourismStore';
+import type { Scene } from '../../types/scene.types';
+import Player from '../player/Player';
 import Floor from './Floor';
 import Lights from './Lights';
-import Player from '../model/Player';
-import type { Scene } from '../../types/scene.types';
 
 type BaseSceneProps = {
   children?: ReactNode;
@@ -19,7 +19,9 @@ function BaseScene({ children, sceneConfig }: BaseSceneProps) {
   const pause = useTourismStore((state) => state.pause);
 
   // Use scene config defaults or fallback
-  const defaultSun: [number, number, number] = (sceneConfig?.environmentConfig?.sunPosition as [number, number, number]) || [10, 10, 10];
+  const defaultSun: [number, number, number] = (sceneConfig?.environmentConfig?.sunPosition as [number, number, number]) || [
+    10, 10, 10,
+  ];
   const defaultFogColor = sceneConfig?.environmentConfig?.fogColor || '#ffffff';
   const defaultFogNear = sceneConfig?.environmentConfig?.fogNear || 30;
   const defaultFogFar = sceneConfig?.environmentConfig?.fogFar || 100;
@@ -56,12 +58,16 @@ function BaseScene({ children, sceneConfig }: BaseSceneProps) {
         <Canvas flat shadows>
           {pause || <PointerLockControls makeDefault />}
           <fog attach='fog' args={[defaultFogColor, defaultFogNear, defaultFogFar]} />
-          <Physics paused={pause} debug>
+          <Physics paused={pause} >
             {perfVisible && <Perf position='top-left' />}
             <group visible={!pause}>
               <Sky sunPosition={sunPosition as [number, number, number]} turbidity={8} rayleigh={0.5} />
-              <Lights />
-              <Floor />
+              <Lights sunPosition={sunPosition as [number, number, number]} />
+              <Floor
+                position={(sceneConfig?.floorConfig?.position as [number, number, number]) || [-0.2, -3.52, 0]}
+                args={(sceneConfig?.floorConfig?.args as [number, number]) || [30, 30]}
+                textures={sceneConfig?.floorConfig?.texture}
+              />
               <Player active={!pause} initialPosition={initialPlayerPos} />
               {children}
             </group>

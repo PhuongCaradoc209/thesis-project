@@ -8,17 +8,27 @@ type FloorProps = {
   color?: string;
   position?: [number, number, number];
   args?: [number, number];
+  textures?: string[];
 };
 
-function Floor({ rotation = [-Math.PI / 2, 0, 0], color = '#ffffff', position = [-0.2, -3.52, 0], args = [30, 30] }: FloorProps) {
+const DEFAULT_TEXTURES = [
+  '/tuduc/floor-1/PavingStones146_1K-JPG_Color.jpg',
+  '/tuduc/floor-1/PavingStones146_1K-JPG_NormalGL.jpg',
+  '/tuduc/floor-1/PavingStones146_1K-JPG_Roughness.jpg',
+  '/tuduc/floor-1/PavingStones146_1K-JPG_AmbientOcclusion.jpg',
+];
+
+function Floor({
+  rotation = [-Math.PI / 2, 0, 0],
+  color = '#ffffff',
+  position = [-0.2, -3.52, 0],
+  args = [80, 30],
+  textures = DEFAULT_TEXTURES,
+}: FloorProps) {
   const ref = useRef<THREE.Mesh>(null!);
 
-  const [colorMap, normalMap, roughnessMap, aoMap] = useTexture([
-    '/tuduc/floor-1/PavingStones146_1K-JPG_Color.jpg',
-    '/tuduc/floor-1/PavingStones146_1K-JPG_NormalGL.jpg',
-    '/tuduc/floor-1/PavingStones146_1K-JPG_Roughness.jpg',
-    '/tuduc/floor-1/PavingStones146_1K-JPG_AmbientOcclusion.jpg',
-  ]);
+  const loadedTextures = useTexture(textures.length >= 3 ? textures : DEFAULT_TEXTURES);
+  const [colorMap, normalMap, roughnessMap, aoMap] = Array.isArray(loadedTextures) ? loadedTextures : [loadedTextures];
 
   colorMap.colorSpace = THREE.SRGBColorSpace;
 

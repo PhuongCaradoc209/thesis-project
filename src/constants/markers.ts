@@ -16,7 +16,7 @@ export const MARKER_DATA: MarkerData[] = [
     latitude: 10.0663,
     longitude: 105.7337,
     thumbnail: '/denhung/DenHung.jpg',
-    sceneId: 'DenHung',
+    sceneId: 'lo1jCATp6QcaQFFAUz6G',
     name: 'Đền Hùng',
     description:
       'Đền Hùng là quần thể di tích lịch sử quốc gia đặc biệt quan trọng của Việt Nam, gắn liền với truyền thuyết về nguồn gốc dân tộc Việt Nam.',

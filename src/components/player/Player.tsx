@@ -3,6 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { CapsuleCollider, RigidBody, useRapier } from '@react-three/rapier';
 import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useTourismStore } from '../../store/useTourismStore';
 
 type PlayerProps = {
   active?: boolean;
@@ -15,6 +16,10 @@ function Player({ active = true, initialPosition = [-6, 0, 0] }: PlayerProps) {
   const body = useRef<any>(null);
   const { rapier, world } = useRapier();
   const { camera } = useThree();
+
+  const teleportTarget = useTourismStore((state) => state.teleportTarget);
+  const clearTeleport = useTourismStore((state) => state.clearTeleport);
+
   /**
    * Movement vectors
    */
@@ -89,6 +94,28 @@ function Player({ active = true, initialPosition = [-6, 0, 0] }: PlayerProps) {
     camera.rotation.order = 'YXZ';
     camera.rotation.y = -Math.PI / 2;
   }, [camera]);
+
+  useEffect(() => {
+    if (!teleportTarget || !body.current) return;
+
+    const timeout1 = setTimeout(() => {
+      const [px, py, pz] = teleportTarget.position;
+      body.current.setTranslation({ x: px, y: py, z: pz }, true);
+      body.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+
+      const [tx, ty, tz] = teleportTarget.lookAt;
+      camera.position.set(px, py + 1, pz);
+      camera.lookAt(tx, ty, tz);
+
+      const timeout2 = setTimeout(() => {
+        clearTeleport();
+      }, 100);
+
+      return () => clearTimeout(timeout2);
+    }, 300);
+
+    return () => clearTimeout(timeout1);
+  }, [teleportTarget, camera, clearTeleport]);
 
   return (
     <>

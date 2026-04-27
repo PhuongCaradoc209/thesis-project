@@ -1,10 +1,5 @@
 import { Outlet } from 'react-router';
 
-/**
- * LoadingLayout
- * Provides a clean, full-screen container for cinematic or loading pages.
- * Bypasses the standard Header and Footer found in MainLayout.
- */
 const LoadingLayout = () => {
   return (
     <div

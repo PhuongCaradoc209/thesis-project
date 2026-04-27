@@ -92,11 +92,12 @@ const AboutSection = () => (
           <p>
             Chào mừng bạn đến với <strong>VIETNAM VIRTUAL</strong>, nơi chúng tôi kết hợp tinh hoa lịch sử với sức mạnh công nghệ
             thực tế ảo hiện đại nhất. Chúng tôi không chỉ cung cấp hình ảnh; chúng tôi mở ra cánh cửa dẫn bạn vào lòng các di tích
-            triều đại patch.
+            triều đại.
           </p>
           <p>
-            Bằng việc quét laser 3D chính xác đến từng milimet và tái hiện âm thanh môi trường đa chiều, mỗi bước đi ảo là một sự
-            kết nối sâu sắc với hồn thiêng sông núi.
+            Bằng việc mô phỏng lại các di tích với độ trung thực cao nhất, chúng tôi mang đến cho bạn trải nghiệm sống động như
+            thật, cho phép bạn khám phá mọi ngóc ngách, chiêm ngưỡng từng chi tiết tinh xảo và cảm nhận được sự vĩ đại của các
+            công trình kiến trúc cổ kính.
           </p>
         </div>
         <div className='border-outline/10 mt-10 grid grid-cols-2 gap-8 border-t pt-10'>

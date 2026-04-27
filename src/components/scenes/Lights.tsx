@@ -1,15 +1,19 @@
-const Lights = () => {
+type LightsProps = {
+  sunPosition?: [number, number, number];
+};
+
+const Lights = ({ sunPosition = [10, 20, 10] }: LightsProps) => {
   return (
     <>
-      <ambientLight intensity={2} />
+      <ambientLight intensity={0.8} />
       <directionalLight
         castShadow
-        position={[10, 20, 10]}
+        position={sunPosition}
         shadow-radius={6}
-        intensity={1.5}
+        intensity={4}
         shadow-mapSize={[2048, 2048]}
         shadow-bias={-0.0001}>
-        {/* <orthographicCamera attach='shadow-camera' args={[-20, 20, 20, -20, 0.1, 50]} /> */}
+        <orthographicCamera attach='shadow-camera' args={[-50, 50, 50, -50, 0.1, 100]} />
       </directionalLight>
     </>
   );

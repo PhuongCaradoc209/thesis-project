@@ -1,4 +1,4 @@
-import { MapPinIcon } from '@phosphor-icons/react';
+﻿import { MapPinIcon } from '@phosphor-icons/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useMemo } from 'react';
 import Map, { Marker, NavigationControl, Popup, Source } from 'react-map-gl/maplibre';
@@ -33,10 +33,7 @@ export default function TerrainMap({
 }: TerrainMapProps) {
   const navigate = useNavigate();
   const mapStyle = `https://api.maptiler.com/maps/satellite-v4/style.json?key=${MAPTILER_KEY}`;
-  const terrainSourceUrl = useMemo(
-    () => `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`,
-    [],
-  );
+  const terrainSourceUrl = useMemo(() => `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`, []);
 
   const displayedMarker = useMemo(() => {
     const activeId = hoveredSiteId || selectedSiteId;

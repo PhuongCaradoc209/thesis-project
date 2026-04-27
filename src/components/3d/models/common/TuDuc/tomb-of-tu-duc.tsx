@@ -14,7 +14,12 @@ import type { Mesh } from 'three';
 
 const GLTF_URL = 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1774656066/tomb_of_tu_duc-transformed_ynnuku.glb';
 
-export function TuDucModel(props: ComponentProps<'group'>) {
+export function TuDucModel({
+  position = [-0.082, -0.238, 0.668],
+  rotation = [-0.575, -0.132, -0.121],
+  scale = 1.25,
+  ...props
+}: ComponentProps<'group'>) {
   const { nodes, materials } = useGLTF(GLTF_URL);
   const meshes = [
     { geometry: (nodes.Model_material1_0 as Mesh).geometry, material: materials.material1 },
@@ -30,9 +35,9 @@ export function TuDucModel(props: ComponentProps<'group'>) {
           geometry={m.geometry}
           material={m.material}
           raycast={() => null}
-          position={[-0.082, -0.238, 0.668]}
-          rotation={[-0.575, -0.132, -0.121]}
-          scale={1.25}
+          position={position as any}
+          rotation={rotation as any}
+          scale={scale as any}
           castShadow
         />
       ))}
