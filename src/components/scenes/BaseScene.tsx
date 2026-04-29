@@ -1,4 +1,4 @@
-import { KeyboardControls, PointerLockControls, Sky } from '@react-three/drei';
+import { KeyboardControls, PointerLockControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import { useControls } from 'leva';
@@ -7,9 +7,9 @@ import { useEffect, type ReactNode } from 'react';
 import { useTourismStore } from '../../store/useTourismStore';
 import type { Scene } from '../../types/scene.types';
 import Player from '../player/Player';
-import Floor from './Floor';
 import Lights from './Lights';
-import { SplatFloor } from './FlashFloor';
+import { SplatFloor } from './SplatFloor';
+import { AnimateSky } from './AnimateSky';
 
 type BaseSceneProps = {
   children?: ReactNode;
@@ -56,18 +56,18 @@ function BaseScene({ children, sceneConfig }: BaseSceneProps) {
           { name: 'right', keys: ['ArrowRight', 'KeyD'] },
           { name: 'jump', keys: ['Space'] },
         ]}>
-        <Canvas flat shadows>
+        <Canvas flat shadows dpr={[1, 1.5]}>
           {pause || <PointerLockControls makeDefault />}
           <fog attach='fog' args={[defaultFogColor, defaultFogNear, defaultFogFar]} />
-          <Physics paused={pause} >
+          <Physics paused={pause}>
             {perfVisible && <Perf position='top-left' />}
             <group visible={!pause}>
-              <Sky sunPosition={sunPosition as [number, number, number]} turbidity={8} rayleigh={0.5} />
+              <AnimateSky />
               <Lights sunPosition={sunPosition as [number, number, number]} />
               <SplatFloor
                 position={(sceneConfig?.floorConfig?.position as [number, number, number]) || [-0.2, -3.52, 0]}
                 args={(sceneConfig?.floorConfig?.args as [number, number]) || [30, 30]}
-                // textures={sceneConfig?.floorConfig?.texture}
+                textures={sceneConfig?.floorConfig?.texture}
               />
               <Player active={!pause} initialPosition={initialPlayerPos} />
               {children}

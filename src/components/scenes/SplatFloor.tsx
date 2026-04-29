@@ -7,21 +7,77 @@ type FloorProps = {
   rotation?: [number, number, number];
   position?: [number, number, number];
   args?: [number, number];
+  textures?: string[];
+  repeat?: [number, number];
 };
 
-export function SplatFloor({ rotation = [-Math.PI / 2, 0, 0], position = [-0.2, -3.52, 0], args = [80, 30] }: FloorProps) {
+const DEFAULT_TEXTURES = [
+  '/scenes/tuduc/grass/Grass006_1K-JPG_Color.jpg',
+  '/scenes/tuduc/grass/Grass006_1K-JPG_NormalGL.jpg',
+  '/scenes/tuduc/grass/Grass006_1K-JPG_Roughness.jpg',
+  '/scenes/tuduc/floor/PavingStones146_1K-JPG_Color.jpg',
+  '/scenes/tuduc/floor/PavingStones146_1K-JPG_NormalGL.jpg',
+  '/scenes/tuduc/floor/PavingStones146_1K-JPG_Roughness.jpg',
+  '/scenes/tuduc/grass/image.png',
+];
+
+const DEFAULT_REPEAT: [number, number] = [15, 5];
+
+export function SplatFloor({
+  rotation = [-Math.PI / 2, 0, 0],
+  position = [-0.2, -3.52, 0],
+  args = [80, 30],
+  textures,
+  repeat = DEFAULT_REPEAT,
+}: FloorProps) {
   const ref = useRef<THREE.Mesh>(null!);
 
-  // 1. Nạp TẤT CẢ các map của Cỏ và Gạch + 1 ảnh Mask
-  const [grassColor, grassNormal, grassRough, brickColor, brickNormal, brickRough, maskMap] = useTexture([
-    '/scenes/tuduc/grass/Grass006_1K-JPG_Color.jpg',
-    '/scenes/tuduc/grass/Grass006_1K-JPG_NormalGL.jpg',
-    '/scenes/tuduc/grass/Grass006_1K-JPG_Roughness.jpg',
-    '/scenes/tuduc/floor/PavingStones146_1K-JPG_Color.jpg',
-    '/scenes/tuduc/floor/PavingStones146_1K-JPG_NormalGL.jpg',
-    '/scenes/tuduc/floor/PavingStones146_1K-JPG_Roughness.jpg',
-    '/scenes/tuduc/grass/image.png', // Ảnh trắng đen
-  ]);
+  const mode: 'splat' | 'single' =
+    textures?.length === 7 ? 'splat' : textures?.length && textures.length >= 3 ? 'single' : 'splat';
+
+  const loaded = useTexture(mode === 'splat' ? (textures?.length === 7 ? textures : DEFAULT_TEXTURES) : (textures as string[]));
+  const loadedArray = Array.isArray(loaded) ? loaded : [loaded];
+
+  const handleGeometry = useCallback((geometry: THREE.BufferGeometry | null) => {
+    if (geometry && !geometry.attributes.uv2) {
+      geometry.setAttribute('uv2', geometry.attributes.uv.clone());
+    }
+  }, []);
+
+  if (mode === 'single') {
+    const [colorMap, normalMap, roughnessMap, aoMap] = loadedArray;
+
+    if (colorMap) colorMap.colorSpace = THREE.SRGBColorSpace;
+
+    const texList: THREE.Texture[] = [colorMap, normalMap, roughnessMap, aoMap].filter((tex): tex is THREE.Texture =>
+      Boolean(tex),
+    );
+
+    texList.forEach((tex) => {
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(repeat[0], repeat[1]);
+    });
+
+    return (
+      <RigidBody type='fixed'>
+        <mesh ref={ref} position={position} receiveShadow rotation={rotation}>
+          <planeGeometry ref={handleGeometry} args={args} />
+          <meshStandardMaterial map={colorMap} normalMap={normalMap} roughnessMap={roughnessMap} aoMap={aoMap} />
+        </mesh>
+      </RigidBody>
+    );
+  }
+
+  const [grassColor, grassNormal, grassRough, brickColor, brickNormal, brickRough, maskMap] = loadedArray as unknown as [
+    THREE.Texture,
+    THREE.Texture,
+    THREE.Texture,
+    THREE.Texture,
+    THREE.Texture,
+    THREE.Texture,
+    THREE.Texture,
+  ];
 
   // Cài đặt hệ màu sRGB cho Color Map
   grassColor.colorSpace = THREE.SRGBColorSpace;
@@ -31,18 +87,12 @@ export function SplatFloor({ rotation = [-Math.PI / 2, 0, 0], position = [-0.2, 
   [grassColor, grassNormal, grassRough, brickColor, brickNormal, brickRough].forEach((tex) => {
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.RepeatWrapping;
-    tex.repeat.set(15, 5);
+    tex.repeat.set(repeat[0], repeat[1]);
   });
 
   // Mask KHÔNG lặp, kéo giãn vừa bằng cái sàn
   maskMap.wrapS = THREE.ClampToEdgeWrapping;
   maskMap.wrapT = THREE.ClampToEdgeWrapping;
-
-  const handleGeometry = useCallback((geometry: THREE.BufferGeometry | null) => {
-    if (geometry && !geometry.attributes.uv2) {
-      geometry.setAttribute('uv2', geometry.attributes.uv.clone());
-    }
-  }, []);
 
   return (
     <RigidBody type='fixed'>
@@ -71,6 +121,7 @@ export function SplatFloor({ rotation = [-Math.PI / 2, 0, 0], position = [-0.2, 
             shader.uniforms.tBrickNormal = { value: brickNormal };
             shader.uniforms.tBrickRough = { value: brickRough };
             shader.uniforms.tMask = { value: maskMap };
+            shader.uniforms.uSplatRepeat = { value: new THREE.Vector2(repeat[0], repeat[1]) };
 
             // Khai báo các biến uniform trong code GLSL
             shader.fragmentShader = shader.fragmentShader.replace(
@@ -81,6 +132,7 @@ export function SplatFloor({ rotation = [-Math.PI / 2, 0, 0], position = [-0.2, 
               uniform sampler2D tBrickNormal;
               uniform sampler2D tBrickRough;
               uniform sampler2D tMask;
+              uniform vec2 uSplatRepeat;
               `,
             );
 
@@ -91,7 +143,7 @@ export function SplatFloor({ rotation = [-Math.PI / 2, 0, 0], position = [-0.2, 
               #ifdef USE_MAP
                 vec4 gColor = texture2D(map, vMapUv); // map là grassColor
                 vec4 bColor = texture2D(tBrickColor, vMapUv);
-                vec2 maskUv = vMapUv / vec2(15.0, 5.0);
+                vec2 maskUv = vMapUv / uSplatRepeat;
                 float splatMaskColor = texture2D(tMask, maskUv).r; // 0=Đen (Cỏ), 1=Trắng (Gạch)
                 
                 vec4 mixedColor = mix(gColor, bColor, splatMaskColor);
