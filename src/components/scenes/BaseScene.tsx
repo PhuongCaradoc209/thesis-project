@@ -9,6 +9,7 @@ import type { Scene } from '../../types/scene.types';
 import Player from '../player/Player';
 import Floor from './Floor';
 import Lights from './Lights';
+import { SplatFloor } from './FlashFloor';
 
 type BaseSceneProps = {
   children?: ReactNode;
@@ -63,10 +64,10 @@ function BaseScene({ children, sceneConfig }: BaseSceneProps) {
             <group visible={!pause}>
               <Sky sunPosition={sunPosition as [number, number, number]} turbidity={8} rayleigh={0.5} />
               <Lights sunPosition={sunPosition as [number, number, number]} />
-              <Floor
+              <SplatFloor
                 position={(sceneConfig?.floorConfig?.position as [number, number, number]) || [-0.2, -3.52, 0]}
                 args={(sceneConfig?.floorConfig?.args as [number, number]) || [30, 30]}
-                textures={sceneConfig?.floorConfig?.texture}
+                // textures={sceneConfig?.floorConfig?.texture}
               />
               <Player active={!pause} initialPosition={initialPlayerPos} />
               {children}

@@ -1,3 +1,5 @@
+import DenHung from '@/assets/scenes/denhung/DenHung.jpg';
+import TuDuc from '@/assets/scenes/tuduc/TuDuc.jpg';
 import type { MarkerData } from '../types/marker';
 
 export const MARKER_DATA: MarkerData[] = [
@@ -5,20 +7,18 @@ export const MARKER_DATA: MarkerData[] = [
     id: 'tu-duc',
     latitude: 16.4326,
     longitude: 107.5656,
-    thumbnail: '/tuduc/TuDuc.jpg',
+    thumbnail: TuDuc,
     sceneId: 'DvuvR5oMnH9hwief9pqn',
-    name: 'Lăng Tự Đức',
-    description:
-      'Lăng vua Tự Đức (Khiêm Lăng) được xem là công trình đẹp nhất trong hệ thống lăng tẩm triều Nguyễn và tiêu biểu cho kiến trúc lăng mộ phong kiến Việt Nam.',
+    nameKey: 'sites.tuDuc.name',
+    descriptionKey: 'sites.tuDuc.description',
   },
   {
     id: 'den-hung',
     latitude: 10.0663,
     longitude: 105.7337,
-    thumbnail: '/denhung/DenHung.jpg',
+    thumbnail: DenHung,
     sceneId: 'lo1jCATp6QcaQFFAUz6G',
-    name: 'Đền Hùng',
-    description:
-      'Đền Hùng là quần thể di tích lịch sử quốc gia đặc biệt quan trọng của Việt Nam, gắn liền với truyền thuyết về nguồn gốc dân tộc Việt Nam.',
+    nameKey: 'sites.denHung.name',
+    descriptionKey: 'sites.denHung.description',
   },
 ];

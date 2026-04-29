@@ -1,0 +1,99 @@
+{
+  "brand": {
+    "name": "VIETNAM VIRTUAL"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "map": "Bản đồ",
+    "heritage": "Di sản",
+    "contact": "Liên hệ"
+  },
+  "actions": {
+    "startExploring": "Bắt đầu khám phá",
+    "view3dTour": "Xem tour 3D",
+    "learnMore": "Tìm hiểu thêm",
+    "backToMap": "Quay lại bản đồ",
+    "switchLanguage": "Đổi ngôn ngữ"
+  },
+  "sites": {
+    "tuDuc": {
+      "name": "Lăng Tự Đức",
+      "description": "Lăng vua Tự Đức (Khiêm Lăng) được xem là công trình đẹp nhất trong hệ thống lăng tẩm triều Nguyễn và tiêu biểu cho kiến trúc lăng mộ phong kiến Việt Nam."
+    },
+    "denHung": {
+      "name": "Đền Hùng",
+      "description": "Đền Hùng là quần thể di tích lịch sử quốc gia đặc biệt quan trọng của Việt Nam, gắn liền với truyền thuyết về nguồn gốc dân tộc Việt Nam."
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Vẻ đẹp Việt Nam",
+      "subtitle": "Hành trình xuyên thời gian và không gian qua những di sản rực rỡ nhất của dải đất hình chữ S."
+    },
+    "destinations": {
+      "sectionLabel": "Điểm đến tâm điểm",
+      "sectionTitle": "Kỳ Quan Di Sản",
+      "hue": {
+        "title": "Cố đô Huế",
+        "description": "Khám phá vẻ đẹp cổ kính và trang nghiêm của triều đại nhà Nguyễn qua công nghệ 3D thực tế ảo.",
+        "alt": "Toàn cảnh Đại Nội Huế - Cổng Ngọ Môn"
+      },
+      "hoiAn": {
+        "title": "Phố cổ Hội An",
+        "alt": "Phố cổ Hội An về đêm"
+      },
+      "fansipan": {
+        "title": "Đỉnh Fansipan",
+        "alt": "Cột mốc trên đỉnh Fansipan"
+      },
+      "trangAn": {
+        "title": "Tràng An - Ninh Bình",
+        "description": "Hành trình xuôi dòng Ngô Đồng, chiêm ngưỡng sự kỳ vĩ của 'Hạ Long trên cạn'.",
+        "alt": "Quần thể danh thắng Tràng An với thuyền và núi đá vôi"
+      }
+    },
+    "about": {
+      "sectionLabel": "Công nghệ & Truyền thống",
+      "heading": {
+        "line1": "Trải nghiệm di sản",
+        "line2": "không giới hạn"
+      },
+      "p1": {
+        "beforeBrand": "Chào mừng bạn đến với ",
+        "afterBrand": ", nơi chúng tôi kết hợp tinh hoa lịch sử với sức mạnh công nghệ thực tế ảo hiện đại nhất. Chúng tôi không chỉ cung cấp hình ảnh; chúng tôi mở ra cánh cửa dẫn bạn vào lòng các di tích triều đại."
+      },
+      "p2": "Bằng việc mô phỏng lại các di tích với độ trung thực cao nhất, chúng tôi mang đến cho bạn trải nghiệm sống động như thật, cho phép bạn khám phá mọi ngóc ngách, chiêm ngưỡng từng chi tiết tinh xảo và cảm nhận được sự vĩ đại của các công trình kiến trúc cổ kính.",
+      "stats": {
+        "panoramicValue": "360°",
+        "panoramicLabel": "Tầm nhìn toàn cảnh",
+        "resolutionValue": "4K+",
+        "resolutionLabel": "Độ phân giải thực tế"
+      },
+      "imageAlt": {
+        "dragonRelief": "Phù điêu rồng",
+        "aoDaiEmbroidery": "Thêu phượng trên áo dài",
+        "bronzeDrum": "Họa tiết trống đồng cận cảnh",
+        "huePavilion": "Nội thất lầu son gác tía ở Huế"
+      }
+    }
+  },
+  "loading": {
+    "title": "Đang tải di sản...",
+    "didYouKnow": "Bạn có biết?",
+    "status": {
+      "preparing": "Đang chuẩn bị trải nghiệm 3D...",
+      "optimizingMeshes": "Đang tối ưu lưới (meshes)...",
+      "loadingTextures": "Đang tải textures...",
+      "finalizingScene": "Đang hoàn tất khung cảnh..."
+    }
+  },
+  "footer": {
+    "tagline": "Hành trình gìn giữ và lan tỏa giá trị di sản dân tộc thông qua công nghệ số hiện đại.",
+    "links": {
+      "privacy": "Chính sách bảo mật",
+      "terms": "Điều khoản sử dụng",
+      "about": "Về chúng tôi"
+    },
+    "copyright": "© 2024 VIETNAM VIRTUAL TOURISM. Hào khí Lạc Việt."
+  }
+}

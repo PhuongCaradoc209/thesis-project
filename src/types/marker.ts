@@ -4,6 +4,6 @@ export type MarkerData = {
   longitude: number;
   thumbnail: string;
   sceneId: string;
-  name: string;
-  description: string;
+  nameKey: string;
+  descriptionKey: string;
 };

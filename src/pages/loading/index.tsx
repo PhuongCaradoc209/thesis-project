@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
+import TuDucLoading from '../../assets/scenes/tuduc/TuDucLoading.jpg';
 import { useSceneData } from '../../hooks/useScenes';
 import { NAV_PATH } from '../../router/paths';
 
@@ -13,9 +15,10 @@ interface LoadingPageProps {
   statusText?: string;
 }
 
-function LoadingPage({ initialProgress = 0, statusText = 'Preparing 3D Experience...' }: LoadingPageProps) {
+function LoadingPage({ initialProgress = 0, statusText }: LoadingPageProps) {
+  const { t } = useTranslation();
   const [progress, setProgress] = useState(initialProgress);
-  const [currentStatus, setCurrentStatus] = useState(statusText);
+  const [currentStatus, setCurrentStatus] = useState(statusText ?? t('loading.status.preparing'));
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sceneId = searchParams.get('sceneId');
@@ -29,38 +32,34 @@ function LoadingPage({ initialProgress = 0, statusText = 'Preparing 3D Experienc
       setProgress((prev) => {
         if (prev >= 90) return 90;
 
-        if (prev > 30 && prev < 35) setCurrentStatus('Optimizing Meshes...');
-        if (prev > 60 && prev < 65) setCurrentStatus('Loading Textures...');
+        if (prev > 30 && prev < 35) setCurrentStatus(t('loading.status.optimizingMeshes'));
+        if (prev > 60 && prev < 65) setCurrentStatus(t('loading.status.loadingTextures'));
 
         return prev + Math.random() * 5;
       });
     }, 150);
 
     return () => clearInterval(interval);
-  }, [initialProgress, isSuccess]);
+  }, [initialProgress, isSuccess, t]);
 
-  // Navigate to tour when data fetching succeeds
   useEffect(() => {
     if (isSuccess && sceneId) {
       setProgress(100);
-      setCurrentStatus('Finalizing Scene...');
+      setCurrentStatus(t('loading.status.finalizingScene'));
       const timer = setTimeout(() => {
         navigate(NAV_PATH.TOUR.replace(':sceneId', sceneId), { replace: true });
       }, 1000); // reduced wait time
       return () => clearTimeout(timer);
     }
-  }, [isSuccess, navigate, sceneId]);
+  }, [isSuccess, navigate, sceneId, t]);
 
   return (
     <div className='flex w-full max-w-md flex-col items-center space-y-4 px-6 text-center'>
-      {/* 3D-like Glowing Icon or Logo Placeholder */}
-      <h1 className='text-primary font-headline text-4xl font-bold'>Đang tải Di sản...</h1>
+      <h1 className='text-primary font-headline text-4xl font-bold'>{t('loading.title')}</h1>
 
-      <img src='/tuduc/loading/TuDucLoading.jpg' className='mt-4 h-64 w-64 rounded-t-full object-cover shadow-lg'></img>
+      <img src={TuDucLoading} className='mt-4 h-64 w-64 rounded-t-full object-cover shadow-lg'></img>
 
-      {/* Progress Information */}
       <div className='mb-8 w-full'>
-        {/* Sleek Progress Bar Container */}
         <div className='border-secondary/50 relative mb-4 w-full overflow-hidden rounded-full border p-[2px]'>
           <div
             className='from-primary to-secondary-container h-2 rounded-full bg-gradient-to-r transition-all duration-300 ease-out'
@@ -72,7 +71,7 @@ function LoadingPage({ initialProgress = 0, statusText = 'Preparing 3D Experienc
         <p className='text-secondary text-lg font-medium tabular-nums'>{currentStatus}</p>
       </div>
 
-      <p className='text-md animate-pulse text-gray-500 italic'>Bạn có biết?</p>
+      <p className='text-md animate-pulse text-gray-500 italic'>{t('loading.didYouKnow')}</p>
     </div>
   );
 }

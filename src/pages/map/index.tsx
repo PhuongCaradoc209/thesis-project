@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import TerrainMap from '../../components/map';
 import { MARKER_DATA } from '../../constants/markers';
 
 function MapPage() {
+  const { t } = useTranslation();
   const [hoveredSiteId, setHoveredSiteId] = useState<string | null>(null);
   const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
 
@@ -31,9 +33,13 @@ function MapPage() {
           onClick={(event) => event.stopPropagation()}>
           {selectedSite && (
             <div className='relative z-10 space-y-3'>
-              <img src={selectedSite.thumbnail} alt={selectedSite.name} className='aspect-video w-full rounded-xl object-cover' />
-              <h3 className='text-xl font-semibold text-white'>{selectedSite.name}</h3>
-              <p className='text-sm leading-relaxed text-gray-100'>{selectedSite.description}</p>
+              <img
+                src={selectedSite.thumbnail}
+                alt={t(selectedSite.nameKey)}
+                className='aspect-video w-full rounded-xl object-cover'
+              />
+              <h3 className='text-xl font-semibold text-white'>{t(selectedSite.nameKey)}</h3>
+              <p className='text-sm leading-relaxed text-gray-100'>{t(selectedSite.descriptionKey)}</p>
             </div>
           )}
         </div>

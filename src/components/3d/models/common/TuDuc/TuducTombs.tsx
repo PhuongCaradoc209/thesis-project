@@ -11,7 +11,7 @@ type ModelProps = {
 };
 
 export default function TuducTombs({ position, rotation, scale }: ModelProps) {
-  const floorModel = useGLTF('/tuduc/collision.glb');
+  const floorModel = useGLTF('https://res.cloudinary.com/djbtyhwl4/image/upload/v1777342022/collision_juyj5n.glb');
   const treeModel = useGLTF('https://res.cloudinary.com/djbtyhwl4/image/upload/v1775703055/tree_s2wv31.glb');
   const scene = useMemo(() => {
     floorModel.scene.traverse((child) => {
@@ -82,5 +82,5 @@ export default function TuducTombs({ position, rotation, scale }: ModelProps) {
     </group>
   );
 }
-useGLTF.preload('/tuduc/collision.glb');
+useGLTF.preload('https://res.cloudinary.com/djbtyhwl4/image/upload/v1777342022/collision_juyj5n.glb');
 useGLTF.preload('https://res.cloudinary.com/djbtyhwl4/image/upload/v1775703055/tree_s2wv31.glb');

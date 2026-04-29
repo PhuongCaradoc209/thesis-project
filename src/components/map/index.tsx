@@ -1,6 +1,7 @@
 ﻿import { MapPinIcon } from '@phosphor-icons/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import Map, { Marker, NavigationControl, Popup, Source } from 'react-map-gl/maplibre';
 import { useNavigate } from 'react-router';
 import { MARKER_DATA } from '../../constants/markers';
@@ -31,6 +32,7 @@ export default function TerrainMap({
   onMarkerClick,
   onMapBackgroundClick,
 }: TerrainMapProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const mapStyle = `https://api.maptiler.com/maps/satellite-v4/style.json?key=${MAPTILER_KEY}`;
   const terrainSourceUrl = useMemo(() => `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`, []);
@@ -78,15 +80,15 @@ export default function TerrainMap({
           <div className='max-w-xs space-y-2 text-neutral-900'>
             <img
               src={displayedMarker.thumbnail}
-              alt={displayedMarker.name}
+              alt={t(displayedMarker.nameKey)}
               className='aspect-video w-full rounded-md object-cover'
             />
-            <h3 className='text-base font-bold'>{displayedMarker.name}</h3>
-            <p className='line-clamp-3 text-sm'>{displayedMarker.description}</p>
+            <h3 className='text-base font-bold'>{t(displayedMarker.nameKey)}</h3>
+            <p className='line-clamp-3 text-sm'>{t(displayedMarker.descriptionKey)}</p>
             <button
               onClick={() => navigate(`${NAV_PATH.LOADING}?sceneId=${displayedMarker.sceneId}`)}
               className='bg-primary hover:bg-primary-container w-full rounded-md py-2 text-white transition ease-in-out'>
-              Bắt đầu khám phá
+              {t('actions.startExploring')}
             </button>
           </div>
         </Popup>

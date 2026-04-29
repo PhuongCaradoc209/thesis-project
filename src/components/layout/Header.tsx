@@ -1,25 +1,35 @@
 ﻿import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router';
+import { i18nLanguages, type I18nLanguage } from '../../i18n';
 import { NAV_PATH } from '../../router/paths';
 
 type NavItem = {
   key: string;
-  label: string;
+  labelKey: string;
   path: string;
 };
 
 const navItems: NavItem[] = [
-  { key: 'home', label: 'Trang chủ', path: NAV_PATH.HOME },
-  { key: 'map', label: 'Bản đồ', path: NAV_PATH.MAP },
-  { key: 'heritage', label: 'Di sản', path: '#' },
-  { key: 'contact', label: 'Liên hệ', path: '#' },
+  { key: 'home', labelKey: 'nav.home', path: NAV_PATH.HOME },
+  { key: 'map', labelKey: 'nav.map', path: NAV_PATH.MAP },
+  { key: 'heritage', labelKey: 'nav.heritage', path: '#' },
+  { key: 'contact', labelKey: 'nav.contact', path: '#' },
 ];
 
 const Header = () => {
+  const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const location = useLocation();
+
+  const activeLanguage: I18nLanguage = (() => {
+    const normalized = (i18n.language || 'en').split('-')[0] as I18nLanguage;
+    return normalized in i18nLanguages ? normalized : 'en';
+  })();
+
+  const nextLanguage: I18nLanguage = activeLanguage === 'en' ? 'vi' : 'en';
 
   const isMapPage = location.pathname === NAV_PATH.MAP;
 
@@ -49,10 +59,12 @@ const Header = () => {
       }`}>
       <div className='flex h-20 w-full max-w-full items-center justify-between px-8 py-4'>
         <NavLink to={NAV_PATH.HOME} className='font-headline text-xl font-bold tracking-tighter text-red-800 uppercase'>
-          VIETNAM VIRTUAL
+          {t('brand.name')}
         </NavLink>
 
-        <div className='absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex' onMouseLeave={() => setHoveredKey(null)}>
+        <div
+          className='absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex'
+          onMouseLeave={() => setHoveredKey(null)}>
           {navItems.map((item) => {
             const isActive = activeKey === item.key;
             const showUnderline = hoveredKey === item.key || (!hoveredKey && isActive);
@@ -64,7 +76,7 @@ const Header = () => {
                   className={`font-label text-sm tracking-wide transition-colors duration-200 ${
                     isActive ? 'text-red-800' : 'text-stone-700 hover:text-red-800'
                   }`}>
-                  {item.label}
+                  {t(item.labelKey)}
                 </NavLink>
 
                 {showUnderline && (
@@ -80,6 +92,13 @@ const Header = () => {
         </div>
 
         <div className='flex items-center gap-4'>
+          <button
+            type='button'
+            aria-label={t('actions.switchLanguage')}
+            onClick={() => i18n.changeLanguage(nextLanguage)}
+            className='font-label rounded-md border border-stone-200/60 px-3 py-1 text-xs font-semibold tracking-wider text-stone-700 transition-colors hover:border-stone-300/80 hover:bg-stone-100/70'>
+            {i18nLanguages[activeLanguage]}
+          </button>
           <button className='material-symbols-outlined scale-95 text-red-800 transition-all duration-300 ease-out'>
             account_circle
           </button>

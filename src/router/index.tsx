@@ -26,7 +26,7 @@ const publicRoutes: RouteObject[] = [
       },
       {
         path: NAV_PATH.REVIEW,
-        element: <div className='p-8'>Review Page Placeholder</div>,
+        element: <div className='p-8' />,
       },
     ],
   },

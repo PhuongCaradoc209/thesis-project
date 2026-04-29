@@ -1,0 +1,99 @@
+{
+  "brand": {
+    "name": "VIETNAM VIRTUAL"
+  },
+  "nav": {
+    "home": "Home",
+    "map": "Map",
+    "heritage": "Heritage",
+    "contact": "Contact"
+  },
+  "actions": {
+    "startExploring": "Start exploring",
+    "view3dTour": "View 3D Tour",
+    "learnMore": "Learn more",
+    "backToMap": "Back to map",
+    "switchLanguage": "Switch language"
+  },
+  "sites": {
+    "tuDuc": {
+      "name": "Tomb of Tu Duc",
+      "description": "Tomb of Emperor Tu Duc (Khiem Lang) is considered the most beautiful in the Nguyen dynasty mausoleum system and a hallmark of Vietnamese feudal tomb architecture."
+    },
+    "denHung": {
+      "name": "Hung Kings Temple",
+      "description": "Hung Kings Temple is an especially important national historical relic complex in Vietnam, associated with legends about the origin of the Vietnamese people."
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "The beauty of Vietnam",
+      "subtitle": "A journey through time and space across the most brilliant heritages of the S-shaped land."
+    },
+    "destinations": {
+      "sectionLabel": "Featured destinations",
+      "sectionTitle": "Heritage Wonders",
+      "hue": {
+        "title": "Imperial City of Hue",
+        "description": "Explore the ancient and solemn beauty of the Nguyen Dynasty through immersive 3D virtual reality.",
+        "alt": "Aerial view of Hue Imperial City - Ngo Mon Gate"
+      },
+      "hoiAn": {
+        "title": "Hoi An Ancient Town",
+        "alt": "Hoi An ancient town street at night"
+      },
+      "fansipan": {
+        "title": "Fansipan Peak",
+        "alt": "Summit monument of Mount Fansipan"
+      },
+      "trangAn": {
+        "title": "Trang An - Ninh Binh",
+        "description": "Drift along the Ngo Dong River and admire the grandeur of \"Ha Long Bay on land\".",
+        "alt": "Trang An landscape complex with boats and karst mountains"
+      }
+    },
+    "about": {
+      "sectionLabel": "Technology & Tradition",
+      "heading": {
+        "line1": "Heritage experience",
+        "line2": "without limits"
+      },
+      "p1": {
+        "beforeBrand": "Welcome to ",
+        "afterBrand": ", where we combine the essence of history with the power of modern virtual reality technology. We don’t just show images; we open a doorway into the heart of dynastic relics."
+      },
+      "p2": "By recreating monuments with the highest fidelity, we bring you a vivid, lifelike experience—letting you explore every corner, admire every exquisite detail, and feel the grandeur of ancient architecture.",
+      "stats": {
+        "panoramicValue": "360°",
+        "panoramicLabel": "Panoramic view",
+        "resolutionValue": "4K+",
+        "resolutionLabel": "True-to-life resolution"
+      },
+      "imageAlt": {
+        "dragonRelief": "Dragon relief sculpture",
+        "aoDaiEmbroidery": "Ao Dai phoenix embroidery",
+        "bronzeDrum": "Bronze drum pattern close-up",
+        "huePavilion": "Hue royal pavilion interior"
+      }
+    }
+  },
+  "loading": {
+    "title": "Loading heritage...",
+    "didYouKnow": "Did you know?",
+    "status": {
+      "preparing": "Preparing 3D experience...",
+      "optimizingMeshes": "Optimizing meshes...",
+      "loadingTextures": "Loading textures...",
+      "finalizingScene": "Finalizing scene..."
+    }
+  },
+  "footer": {
+    "tagline": "A journey to preserve and spread national heritage values through modern digital technology.",
+    "links": {
+      "privacy": "Privacy policy",
+      "terms": "Terms of use",
+      "about": "About us"
+    },
+    "copyright": "© 2024 VIETNAM VIRTUAL TOURISM. The spirit of Lac Viet."
+  }
+}

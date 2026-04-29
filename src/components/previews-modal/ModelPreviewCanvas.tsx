@@ -1,5 +1,6 @@
 import { Bounds, OrbitControls, useGLTF } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import PreviewBackground from '@/assets/scenes/tuduc/BackgroundTuDucTomb.jpg'
 import { Suspense, useMemo } from 'react';
 import * as THREE from 'three';
 
@@ -37,7 +38,7 @@ export function ModelPreviewCanvas({ modelUrl, cameraPosition = [0, 1, 4.5] }: M
     <div
       className='relative h-full w-full overflow-hidden'
       style={{
-        backgroundImage: "url('/tuduc/BackgroundTuDucTomb.jpg')",
+        backgroundImage: `url('${PreviewBackground}')`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
