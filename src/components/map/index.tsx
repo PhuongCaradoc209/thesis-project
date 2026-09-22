@@ -1,8 +1,8 @@
 ﻿import { MapPinIcon } from '@phosphor-icons/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import Map, { Marker, NavigationControl, Popup, Source } from 'react-map-gl/maplibre';
+import Map, { Marker, NavigationControl, Popup, Source, type MapRef } from 'react-map-gl/maplibre';
 import { useNavigate } from 'react-router';
 import { MARKER_DATA } from '../../constants/markers';
 import { NAV_PATH } from '../../router/paths';
@@ -34,6 +34,7 @@ export default function TerrainMap({
 }: TerrainMapProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const mapRef = useRef<MapRef | null>(null);
   const mapStyle = `https://api.maptiler.com/maps/satellite-v4/style.json?key=${MAPTILER_KEY}`;
   const terrainSourceUrl = useMemo(() => `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`, []);
 
@@ -42,8 +43,34 @@ export default function TerrainMap({
     return MARKER_DATA.find((m) => m.id === activeId);
   }, [hoveredSiteId, selectedSiteId]);
 
+  useEffect(() => {
+    if (!displayedMarker) return;
+
+    const loadingBackground = new Image();
+    loadingBackground.src = displayedMarker.loadingBackground ?? displayedMarker.thumbnail;
+  }, [displayedMarker]);
+
+  useEffect(() => {
+    if (!selectedSiteId) {
+      return;
+    }
+
+    const targetMarker = MARKER_DATA.find((marker) => marker.id === selectedSiteId);
+    if (!targetMarker) {
+      return;
+    }
+
+    mapRef.current?.flyTo({
+      center: [targetMarker.longitude, targetMarker.latitude],
+      zoom: 12,
+      duration: 2500,
+      essential: true,
+    });
+  }, [selectedSiteId]);
+
   return (
     <Map
+      ref={mapRef}
       reuseMaps
       initialViewState={INITIAL_VIEW_STATE}
       mapStyle={mapStyle as any}
@@ -86,7 +113,7 @@ export default function TerrainMap({
             <h3 className='text-base font-bold'>{t(displayedMarker.nameKey)}</h3>
             <p className='line-clamp-3 text-sm'>{t(displayedMarker.descriptionKey)}</p>
             <button
-              onClick={() => navigate(`${NAV_PATH.LOADING}?sceneId=${displayedMarker.sceneId}`)}
+              onClick={() => navigate(NAV_PATH.TOUR.replace(':sceneId', displayedMarker.sceneId))}
               className='bg-primary hover:bg-primary-container w-full rounded-md py-2 text-white transition ease-in-out'>
               {t('actions.startExploring')}
             </button>

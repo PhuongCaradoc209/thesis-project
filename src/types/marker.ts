@@ -3,6 +3,7 @@ export type MarkerData = {
   latitude: number;
   longitude: number;
   thumbnail: string;
+  loadingBackground?: string;
   sceneId: string;
   nameKey: string;
   descriptionKey: string;
