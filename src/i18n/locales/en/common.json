@@ -87,6 +87,33 @@
       "finalizingScene": "Finalizing scene..."
     }
   },
+  "artifact": {
+    "statistics": "Artifact details",
+    "dynasty": "Dynasty",
+    "material": "Material",
+    "year": "Year",
+    "unknown": "Unknown",
+    "noInformation": "No information available.",
+    "noDetails": "No detailed information available.",
+    "missingConfig": "No review configuration was found for this artifact.",
+    "loadingModel": "Loading 3D model...",
+    "dataLoadError": "The artifact information could not be loaded.",
+    "modelLoadError": "The 3D artifact model could not be loaded.",
+    "retry": "Try again",
+    "expandPanel": "Expand information panel",
+    "collapsePanel": "Collapse information panel",
+    "reviewPanel": "Review panel"
+  },
+  "sceneAsset": {
+    "loading": "Loading scene asset...",
+    "loadError": "This scene asset could not be loaded.",
+    "missing": "Scene asset data is missing."
+  },
+  "webgl": {
+    "contextLost": "The 3D renderer stopped responding.",
+    "restoring": "The browser is attempting to restore the graphics context.",
+    "resetCanvas": "Restart 3D renderer"
+  },
   "footer": {
     "tagline": "A journey to preserve and spread national heritage values through modern digital technology.",
     "links": {

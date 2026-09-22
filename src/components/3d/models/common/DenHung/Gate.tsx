@@ -1,14 +1,16 @@
 import { useGLTF } from '@react-three/drei';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useMemo } from 'react';
+import type { SceneAsset } from '../../../../../types/scene.types';
 
 type GateProps = {
   position?: [number, number, number];
   rotation?: [number, number, number];
   scale?: number | [number, number, number];
+  asset?: SceneAsset | null;
 };
-function Gate({ position = [0, -3.8, 0], rotation = [0, 0, 0], scale = 0.012 }: GateProps) {
-  const gateModel = useGLTF('https://res.cloudinary.com/djbtyhwl4/image/upload/v1775313663/stone-gate_tlfms8.glb');
+function Gate({ position = [0, -3.8, 0], rotation = [0, 0, 0], scale = 0.012, asset }: GateProps) {
+  const gateModel = useGLTF(asset?.url || 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1775313663/stone-gate_tlfms8.glb');
 
   useMemo(() => {
     gateModel.scene.traverse((child: any) => {

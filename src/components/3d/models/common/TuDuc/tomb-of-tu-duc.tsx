@@ -15,12 +15,13 @@ import type { Mesh } from 'three';
 const GLTF_URL = 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1774656066/tomb_of_tu_duc-transformed_ynnuku.glb';
 
 export function TuDucModel({
+  modelUrl = GLTF_URL,
   position = [-0.082, -0.238, 0.668],
   rotation = [-0.575, -0.132, -0.121],
   scale = 1.25,
   ...props
-}: ComponentProps<'group'>) {
-  const { nodes, materials } = useGLTF(GLTF_URL);
+}: ComponentProps<'group'> & { modelUrl?: string }) {
+  const { nodes, materials } = useGLTF(modelUrl);
   const meshes = [
     { geometry: (nodes.Model_material1_0 as Mesh).geometry, material: materials.material1 },
     { geometry: (nodes.Model_material2_0 as Mesh).geometry, material: materials.material2 },

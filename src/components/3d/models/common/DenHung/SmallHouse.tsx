@@ -2,16 +2,21 @@ import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import { useMemo } from 'react';
 import * as THREE from 'three';
+import type { CollisionModel, SceneAsset } from '../../../../../types/scene.types';
 
 type ModelProps = {
   position?: [number, number, number];
   rotation?: [number, number, number];
   scale?: number | [number, number, number];
+  asset?: SceneAsset | null;
+  collision?: CollisionModel | null;
 };
 
-function SmallHouse({ position, rotation, scale = 0.4 }: ModelProps) {
-  const smallHouse = useGLTF('https://res.cloudinary.com/djbtyhwl4/image/upload/v1775354344/DenHung_kos2g3.glb');
-  const collision = useGLTF('https://res.cloudinary.com/djbtyhwl4/image/upload/v1775354764/collisionDenHung_nv92of.glb');
+function SmallHouse({ position, rotation, scale = 0.4, asset, collision: collisionConfig }: ModelProps) {
+  const smallHouse = useGLTF(asset?.url || 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1775354344/DenHung_kos2g3.glb');
+  const collision = useGLTF(
+    collisionConfig?.url || 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1775354764/collisionDenHung_nv92of.glb',
+  );
   useMemo(() => {
     smallHouse.scene.traverse((child: any) => {
       if (child.isMesh) {

@@ -87,6 +87,33 @@
       "finalizingScene": "Đang hoàn tất khung cảnh..."
     }
   },
+  "artifact": {
+    "statistics": "Thông tin hiện vật",
+    "dynasty": "Triều đại",
+    "material": "Chất liệu",
+    "year": "Năm",
+    "unknown": "Chưa rõ",
+    "noInformation": "Chưa có thông tin.",
+    "noDetails": "Không có thông tin chi tiết.",
+    "missingConfig": "Không tìm thấy cấu hình review cho hiện vật này.",
+    "loadingModel": "Đang tải mô hình 3D...",
+    "dataLoadError": "Không thể tải thông tin hiện vật.",
+    "modelLoadError": "Không thể tải mô hình 3D của hiện vật.",
+    "retry": "Thử lại",
+    "expandPanel": "Mở rộng bảng thông tin",
+    "collapsePanel": "Thu gọn bảng thông tin",
+    "reviewPanel": "Bảng thông tin"
+  },
+  "sceneAsset": {
+    "loading": "Đang tải mô hình trong cảnh...",
+    "loadError": "Không thể tải mô hình trong cảnh này.",
+    "missing": "Thiếu dữ liệu mô hình của cảnh."
+  },
+  "webgl": {
+    "contextLost": "Bộ dựng hình 3D đã ngừng phản hồi.",
+    "restoring": "Trình duyệt đang thử khôi phục ngữ cảnh đồ họa.",
+    "resetCanvas": "Khởi động lại 3D"
+  },
   "footer": {
     "tagline": "Hành trình gìn giữ và lan tỏa giá trị di sản dân tộc thông qua công nghệ số hiện đại.",
     "links": {

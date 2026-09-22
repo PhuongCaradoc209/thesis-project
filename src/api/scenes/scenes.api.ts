@@ -1,6 +1,6 @@
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, documentId, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import type { InteractionPoint, Scene, ScenePlacement, TeleportPoint } from '../../types/scene.types';
+import type { CollisionModel, InteractionPoint, Scene, SceneAsset, ScenePlacement, TeleportPoint } from '../../types/scene.types';
 
 // Chunk array helper for Firestore 'in' queries
 const chunkArray = <T>(array: T[], size: number): T[][] => {
@@ -30,6 +30,46 @@ export const getScenePlacements = async (sceneId: string): Promise<ScenePlacemen
         placementId: doc.id,
         ...doc.data(),
       }) as ScenePlacement,
+  );
+};
+
+export const getSceneAssetsByIds = async (assetIds: string[]): Promise<SceneAsset[]> => {
+  const uniqueIds = [...new Set(assetIds)];
+  if (!uniqueIds.length) return [];
+
+  const assetsRef = collection(db, 'scene_assets');
+  const snapshots = await Promise.all(
+    chunkArray(uniqueIds, 10).map((ids) => getDocs(query(assetsRef, where(documentId(), 'in', ids)))),
+  );
+
+  return snapshots.flatMap((snapshot) =>
+    snapshot.docs.map(
+      (assetDoc) =>
+        ({
+          assetId: assetDoc.id,
+          ...assetDoc.data(),
+        }) as SceneAsset,
+    ),
+  );
+};
+
+export const getCollisionModelsByIds = async (collisionIds: string[]): Promise<CollisionModel[]> => {
+  const uniqueIds = [...new Set(collisionIds)];
+  if (!uniqueIds.length) return [];
+
+  const collisionsRef = collection(db, 'collision_models');
+  const snapshots = await Promise.all(
+    chunkArray(uniqueIds, 10).map((ids) => getDocs(query(collisionsRef, where(documentId(), 'in', ids)))),
+  );
+
+  return snapshots.flatMap((snapshot) =>
+    snapshot.docs.map(
+      (collisionDoc) =>
+        ({
+          collisionId: collisionDoc.id,
+          ...collisionDoc.data(),
+        }) as CollisionModel,
+    ),
   );
 };
 

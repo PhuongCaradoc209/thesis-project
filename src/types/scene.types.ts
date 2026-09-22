@@ -1,9 +1,39 @@
+export interface FloorMaterialConfig {
+  color: string;
+  normal: string;
+  roughness: string;
+  ao?: string;
+}
+
+export interface FloorConfig {
+  mode?: 'single' | 'splat' | 'splat-terrain';
+  args: number[];
+  position: number[];
+  rotation?: number[];
+  repeat?: number[];
+  segments?: number[];
+  texture?: string[];
+  materials?: {
+    grass: FloorMaterialConfig;
+    brick: FloorMaterialConfig;
+    dirt: FloorMaterialConfig;
+  };
+  splatMap?: string;
+  heightMap?: string;
+  heightScale?: number;
+  heightOffset?: number;
+  collision?: {
+    enabled?: boolean;
+    type?: 'heightfield';
+  };
+}
+
 // 1. SCENES
 export interface Scene {
   sceneId: string;
   environmentConfig: { sunPosition: number[]; fogColor: string; fogNear: number; fogFar: number };
-  playerConfig: { position: number[]; };
-  floorConfig: { texture: string[]; args: number[]; position: number[] };
+  playerConfig: { position: number[] };
+  floorConfig: FloorConfig;
 }
 
 // 2. SCENE ASSETS (Low-poly models)
@@ -11,6 +41,7 @@ export interface SceneAsset {
   assetId: string;
   url: string; // Firebase Storage URL
   collisionId?: string | null;
+  rendererKey?: string | null;
 }
 
 // 3. COLLISION MODELS (Physics bounding boxes)
@@ -18,6 +49,8 @@ export interface CollisionModel {
   collisionId: string;
   url: string;
   position: number[];
+  rotation?: number[];
+  scale?: number | number[];
 }
 
 // 4. SCENE PLACEMENTS (Instancing assets into scenes)
@@ -26,8 +59,14 @@ export interface ScenePlacement {
   sceneId: string;
   assetId: string;
   position: number[];
-  rotation: number[];
-  scale: number;
+  rotation?: number[];
+  scale?: number | number[];
+}
+
+export interface ResolvedScenePlacement {
+  placement: ScenePlacement;
+  asset: SceneAsset | null;
+  collision: CollisionModel | null;
 }
 
 // 5. ARTIFACTS (High-poly models & i18n Data for Review Mode)
