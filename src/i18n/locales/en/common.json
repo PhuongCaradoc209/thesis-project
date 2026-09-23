@@ -104,6 +104,19 @@
     "collapsePanel": "Collapse information panel",
     "reviewPanel": "Review panel"
   },
+  "previewControls": "Drag to rotate · Scroll to zoom",
+  "tourControls": {
+    "title": "Explore the heritage site",
+    "subtitle": "A quick guide to moving around",
+    "move": "Move",
+    "mouse": "Mouse",
+    "look": "Click the scene, then look around",
+    "jump": "Jump",
+    "inspect": "Inspect a nearby artifact",
+    "map": "Open the map and teleport",
+    "unlockMouse": "Press Esc to release the mouse cursor.",
+    "dismiss": "Got it"
+  },
   "sceneAsset": {
     "loading": "Loading scene asset...",
     "loadError": "This scene asset could not be loaded.",

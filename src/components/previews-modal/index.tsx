@@ -134,6 +134,11 @@ function InspectModal() {
                     </div>
                   )}
                 </div>
+                {!isLoading && !isError && previewConfig && !previewError && (
+                  <p className='pointer-events-none shrink-0 border-t border-amber-100/15 bg-neutral-950/80 px-4 py-2 text-center text-xs text-amber-100/90'>
+                    {t('previewControls')}
+                  </p>
+                )}
               </div>
             </motion.section>
 

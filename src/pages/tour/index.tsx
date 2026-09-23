@@ -9,11 +9,14 @@ import { InteractPoint } from '../../components/interact-point';
 import SceneLoadingOverlay from '../../components/loading/SceneLoadingOverlay';
 import InspectModal from '../../components/previews-modal';
 import BaseScene from '../../components/scenes/BaseScene';
+import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
 import { useSceneData } from '../../hooks/useScenes';
 import { NAV_PATH } from '../../router/paths';
 import { useTourismStore } from '../../store/useTourismStore';
 import { getScenePresentation } from '../../utils/scenePresentation';
+
+const CONTROLS_ONBOARDING_KEY = 'tour-controls-onboarding-seen:v1';
 
 // Clean, React-friendly Tour Page component
 export default function TourPage() {
@@ -26,6 +29,14 @@ export default function TourPage() {
   const [firstFrameRendered, setFirstFrameRendered] = useState(false);
   const [isSceneReady, setIsSceneReady] = useState(false);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(true);
+  const [isLoadingOverlayGone, setIsLoadingOverlayGone] = useState(false);
+  const [hasSeenControls, setHasSeenControls] = useState(() => {
+    try {
+      return window.localStorage.getItem(CONTROLS_ONBOARDING_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [hasAssetActivity, setHasAssetActivity] = useState(false);
   const [trackedAssetsProgress, setTrackedAssetsProgress] = useState(0);
 
@@ -41,6 +52,7 @@ export default function TourPage() {
     setFirstFrameRendered(false);
     setIsSceneReady(false);
     setShowLoadingOverlay(true);
+    setIsLoadingOverlayGone(false);
     setHasAssetActivity(false);
     setTrackedAssetsProgress(0);
     setIsTeleportMapOpen(false);
@@ -108,6 +120,15 @@ export default function TourPage() {
     // Keep external store updates in the event handler. Calling setPause from
     // inside a React state updater can update BaseScene during TourPage render.
     setPause(next || Boolean(selectedArtifactId));
+  };
+
+  const dismissControlsOnboarding = () => {
+    setHasSeenControls(true);
+    try {
+      window.localStorage.setItem(CONTROLS_ONBOARDING_KEY, 'true');
+    } catch {
+      // Keep the current visit usable if storage is unavailable.
+    }
   };
 
   return (
@@ -186,10 +207,21 @@ export default function TourPage() {
         <MapTrifoldIcon size={48} weight='fill' />
       </button>
 
+      {isSceneReady &&
+        !showLoadingOverlay &&
+        isLoadingOverlayGone &&
+        !hasSeenControls &&
+        !selectedArtifactId &&
+        !isTeleportMapOpen && (
+          <div className='pointer-events-none absolute bottom-28 left-4 z-30 w-[min(24rem,calc(100vw-2rem))] sm:bottom-4'>
+            <TourControlsOnboarding onDismiss={dismissControlsOnboarding} />
+          </div>
+        )}
+
       {/* Artifact Inspection Overlay */}
       {selectedArtifactId && <InspectModal />}
 
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={() => setIsLoadingOverlayGone(true)}>
         {showLoadingOverlay && (
           <SceneLoadingOverlay presentation={presentation} progress={loadingProgress} statusText={loadingStatus} />
         )}

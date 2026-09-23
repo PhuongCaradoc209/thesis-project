@@ -104,6 +104,19 @@
     "collapsePanel": "Thu gọn bảng thông tin",
     "reviewPanel": "Bảng thông tin"
   },
+  "previewControls": "Kéo chuột để xoay · Cuộn để phóng to/thu nhỏ",
+  "tourControls": {
+    "title": "Khám phá di sản",
+    "subtitle": "Hướng dẫn điều khiển nhanh",
+    "move": "Di chuyển",
+    "mouse": "Chuột",
+    "look": "Bấm vào cảnh rồi xoay để quan sát",
+    "jump": "Nhảy",
+    "inspect": "Xem hiện vật ở gần",
+    "map": "Mở bản đồ và dịch chuyển",
+    "unlockMouse": "Nhấn Esc để hiện lại con trỏ chuột.",
+    "dismiss": "Đã hiểu"
+  },
   "sceneAsset": {
     "loading": "Đang tải mô hình trong cảnh...",
     "loadError": "Không thể tải mô hình trong cảnh này.",

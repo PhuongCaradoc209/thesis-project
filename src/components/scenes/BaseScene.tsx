@@ -83,6 +83,49 @@ function FirstFrameReporter({ onFirstFrame }: { onFirstFrame?: () => void }) {
   return null;
 }
 
+type SceneContentsProps = {
+  children?: ReactNode;
+  sceneConfig?: Scene;
+  initialPlayerPos?: [number, number, number];
+  active: boolean;
+  visible: boolean;
+  sunPosition: [number, number, number];
+};
+
+function SceneContents({ children, sceneConfig, initialPlayerPos, active, visible, sunPosition }: SceneContentsProps) {
+  return (
+    <group visible={visible}>
+      <AnimateSky />
+      <Lights sunPosition={sunPosition} />
+      <SplatFloor config={sceneConfig?.floorConfig} />
+      <Player active={active} initialPosition={initialPlayerPos} />
+      {children}
+    </group>
+  );
+}
+
+function DevelopmentSceneContents({
+  defaultSun,
+  ...props
+}: Omit<SceneContentsProps, 'sunPosition'> & { defaultSun: [number, number, number] }) {
+  const { sunPosition, perfVisible } = useControls('Environment', {
+    sunPosition: {
+      value: defaultSun,
+      step: 0.1,
+    },
+    perfVisible: {
+      value: true,
+    },
+  });
+
+  return (
+    <>
+      {perfVisible && <Perf position='top-left' />}
+      <SceneContents {...props} sunPosition={sunPosition as [number, number, number]} />
+    </>
+  );
+}
+
 function BaseScene({ children, sceneConfig, loading = false, onFirstFrame }: BaseSceneProps) {
   const { t } = useTranslation();
   const pause = useTourismStore((state) => state.pause);
@@ -100,16 +143,13 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame }: Bas
   const defaultFogNear = sceneConfig?.environmentConfig?.fogNear || 30;
   const defaultFogFar = sceneConfig?.environmentConfig?.fogFar || 100;
   const initialPlayerPos = sceneConfig?.playerConfig?.position as [number, number, number] | undefined;
-
-  const { sunPosition, perfVisible } = useControls('Environment', {
-    sunPosition: {
-      value: defaultSun,
-      step: 0.1,
-    },
-    perfVisible: {
-      value: true,
-    },
-  });
+  const sceneContentsProps = {
+    children,
+    sceneConfig,
+    initialPlayerPos,
+    active: !pause && !loading,
+    visible: !selectedArtifactId,
+  };
 
   useEffect(() => {
     if (pause || loading) {
@@ -157,14 +197,11 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame }: Bas
           {pause || loading || <PointerLockControls makeDefault />}
           <fog attach='fog' args={[defaultFogColor, defaultFogNear, defaultFogFar]} />
           <Physics paused={pause || loading}>
-            {perfVisible && <Perf position='top-left' />}
-            <group visible={!selectedArtifactId}>
-              <AnimateSky />
-              <Lights sunPosition={sunPosition as [number, number, number]} />
-              <SplatFloor config={sceneConfig?.floorConfig} />
-              <Player active={!pause && !loading} initialPosition={initialPlayerPos} />
-              {children}
-            </group>
+            {import.meta.env.DEV ? (
+              <DevelopmentSceneContents {...sceneContentsProps} defaultSun={defaultSun} />
+            ) : (
+              <SceneContents {...sceneContentsProps} sunPosition={defaultSun} />
+            )}
           </Physics>
           <View.Port />
         </Canvas>
