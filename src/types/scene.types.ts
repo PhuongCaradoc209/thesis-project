@@ -69,6 +69,14 @@ export interface ResolvedScenePlacement {
   collision: CollisionModel | null;
 }
 
+export interface ArtifactAnnotation {
+  annotationId: string;
+  position: number[];
+  title: string;
+  description?: string;
+  images?: string[];
+}
+
 // 5. ARTIFACTS (High-poly models & i18n Data for Review Mode)
 export interface Artifact {
   artifactId: string;
@@ -77,6 +85,9 @@ export interface Artifact {
   subtitle: string;
   modelUrl: string;
   cameraPosition: number[];
+  modelPosition?: number[];
+  orbitTarget?: number[];
+  annotations?: ArtifactAnnotation[];
   dynasty?: string;
   material?: string;
   year?: number | string;
