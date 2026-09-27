@@ -8,17 +8,28 @@ import { useTourismStore } from '../../store/useTourismStore';
 type PlayerProps = {
   active?: boolean;
   initialPosition?: [number, number, number];
+  killY?: number;
 };
 
-function Player({ active = true, initialPosition = [-6, 0, 0] }: PlayerProps) {
+export const DEFAULT_KILL_Y = -20;
+
+const PLAYER_EYE_HEIGHT = 1;
+const INITIAL_CAMERA_YAW = -Math.PI / 2;
+const RESPAWN_REARM_MARGIN = 1;
+
+function Player({ active = true, initialPosition = [-6, 0, 0], killY = DEFAULT_KILL_Y }: PlayerProps) {
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
   const body = useRef<any>(null);
+  const respawnRequestedRef = useRef(false);
   const { rapier, world } = useRapier();
   const { camera } = useThree();
 
+  const isTeleporting = useTourismStore((state) => state.isTeleporting);
   const teleportTarget = useTourismStore((state) => state.teleportTarget);
+  const triggerTeleport = useTourismStore((state) => state.triggerTeleport);
   const clearTeleport = useTourismStore((state) => state.clearTeleport);
+  const effectiveKillY = initialPosition[1] > killY ? killY : initialPosition[1] - RESPAWN_REARM_MARGIN;
 
   /**
    * Movement vectors
@@ -55,10 +66,42 @@ function Player({ active = true, initialPosition = [-6, 0, 0] }: PlayerProps) {
     return () => unsubscribeJump();
   }, [active, jump, subscribeKeys]);
 
+  useEffect(() => {
+    if (initialPosition[1] > killY) return;
+
+    console.warn('[Player] Invalid killY, using fallback.', {
+      spawnY: initialPosition[1],
+      killY,
+      fallbackKillY: effectiveKillY,
+    });
+  }, [effectiveKillY, initialPosition, killY]);
+
   useFrame((state) => {
     if (!active || !body.current) return;
 
     const translation = body.current.translation();
+
+    if (
+      respawnRequestedRef.current &&
+      !isTeleporting &&
+      !teleportTarget &&
+      translation.y > effectiveKillY + RESPAWN_REARM_MARGIN
+    ) {
+      respawnRequestedRef.current = false;
+    }
+
+    if (translation.y < effectiveKillY && !respawnRequestedRef.current && !isTeleporting && !teleportTarget) {
+      const [spawnX, spawnY, spawnZ] = initialPosition;
+      respawnRequestedRef.current = true;
+      triggerTeleport({
+        position: [spawnX, spawnY, spawnZ],
+        lookAt: [spawnX + 1, spawnY + PLAYER_EYE_HEIGHT, spawnZ],
+      });
+      return;
+    }
+
+    if (isTeleporting || teleportTarget) return;
+
     const velocity = body.current.linvel();
 
     const isMoving = Math.abs(velocity.x) > 0.1 || Math.abs(velocity.z) > 0.1;
@@ -70,7 +113,7 @@ function Player({ active = true, initialPosition = [-6, 0, 0] }: PlayerProps) {
       bobbingOffset = Math.sin(state.clock.elapsedTime * speedFactor) * amplitude;
     }
 
-    state.camera.position.set(translation.x, translation.y + 1 + bobbingOffset, translation.z);
+    state.camera.position.set(translation.x, translation.y + PLAYER_EYE_HEIGHT + bobbingOffset, translation.z);
 
     const { forward, backward, left, right } = getKeys();
 
@@ -92,30 +135,42 @@ function Player({ active = true, initialPosition = [-6, 0, 0] }: PlayerProps) {
 
   useEffect(() => {
     camera.rotation.order = 'YXZ';
-    camera.rotation.y = -Math.PI / 2;
+    camera.rotation.set(0, INITIAL_CAMERA_YAW, 0);
   }, [camera]);
 
   useEffect(() => {
     if (!teleportTarget || !body.current) return;
 
+    const [px, py, pz] = teleportTarget.position;
+    if (py <= effectiveKillY) {
+      console.error(
+        `[Player] Teleport target [${teleportTarget.position.join(', ')}] is not above killY (${effectiveKillY}). Teleport cancelled.`,
+      );
+      respawnRequestedRef.current = false;
+      clearTeleport();
+      return;
+    }
+
+    let clearTransitionTimeout: ReturnType<typeof setTimeout> | undefined;
     const timeout1 = setTimeout(() => {
-      const [px, py, pz] = teleportTarget.position;
       body.current.setTranslation({ x: px, y: py, z: pz }, true);
       body.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+      body.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
 
       const [tx, ty, tz] = teleportTarget.lookAt;
-      camera.position.set(px, py + 1, pz);
+      camera.position.set(px, py + PLAYER_EYE_HEIGHT, pz);
       camera.lookAt(tx, ty, tz);
 
-      const timeout2 = setTimeout(() => {
+      clearTransitionTimeout = setTimeout(() => {
         clearTeleport();
       }, 100);
-
-      return () => clearTimeout(timeout2);
     }, 300);
 
-    return () => clearTimeout(timeout1);
-  }, [teleportTarget, camera, clearTeleport]);
+    return () => {
+      clearTimeout(timeout1);
+      if (clearTransitionTimeout) clearTimeout(clearTransitionTimeout);
+    };
+  }, [teleportTarget, camera, clearTeleport, effectiveKillY]);
 
   return (
     <>

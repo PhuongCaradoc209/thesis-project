@@ -9,7 +9,7 @@ import * as THREE from 'three';
 import PreviewBackground from '../../assets/scenes/tuduc/BackgroundTuDucTomb.jpg';
 import { useTourismStore } from '../../store/useTourismStore';
 import type { Scene } from '../../types/scene.types';
-import Player from '../player/Player';
+import Player, { DEFAULT_KILL_Y } from '../player/Player';
 import { AnimateSky } from './AnimateSky';
 import Lights from './Lights';
 import { SplatFloor } from './SplatFloor';
@@ -87,18 +87,19 @@ type SceneContentsProps = {
   children?: ReactNode;
   sceneConfig?: Scene;
   initialPlayerPos?: [number, number, number];
+  killY: number;
   active: boolean;
   visible: boolean;
   sunPosition: [number, number, number];
 };
 
-function SceneContents({ children, sceneConfig, initialPlayerPos, active, visible, sunPosition }: SceneContentsProps) {
+function SceneContents({ children, sceneConfig, initialPlayerPos, killY, active, visible, sunPosition }: SceneContentsProps) {
   return (
     <group visible={visible}>
       <AnimateSky />
       <Lights sunPosition={sunPosition} />
       <SplatFloor config={sceneConfig?.floorConfig} />
-      <Player active={active} initialPosition={initialPlayerPos} />
+      <Player active={active} initialPosition={initialPlayerPos} killY={killY} />
       {children}
     </group>
   );
@@ -143,10 +144,13 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame }: Bas
   const defaultFogNear = sceneConfig?.environmentConfig?.fogNear || 30;
   const defaultFogFar = sceneConfig?.environmentConfig?.fogFar || 100;
   const initialPlayerPos = sceneConfig?.playerConfig?.position as [number, number, number] | undefined;
+  const configuredKillY = sceneConfig?.playerConfig?.killY;
+  const killY = Number.isFinite(configuredKillY) ? (configuredKillY as number) : DEFAULT_KILL_Y;
   const sceneContentsProps = {
     children,
     sceneConfig,
     initialPlayerPos,
+    killY,
     active: !pause && !loading,
     visible: !selectedArtifactId,
   };

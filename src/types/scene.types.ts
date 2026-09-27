@@ -32,7 +32,7 @@ export interface FloorConfig {
 export interface Scene {
   sceneId: string;
   environmentConfig: { sunPosition: number[]; fogColor: string; fogNear: number; fogFar: number };
-  playerConfig: { position: number[] };
+  playerConfig: { position: number[]; killY?: number };
   floorConfig: FloorConfig;
 }
 
