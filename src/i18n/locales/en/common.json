@@ -102,7 +102,8 @@
     "retry": "Try again",
     "expandPanel": "Expand information panel",
     "collapsePanel": "Collapse information panel",
-    "reviewPanel": "Review panel"
+    "reviewPanel": "Review panel",
+    "resetCamera": "Reset camera"
   },
   "previewControls": "Drag to rotate · Scroll to zoom",
   "tourControls": {

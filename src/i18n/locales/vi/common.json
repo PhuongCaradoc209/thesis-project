@@ -102,7 +102,8 @@
     "retry": "Thử lại",
     "expandPanel": "Mở rộng bảng thông tin",
     "collapsePanel": "Thu gọn bảng thông tin",
-    "reviewPanel": "Bảng thông tin"
+    "reviewPanel": "Bảng thông tin",
+    "resetCamera": "Đặt lại camera"
   },
   "previewControls": "Kéo chuột để xoay · Cuộn để phóng to/thu nhỏ",
   "tourControls": {
