@@ -20,6 +20,7 @@ function InspectModal() {
   const { active: isModelLoading } = useProgress();
 
   const { data: previewConfig, isLoading, isError, refetch } = useArtifactData(selectedArtifactId);
+  const previewAnnotations = Object.values(previewConfig?.annotations ?? {});
 
   return (
     <AnimatePresence>
@@ -90,6 +91,7 @@ function InspectModal() {
                             cameraPosition={previewConfig.cameraPosition}
                             modelPosition={previewConfig.modelPosition}
                             orbitTarget={previewConfig.orbitTarget}
+                            annotations={previewAnnotations}
                             resetRequest={cameraResetRequest}
                           />
                         </Suspense>

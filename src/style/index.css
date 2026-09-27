@@ -77,6 +77,28 @@
     animation: model-loading-slide 1.8s ease-in-out infinite;
   }
 
+  .annotation-scrollbar {
+    scrollbar-color: rgb(112 93 0 / 35%) transparent;
+    scrollbar-width: thin;
+  }
+
+  .annotation-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .annotation-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .annotation-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(112 93 0 / 35%);
+    border-radius: 999px;
+  }
+
+  .annotation-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(112 93 0 / 55%);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .model-loading-bar {
       animation: none;

@@ -24,6 +24,7 @@ export default function TourPage() {
   const { sceneId } = useParams<{ sceneId: string }>();
   const { data, isLoading, isError } = useSceneData(sceneId || null);
   const { active: assetsActive, progress: assetsProgress } = useProgress();
+  const [eventSource, setEventSource] = useState<HTMLDivElement | null>(null);
 
   const [isTeleportMapOpen, setIsTeleportMapOpen] = useState(false);
   const [firstFrameRendered, setFirstFrameRendered] = useState(false);
@@ -132,9 +133,14 @@ export default function TourPage() {
   };
 
   return (
-    <div className='relative h-screen w-screen overflow-hidden bg-black text-white'>
+    <div ref={setEventSource} className='relative h-screen w-screen overflow-hidden bg-black text-white'>
       <TeleportTransition />
-      <BaseScene key={sceneId} sceneConfig={scene} loading={!isSceneReady} onFirstFrame={handleFirstFrame}>
+      <BaseScene
+        key={sceneId}
+        sceneConfig={scene}
+        loading={!isSceneReady}
+        onFirstFrame={handleFirstFrame}
+        eventSource={eventSource ?? undefined}>
         <DynamicSceneRenderer sceneId={sceneId} />
 
         {interactionPoints.map((point) => {

@@ -19,6 +19,7 @@ type BaseSceneProps = {
   sceneConfig?: Scene;
   loading?: boolean;
   onFirstFrame?: () => void;
+  eventSource?: HTMLElement;
 };
 
 type WebGLContextEventsProps = {
@@ -127,7 +128,7 @@ function DevelopmentSceneContents({
   );
 }
 
-function BaseScene({ children, sceneConfig, loading = false, onFirstFrame }: BaseSceneProps) {
+function BaseScene({ children, sceneConfig, loading = false, onFirstFrame, eventSource }: BaseSceneProps) {
   const { t } = useTranslation();
   const pause = useTourismStore((state) => state.pause);
   const selectedArtifactId = useTourismStore((state) => state.selectedArtifactId);
@@ -184,6 +185,8 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame }: Bas
         ]}>
         <Canvas
           key={canvasGeneration}
+          eventSource={eventSource}
+          eventPrefix='client'
           shadows={!pause}
           dpr={[1, 1.5]}
           frameloop='always'
