@@ -1,11 +1,20 @@
 {
   "annotation": {
     "tuduc": {
+      "column": "Cột kiến trúc",
+      "column_des": "Đây là nội dung xem thử cho chú thích kiến trúc. Phần mô tả lịch sử đã kiểm chứng sẽ được bổ sung khi điểm chú thích được kết nối với Firestore.",
+      "architectureDetail": "Chi tiết kiến trúc",
+      "architectureDetail_des": "Điểm xem thử thứ hai dùng để kiểm tra rằng chỉ chi tiết nằm gần tâm camera nhất nhận tương tác.",
       "vanbia": "Trán bia",
       "vanbia_des": "Trán bia hình khánh, chạm nổi đồ án “long vân” với hình mặt rồng chính diện ở phía trên và chòm đuôi xoắn ở phía dưới, xung quanh là hình mây và các đao lửa. ",
       "thanvanbia": "Áng Văn Khắc Đá Trường Tồn",
       "thanvanbia_des": "Với 4.935 chữ Hán khắc trên hai mặt, bia Khiêm Cung Ký tự hào là tấm bia có số lượng văn tự khắc trên đá nhiều nhất Việt Nam. Đây cũng là bảo vật hoàng gia duy nhất lưu giữ trọn vẹn nét bút ngự phê của chính tác giả – Hoàng đế Tự Đức. Sự độc đáo này đã biến Khiêm Cung Ký trở thành kiệt tác đỉnh cao về cả nghệ thuật tạo hình lẫn kỹ thuật chạm khắc trong các lăng vua triều Nguyễn. Không chỉ là tiếng lòng đầy trăn trở của một bậc quân vương trước vận mệnh đổi thay của đất nước, văn bia còn hé lộ bức tranh phong thủy tuyệt mỹ bao quanh lăng mộ với những ngọn núi mang chữ \"Khiêm\" nối đuôi nhau chầu về như: Dẫn Khiêm, Lao Khiêm, Long Khiêm... Sinh thời, nhà vua đã gửi gắm trọn vẹn chí hướng và tâm nguyện của mình vào cảnh quan nơi đây: “Lên cao mà nhìn bốn phía thì trước mặt là đàn Nam Giao, sau lưng là chùa Linh Mụ đã đủ rõ chí hướng bình sinh của ta rồi... Bên phải gần Xương Lăng, bên trái đối diện Văn Miếu đủ để an ủi niềm yêu mến ngưỡng mộ thành thực của ta, để ngày kia hồn phách ta có nơi nương tựa dài lâu thủy chung như nhất”. Đối với du khách, mỗi dòng chữ trên tấm bia không chỉ là tư liệu lịch sử, mà còn là lời tự sự linh thiêng kết nối con người với hồn thiêng sông núi xứ Huế."
     }
+  },
+  "sceneAnnotation": {
+    "category": "Chi tiết kiến trúc",
+    "close": "Đóng chú thích",
+    "continue": "Đóng và tiếp tục khám phá"
   },
   "brand": {
     "name": "VIETNAM VIRTUAL"

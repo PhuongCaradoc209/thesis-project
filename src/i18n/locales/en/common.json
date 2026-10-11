@@ -1,11 +1,20 @@
 {
   "annotation": {
     "tuduc": {
+      "column": "Architectural Column",
+      "column_des": "This is a preview of an architectural annotation. The verified historical description will be added when the scene point is connected to Firestore.",
+      "architectureDetail": "Architectural Detail",
+      "architectureDetail_des": "This second preview point verifies that only the detail closest to the center of the camera receives the interaction.",
       "vanbia": "Stele Pediment",
       "vanbia_des": "The bell-shaped pediment of the stele features a raised dragon-and-cloud motif. A dragon’s face appears at the top, with its curling tail below, surrounded by clouds and flame-like details.",
       "thanvanbia": "An Enduring Inscription in Stone",
       "thanvanbia_des": "Inscribed with 4,935 Chinese characters across both sides, the Khiêm Cung Ký stele bears the longest stone inscription in Vietnam. It is also the only surviving royal artifact that fully preserves Emperor Tự Đức’s own handwritten text. A remarkable work of artistry and stone carving, the inscription offers a personal glimpse into the emperor’s concerns for his changing country. It also describes the landscape around his tomb, where hills bearing the name “Khiêm” seem to gather in tribute. For visitors, the stele is both a historical record and a moving connection to the spirit of Huế."
     }
+  },
+  "sceneAnnotation": {
+    "category": "Architectural detail",
+    "close": "Close annotation",
+    "continue": "Close and continue exploring"
   },
   "brand": {
     "name": "VIETNAM VIRTUAL"

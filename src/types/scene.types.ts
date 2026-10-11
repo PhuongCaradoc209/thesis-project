@@ -95,12 +95,25 @@ export interface Artifact {
 }
 
 // 6. INTERACTION POINTS (Hotspots attached to placements)
-export interface InteractionPoint {
+interface BaseInteractionPoint {
   pointId: string;
   placementId: string;
-  artifactId: string;
   positionOffset: number[];
 }
+
+export interface ArtifactInteractionPoint extends BaseInteractionPoint {
+  type?: 'artifact';
+  artifactId: string;
+}
+
+export interface SceneAnnotationInteractionPoint extends BaseInteractionPoint {
+  type: 'scene_annotation';
+  title: string;
+  description: string;
+  images?: string[];
+}
+
+export type InteractionPoint = ArtifactInteractionPoint | SceneAnnotationInteractionPoint;
 
 // 7. TELEPORT POINTS (Fast travel locations)
 export interface TeleportPoint {

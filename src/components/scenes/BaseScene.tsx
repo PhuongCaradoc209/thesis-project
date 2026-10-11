@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import PreviewBackground from '../../assets/scenes/tuduc/BackgroundTuDucTomb.jpg';
 import { useTourismStore } from '../../store/useTourismStore';
 import type { Scene } from '../../types/scene.types';
+import { SceneInteractionProvider } from '../interactions/SceneInteractionManager';
 import Player, { DEFAULT_KILL_Y } from '../player/Player';
 import { AnimateSky } from './AnimateSky';
 import Lights from './Lights';
@@ -203,13 +204,15 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame, event
           <FullCanvasViewport active={!selectedArtifactId} />
           {pause || loading || <PointerLockControls makeDefault />}
           <fog attach='fog' args={[defaultFogColor, defaultFogNear, defaultFogFar]} />
-          <Physics paused={pause || loading}>
-            {import.meta.env.DEV ? (
-              <DevelopmentSceneContents {...sceneContentsProps} defaultSun={defaultSun} />
-            ) : (
-              <SceneContents {...sceneContentsProps} sunPosition={defaultSun} />
-            )}
-          </Physics>
+          <SceneInteractionProvider active={!pause && !loading}>
+            <Physics paused={pause || loading}>
+              {import.meta.env.DEV ? (
+                <DevelopmentSceneContents {...sceneContentsProps} defaultSun={defaultSun} />
+              ) : (
+                <SceneContents {...sceneContentsProps} sunPosition={defaultSun} />
+              )}
+            </Physics>
+          </SceneInteractionProvider>
           <View.Port />
         </Canvas>
       </KeyboardControls>

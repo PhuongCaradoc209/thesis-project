@@ -8,6 +8,8 @@ import DynamicSceneRenderer from '../../components/3d/DynamicSceneRenderer';
 import { InteractPoint } from '../../components/interact-point';
 import SceneLoadingOverlay from '../../components/loading/SceneLoadingOverlay';
 import InspectModal from '../../components/previews-modal';
+import { SceneAnnotationPanel, type SceneAnnotationPreview } from '../../components/scene-annotation/SceneAnnotationPanel';
+import { SceneAnnotationPoint } from '../../components/scene-annotation/SceneAnnotationPoint';
 import BaseScene from '../../components/scenes/BaseScene';
 import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
@@ -27,6 +29,7 @@ export default function TourPage() {
   const [eventSource, setEventSource] = useState<HTMLDivElement | null>(null);
 
   const [isTeleportMapOpen, setIsTeleportMapOpen] = useState(false);
+  const [selectedSceneAnnotation, setSelectedSceneAnnotation] = useState<SceneAnnotationPreview | null>(null);
   const [firstFrameRendered, setFirstFrameRendered] = useState(false);
   const [isSceneReady, setIsSceneReady] = useState(false);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(true);
@@ -57,6 +60,7 @@ export default function TourPage() {
     setHasAssetActivity(false);
     setTrackedAssetsProgress(0);
     setIsTeleportMapOpen(false);
+    setSelectedSceneAnnotation(null);
     clearTourState();
   }, [clearTourState, sceneId]);
 
@@ -82,6 +86,19 @@ export default function TourPage() {
     const timer = setTimeout(() => setShowLoadingOverlay(false), 350);
     return () => clearTimeout(timer);
   }, [isSceneReady]);
+
+  const openSceneAnnotation = useCallback(
+    (annotation: SceneAnnotationPreview) => {
+      setSelectedSceneAnnotation(annotation);
+      setPause(true);
+    },
+    [setPause],
+  );
+
+  const closeSceneAnnotation = useCallback(() => {
+    setSelectedSceneAnnotation(null);
+    if (!selectedArtifactId && !isTeleportMapOpen) setPause(false);
+  }, [isTeleportMapOpen, selectedArtifactId, setPause]);
 
   // If there's an error or no sceneId provided, fallback to map
   if (!sceneId || isError) {
@@ -112,7 +129,7 @@ export default function TourPage() {
 
   const closeTeleportMap = () => {
     setIsTeleportMapOpen(false);
-    if (!selectedArtifactId) setPause(false);
+    if (!selectedArtifactId && !selectedSceneAnnotation) setPause(false);
   };
 
   const toggleTeleportMap = () => {
@@ -120,7 +137,7 @@ export default function TourPage() {
     setIsTeleportMapOpen(next);
     // Keep external store updates in the event handler. Calling setPause from
     // inside a React state updater can update BaseScene during TourPage render.
-    setPause(next || Boolean(selectedArtifactId));
+    setPause(next || Boolean(selectedArtifactId) || Boolean(selectedSceneAnnotation));
   };
 
   const dismissControlsOnboarding = () => {
@@ -146,8 +163,33 @@ export default function TourPage() {
         {interactionPoints.map((point) => {
           const position: [number, number, number] = [point.positionOffset[0], point.positionOffset[1], point.positionOffset[2]];
 
+          if (point.type === 'scene_annotation') {
+            const annotation: SceneAnnotationPreview = {
+              pointId: point.pointId,
+              position,
+              title: point.title,
+              description: point.description,
+              images: point.images ?? [],
+            };
+
+            return (
+              <SceneAnnotationPoint
+                key={point.pointId}
+                interactionId={point.pointId}
+                position={position}
+                onInteract={() => openSceneAnnotation(annotation)}
+              />
+            );
+          }
+
           return (
-            <InteractPoint key={point.pointId} position={position} artifactId={point.artifactId} onInspect={handleInspect} />
+            <InteractPoint
+              key={point.pointId}
+              interactionId={point.pointId}
+              position={position}
+              artifactId={point.artifactId}
+              onInspect={handleInspect}
+            />
           );
         })}
       </BaseScene>
@@ -218,6 +260,7 @@ export default function TourPage() {
         isLoadingOverlayGone &&
         !hasSeenControls &&
         !selectedArtifactId &&
+        !selectedSceneAnnotation &&
         !isTeleportMapOpen && (
           <div className='pointer-events-none absolute bottom-28 left-4 z-30 w-[min(24rem,calc(100vw-2rem))] sm:bottom-4'>
             <TourControlsOnboarding onDismiss={dismissControlsOnboarding} />
@@ -226,6 +269,10 @@ export default function TourPage() {
 
       {/* Artifact Inspection Overlay */}
       {selectedArtifactId && <InspectModal />}
+
+      <AnimatePresence>
+        {selectedSceneAnnotation && <SceneAnnotationPanel annotation={selectedSceneAnnotation} onClose={closeSceneAnnotation} />}
+      </AnimatePresence>
 
       <AnimatePresence onExitComplete={() => setIsLoadingOverlayGone(true)}>
         {showLoadingOverlay && (
