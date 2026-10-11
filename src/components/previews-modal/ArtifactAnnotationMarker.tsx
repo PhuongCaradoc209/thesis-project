@@ -11,9 +11,11 @@ import { useAnnotationVisibility } from './useAnnotationVisibility';
 type ArtifactAnnotationMarkerProps = {
   annotation: ArtifactAnnotation;
   modelRef: RefObject<THREE.Group | null>;
+  guidedTarget?: boolean;
+  onOpen?: (annotationId: string) => void;
 };
 
-export function ArtifactAnnotationMarker({ annotation, modelRef }: ArtifactAnnotationMarkerProps) {
+export function ArtifactAnnotationMarker({ annotation, modelRef, guidedTarget = false, onOpen }: ArtifactAnnotationMarkerProps) {
   const groupRef = useRef<THREE.Group>(null);
   const gl = useThree((state) => state.gl);
   const [isHovered, setIsHovered] = useState(false);
@@ -44,12 +46,14 @@ export function ArtifactAnnotationMarker({ annotation, modelRef }: ArtifactAnnot
     <Billboard position={position}>
       <group ref={groupRef}>
         <AnnotationMarkerVisual
-          active={isHovered || isSelected}
+          active={isHovered || isSelected || guidedTarget}
           interactive
           visible={isVisible}
           onPointerDown={(event) => {
             event.stopPropagation();
-            setIsSelected((current) => !current);
+            const nextSelected = !isSelected;
+            setIsSelected(nextSelected);
+            if (nextSelected) onOpen?.(annotation.annotationId);
           }}
           onPointerOut={(event) => {
             event.stopPropagation();

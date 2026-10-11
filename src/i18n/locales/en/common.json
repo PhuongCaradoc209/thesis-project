@@ -16,6 +16,97 @@
     "close": "Close annotation",
     "continue": "Close and continue exploring"
   },
+  "guidedTour": {
+    "intro": {
+      "eyebrow": "Guided journey",
+      "steps_one": "{{count}} stop",
+      "steps_other": "{{count}} stops",
+      "estimatedTime": "About 5 minutes"
+    },
+    "cinematic": {
+      "eyebrow": "Heritage overview"
+    },
+    "hud": {
+      "step": "Step {{current}} of {{total}}"
+    },
+    "actions": {
+      "start": "Start journey",
+      "open": "Guided journey",
+      "continue": "Continue",
+      "pause": "Pause",
+      "restart": "Start over",
+      "replay": "Replay journey",
+      "freeExplore": "Explore freely",
+      "hint": "Show hint",
+      "hideHint": "Hide hint",
+      "exit": "Exit guided journey",
+      "skipCinematic": "Skip introduction",
+      "journal": "Journal",
+      "openJournal": "Open journal"
+    },
+    "feedback": {
+      "stepComplete": "Step completed",
+      "discoveryUnlocked": "A new entry was added to your Journal",
+      "wrongTarget": "This is not the current destination"
+    },
+    "journal": {
+      "eyebrow": "Journey notes",
+      "title": "Discovery Journal",
+      "contents": "Contents",
+      "close": "Close journal",
+      "unlockedEntry": "Unlocked entry",
+      "empty": "Complete a discovery objective to unlock your first journal entry.",
+      "fallbackSummary": "Detailed content for this discovery will be added later."
+    },
+    "completion": {
+      "title": "Journey completed",
+      "description": "You have explored an architectural detail and examined the Khiem Cung Ky stele up close."
+    },
+    "tuDuc": {
+      "title": "Architecture and the Khiem Cung Ky Stele",
+      "description": "Walk through a detail of the pavilion before examining the stele and discovering one of its carved features.",
+      "cinematic": {
+        "title": "A journey through the Khiem Tomb landscape",
+        "caption": "Take in the heritage site before exploring its individual traces in the 3D environment."
+      },
+      "steps": {
+        "reachColumn": {
+          "instruction": "Walk to the highlighted architectural column area.",
+          "hint": "Follow the golden marker and approach the structure."
+        },
+        "inspectColumn": {
+          "instruction": "Find the highlighted architectural column and press F to inspect it.",
+          "hint": "Look for the golden annotation marker near the pavilion's column."
+        },
+        "inspectStele": {
+          "instruction": "Continue to the stele and press F to examine the artifact.",
+          "hint": "Approach the large stone stele until its interaction marker appears."
+        },
+        "viewSteleHeading": {
+          "instruction": "Rotate the stele and open the annotation on its pediment.",
+          "hint": "Drag to rotate the model, then select the highlighted golden marker near the top."
+        }
+      },
+      "discoveries": {
+        "overview": {
+          "title": "The visitor area",
+          "summary": "You have reached the main visitor area. This placeholder will be replaced with verified historical context."
+        },
+        "column": {
+          "title": "Architectural column detail",
+          "summary": "This journal entry records the architectural detail you inspected. Specialist content will be added later."
+        },
+        "stele": {
+          "title": "The Khiem Cung Ky Stele",
+          "summary": "You opened the close inspection view of the stele. The current description is placeholder Journal content."
+        },
+        "steleHeading": {
+          "title": "Stele pediment detail",
+          "summary": "You found the annotation on the stele pediment. A verified interpretation will be added later."
+        }
+      }
+    }
+  },
   "brand": {
     "name": "VIETNAM VIRTUAL"
   },

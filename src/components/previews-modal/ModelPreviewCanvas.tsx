@@ -14,6 +14,8 @@ type ModelPreviewCanvasProps = {
   orbitTarget?: number[];
   annotations?: ArtifactAnnotation[];
   resetRequest?: number;
+  guidedAnnotationId?: string | null;
+  onAnnotationOpen?: (annotationId: string) => void;
 };
 
 const DEFAULT_CAMERA_POSITION: Vector3Tuple = [0, 1, 4.5];
@@ -26,6 +28,8 @@ export function ArtifactPreviewScene({
   orbitTarget,
   annotations = [],
   resetRequest = 0,
+  guidedAnnotationId,
+  onAnnotationOpen,
 }: ModelPreviewCanvasProps) {
   const gl = useThree((state) => state.gl);
   const modelRef = useRef<THREE.Group>(null);
@@ -86,6 +90,8 @@ export function ArtifactPreviewScene({
             key={`${previewConfigurationKey}:${annotation.annotationId}`}
             annotation={annotation}
             modelRef={modelRef}
+            guidedTarget={guidedAnnotationId === annotation.annotationId}
+            onOpen={onAnnotationOpen}
           />
         ))}
       </group>

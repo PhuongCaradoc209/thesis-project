@@ -47,7 +47,7 @@ export function SceneAnnotationPanel({ annotation, onClose }: SceneAnnotationPan
         role='dialog'
         aria-modal='true'
         aria-label={title}
-        className='text-on-surface pointer-events-auto m-4 flex h-[calc(100%-2rem)] w-[min(25rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-gray-100 shadow-2xl'
+        className='text-on-surface pointer-events-auto m-4 flex h-[calc(100%-2rem)] w-[min(25rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-xl border border-slate-200/70 bg-gray-100 shadow-2xl'
         initial={reduceMotion ? false : { x: '100%' }}
         animate={{ x: 0 }}
         exit={reduceMotion ? undefined : { x: '100%' }}

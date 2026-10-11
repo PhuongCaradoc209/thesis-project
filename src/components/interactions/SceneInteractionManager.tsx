@@ -1,10 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
-import {
-  SceneInteractionContext,
-  type SceneInteractionRegistration,
-} from './sceneInteractionContext';
+import { SceneInteractionContext, type SceneInteractionRegistration } from './sceneInteractionContext';
 
 const DISTANCE_TIE_THRESHOLD = 0.25;
 const TARGET_SWITCH_MARGIN = 0.75;

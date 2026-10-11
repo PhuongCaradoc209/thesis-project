@@ -1,11 +1,15 @@
 import { CompassIcon, MapPinSimpleAreaIcon, MapTrifoldIcon, XIcon } from '@phosphor-icons/react';
 import { useProgress } from '@react-three/drei';
 import { AnimatePresence, motion } from 'motion/react';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import DynamicSceneRenderer from '../../components/3d/DynamicSceneRenderer';
+import { DevelopmentGuidedCameraDirector, GuidedCameraDirector } from '../../components/guided-tour/GuidedCameraDirector';
+import { GuidedReachTarget } from '../../components/guided-tour/GuidedReachTarget';
+import { GuidedTourUi } from '../../components/guided-tour/GuidedTourUi';
 import { InteractPoint } from '../../components/interact-point';
+import { SCENE_ANNOTATION_INTERACTION_DISTANCE } from '../../components/interactions/sceneInteraction.constants';
 import SceneLoadingOverlay from '../../components/loading/SceneLoadingOverlay';
 import InspectModal from '../../components/previews-modal';
 import { SceneAnnotationPanel, type SceneAnnotationPreview } from '../../components/scene-annotation/SceneAnnotationPanel';
@@ -13,18 +17,20 @@ import { SceneAnnotationPoint } from '../../components/scene-annotation/SceneAnn
 import BaseScene from '../../components/scenes/BaseScene';
 import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
+import { useGuidedTours } from '../../hooks/useGuidedTours';
 import { useSceneData } from '../../hooks/useScenes';
 import { NAV_PATH } from '../../router/paths';
 import { useTourismStore } from '../../store/useTourismStore';
+import { useGuidedTourStore } from '../../store/useGuidedTourStore';
 import { getScenePresentation } from '../../utils/scenePresentation';
 
 const CONTROLS_ONBOARDING_KEY = 'tour-controls-onboarding-seen:v1';
 
-// Clean, React-friendly Tour Page component
 export default function TourPage() {
   const { t } = useTranslation();
   const { sceneId } = useParams<{ sceneId: string }>();
   const { data, isLoading, isError } = useSceneData(sceneId || null);
+  const { data: guidedTours = [], isError: isGuidedToursError } = useGuidedTours(sceneId || null);
   const { active: assetsActive, progress: assetsProgress } = useProgress();
   const [eventSource, setEventSource] = useState<HTMLDivElement | null>(null);
 
@@ -49,8 +55,20 @@ export default function TourPage() {
   const triggerTeleport = useTourismStore((state) => state.triggerTeleport);
   const setPause = useTourismStore((state) => state.setPause);
   const clearTourState = useTourismStore((state) => state.clear);
+  const guidedTour = useGuidedTourStore((state) => state.tour);
+  const guidedStatus = useGuidedTourStore((state) => state.status);
+  const guidedStepIndex = useGuidedTourStore((state) => state.currentStepIndex);
+  const isGuidedIntroOpen = useGuidedTourStore((state) => state.isIntroOpen);
+  const isGuidedCompletionOpen = useGuidedTourStore((state) => state.isCompletionOpen);
+  const isGuidedJournalOpen = useGuidedTourStore((state) => state.isJournalOpen);
+  const guidedCompletionPending = useGuidedTourStore((state) => state.completionPending);
+  const attachGuidedTour = useGuidedTourStore((state) => state.attachTour);
+  const detachGuidedTour = useGuidedTourStore((state) => state.detachTour);
+  const reportGuidedEvent = useGuidedTourStore((state) => state.reportEvent);
+  const showGuidedCompletion = useGuidedTourStore((state) => state.showPendingCompletion);
   const presentation = getScenePresentation(sceneId || null, t);
   const handleFirstFrame = useCallback(() => setFirstFrameRendered(true), []);
+  const currentGuidedStep = guidedTour?.steps[guidedStepIndex];
 
   useEffect(() => {
     setFirstFrameRendered(false);
@@ -63,6 +81,8 @@ export default function TourPage() {
     setSelectedSceneAnnotation(null);
     clearTourState();
   }, [clearTourState, sceneId]);
+
+  useEffect(() => () => detachGuidedTour(), [detachGuidedTour, sceneId]);
 
   useEffect(() => {
     if (!assetsActive) return;
@@ -87,12 +107,63 @@ export default function TourPage() {
     return () => clearTimeout(timer);
   }, [isSceneReady]);
 
+  useEffect(() => {
+    if (!isSceneReady || showLoadingOverlay || !isLoadingOverlayGone || !hasSeenControls) return;
+
+    const sceneTour = guidedTours[0];
+    if (sceneTour) attachGuidedTour(sceneTour, true);
+  }, [attachGuidedTour, guidedTours, hasSeenControls, isLoadingOverlayGone, isSceneReady, showLoadingOverlay]);
+
+  useEffect(() => {
+    if (!isGuidedToursError) return;
+    console.error(`[GuidedTour] Failed to load tours for scene ${sceneId}.`);
+  }, [isGuidedToursError, sceneId]);
+
+  useEffect(() => {
+    const guidedOverlayOpen = isGuidedIntroOpen || isGuidedCompletionOpen || isGuidedJournalOpen || guidedStatus === 'cinematic';
+    if (guidedOverlayOpen) {
+      setPause(true);
+      return;
+    }
+
+    if (!selectedArtifactId && !selectedSceneAnnotation && !isTeleportMapOpen) setPause(false);
+  }, [
+    guidedStatus,
+    isGuidedCompletionOpen,
+    isGuidedIntroOpen,
+    isGuidedJournalOpen,
+    isTeleportMapOpen,
+    selectedArtifactId,
+    selectedSceneAnnotation,
+    setPause,
+  ]);
+
+  useEffect(() => {
+    if (
+      guidedStatus === 'completed' &&
+      guidedCompletionPending &&
+      !selectedArtifactId &&
+      !selectedSceneAnnotation &&
+      !isTeleportMapOpen
+    ) {
+      showGuidedCompletion();
+    }
+  }, [
+    guidedCompletionPending,
+    guidedStatus,
+    isTeleportMapOpen,
+    selectedArtifactId,
+    selectedSceneAnnotation,
+    showGuidedCompletion,
+  ]);
+
   const openSceneAnnotation = useCallback(
     (annotation: SceneAnnotationPreview) => {
       setSelectedSceneAnnotation(annotation);
       setPause(true);
+      reportGuidedEvent({ type: 'scene_point_opened', targetId: annotation.pointId });
     },
-    [setPause],
+    [reportGuidedEvent, setPause],
   );
 
   const closeSceneAnnotation = useCallback(() => {
@@ -125,6 +196,7 @@ export default function TourPage() {
 
   const handleInspect = (artifactId: string) => {
     openInspect(artifactId);
+    reportGuidedEvent({ type: 'artifact_opened', targetId: artifactId });
   };
 
   const closeTeleportMap = () => {
@@ -160,44 +232,69 @@ export default function TourPage() {
         eventSource={eventSource ?? undefined}>
         <DynamicSceneRenderer sceneId={sceneId} />
 
-        {interactionPoints.map((point) => {
-          const position: [number, number, number] = [point.positionOffset[0], point.positionOffset[1], point.positionOffset[2]];
+        {guidedTour?.intro && (import.meta.env.DEV ? <DevelopmentGuidedCameraDirector /> : <GuidedCameraDirector />)}
 
-          if (point.type === 'scene_annotation') {
-            const annotation: SceneAnnotationPreview = {
-              pointId: point.pointId,
-              position,
-              title: point.title,
-              description: point.description,
-              images: point.images ?? [],
-            };
+        {guidedStatus !== 'cinematic' &&
+          interactionPoints.map((point) => {
+            const position: [number, number, number] = [
+              point.positionOffset[0],
+              point.positionOffset[1],
+              point.positionOffset[2],
+            ];
+
+            if (point.type === 'scene_annotation') {
+              const annotation: SceneAnnotationPreview = {
+                pointId: point.pointId,
+                position,
+                title: point.title,
+                description: point.description,
+                images: point.images ?? [],
+              };
+              const isReachTarget =
+                guidedStatus === 'active' &&
+                currentGuidedStep?.type === 'reach_scene_point' &&
+                currentGuidedStep.targetId === point.pointId;
+
+              return (
+                <Fragment key={point.pointId}>
+                  {isReachTarget && <GuidedReachTarget targetId={point.pointId} />}
+                  <SceneAnnotationPoint
+                    interactionId={point.pointId}
+                    position={position}
+                    maxDistance={isReachTarget ? (currentGuidedStep.radius ?? SCENE_ANNOTATION_INTERACTION_DISTANCE) : undefined}
+                    guidedTarget={
+                      isReachTarget ||
+                      (guidedStatus === 'active' &&
+                        currentGuidedStep?.type === 'inspect_scene_point' &&
+                        currentGuidedStep.targetId === point.pointId)
+                    }
+                    onInteract={() => openSceneAnnotation(annotation)}
+                  />
+                </Fragment>
+              );
+            }
 
             return (
-              <SceneAnnotationPoint
+              <InteractPoint
                 key={point.pointId}
                 interactionId={point.pointId}
                 position={position}
-                onInteract={() => openSceneAnnotation(annotation)}
+                artifactId={point.artifactId}
+                guidedTarget={
+                  guidedStatus === 'active' &&
+                  currentGuidedStep?.type === 'inspect_artifact' &&
+                  currentGuidedStep.targetId === point.artifactId
+                }
+                onInspect={handleInspect}
               />
             );
-          }
-
-          return (
-            <InteractPoint
-              key={point.pointId}
-              interactionId={point.pointId}
-              position={position}
-              artifactId={point.artifactId}
-              onInspect={handleInspect}
-            />
-          );
-        })}
+          })}
       </BaseScene>
 
       <AnimatePresence>
         {isTeleportMapOpen && (
           <motion.div
-            className='absolute right-4 bottom-28 z-10 flex h-120 w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/80 backdrop-blur-lg'
+            className='absolute right-4 bottom-28 z-30 flex h-120 w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/80 backdrop-blur-lg'
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -225,6 +322,7 @@ export default function TourPage() {
                         position: point.position as [number, number, number],
                         lookAt: point.lookAt as [number, number, number],
                       });
+                      reportGuidedEvent({ type: 'teleport_selected', targetId: point.teleportId });
                       closeTeleportMap();
                     }}
                     className='group flex w-full cursor-pointer space-x-4 rounded-2xl p-4 transition-all duration-200 ease-in-out hover:bg-white/10'>
@@ -247,13 +345,15 @@ export default function TourPage() {
         )}
       </AnimatePresence>
 
-      <button
-        type='button'
-        onClick={toggleTeleportMap}
-        className='text-secondary-fixed-dim bg-primary hover:bg-primary-container absolute right-4 bottom-4 z-10 cursor-pointer rounded-2xl border-4 border-amber-700 p-4 transition-all duration-300 ease-in-out'
-        aria-label={isTeleportMapOpen ? 'Đóng bản đồ di chuyển' : 'Mở bản đồ di chuyển'}>
-        <MapTrifoldIcon size={48} weight='fill' />
-      </button>
+      {guidedStatus !== 'cinematic' && !isGuidedJournalOpen && (
+        <button
+          type='button'
+          onClick={toggleTeleportMap}
+          className='text-secondary-fixed-dim bg-primary hover:bg-primary-container absolute right-4 bottom-4 z-30 cursor-pointer rounded-2xl border-4 border-amber-700 p-4 transition-all duration-300 ease-in-out'
+          aria-label={isTeleportMapOpen ? 'Đóng bản đồ di chuyển' : 'Mở bản đồ di chuyển'}>
+          <MapTrifoldIcon size={48} weight='fill' />
+        </button>
+      )}
 
       {isSceneReady &&
         !showLoadingOverlay &&
@@ -261,14 +361,29 @@ export default function TourPage() {
         !hasSeenControls &&
         !selectedArtifactId &&
         !selectedSceneAnnotation &&
-        !isTeleportMapOpen && (
+        !isTeleportMapOpen &&
+        guidedStatus !== 'cinematic' &&
+        !isGuidedJournalOpen && (
           <div className='pointer-events-none absolute bottom-28 left-4 z-30 w-[min(24rem,calc(100vw-2rem))] sm:bottom-4'>
             <TourControlsOnboarding onDismiss={dismissControlsOnboarding} />
           </div>
         )}
 
       {/* Artifact Inspection Overlay */}
-      {selectedArtifactId && <InspectModal />}
+      {selectedArtifactId && (
+        <InspectModal
+          guidedAnnotationId={
+            guidedStatus === 'active' &&
+            currentGuidedStep?.type === 'view_artifact_annotation' &&
+            currentGuidedStep.artifactId === selectedArtifactId
+              ? currentGuidedStep.targetId
+              : null
+          }
+          onAnnotationOpen={(artifactId, annotationId) =>
+            reportGuidedEvent({ type: 'artifact_annotation_opened', artifactId, targetId: annotationId })
+          }
+        />
+      )}
 
       <AnimatePresence>
         {selectedSceneAnnotation && <SceneAnnotationPanel annotation={selectedSceneAnnotation} onClose={closeSceneAnnotation} />}
@@ -279,6 +394,11 @@ export default function TourPage() {
           <SceneLoadingOverlay presentation={presentation} progress={loadingProgress} statusText={loadingStatus} />
         )}
       </AnimatePresence>
+
+      <GuidedTourUi
+        hideHud={Boolean(selectedSceneAnnotation || isTeleportMapOpen)}
+        hideLauncher={Boolean(selectedArtifactId || selectedSceneAnnotation || isTeleportMapOpen)}
+      />
     </div>
   );
 }

@@ -87,7 +87,7 @@ export interface Artifact {
   cameraPosition: number[];
   modelPosition?: number[];
   orbitTarget?: number[];
-  annotations?: ArtifactAnnotation[];
+  annotation?: ArtifactAnnotation[];
   dynasty?: string;
   material?: string;
   year?: number | string;

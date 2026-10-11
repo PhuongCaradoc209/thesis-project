@@ -9,7 +9,12 @@ import { useArtifactData } from '../../hooks/useArtifacts';
 import { useTourismStore } from '../../store/useTourismStore';
 import { ArtifactPreviewScene } from './ModelPreviewCanvas';
 
-function InspectModal() {
+type InspectModalProps = {
+  guidedAnnotationId?: string | null;
+  onAnnotationOpen?: (artifactId: string, annotationId: string) => void;
+};
+
+function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProps) {
   const { t } = useTranslation();
   const selectedArtifactId = useTourismStore((state) => state.selectedArtifactId);
   const clear = useTourismStore((state) => state.clear);
@@ -20,7 +25,7 @@ function InspectModal() {
   const { active: isModelLoading } = useProgress();
 
   const { data: previewConfig, isLoading, isError, refetch } = useArtifactData(selectedArtifactId);
-  const previewAnnotations = Object.values(previewConfig?.annotations ?? {});
+  const previewAnnotations = Object.values(previewConfig?.annotation ?? {});
 
   return (
     <AnimatePresence>
@@ -93,6 +98,10 @@ function InspectModal() {
                             orbitTarget={previewConfig.orbitTarget}
                             annotations={previewAnnotations}
                             resetRequest={cameraResetRequest}
+                            guidedAnnotationId={guidedAnnotationId}
+                            onAnnotationOpen={(annotationId) => {
+                              if (selectedArtifactId) onAnnotationOpen?.(selectedArtifactId, annotationId);
+                            }}
                           />
                         </Suspense>
                       </ModelErrorBoundary>

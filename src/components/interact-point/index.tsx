@@ -2,6 +2,7 @@ import { Html } from '@react-three/drei';
 import { motion } from 'motion/react';
 import { useCallback, useRef } from 'react';
 import * as THREE from 'three';
+import { SCENE_INTERACTION_HTML_Z_INDEX_RANGE } from '../interactions/sceneInteraction.constants';
 import { useSceneInteraction } from '../interactions/useSceneInteraction';
 
 type InteractPointProps = {
@@ -9,9 +10,10 @@ type InteractPointProps = {
   position: [number, number, number];
   artifactId: string;
   onInspect: (id: string) => void;
+  guidedTarget?: boolean;
 };
 
-export function InteractPoint({ interactionId, position, artifactId, onInspect }: InteractPointProps) {
+export function InteractPoint({ interactionId, position, artifactId, onInspect, guidedTarget = false }: InteractPointProps) {
   const pointRef = useRef<THREE.Group>(null);
   const handleInteract = useCallback(() => onInspect(artifactId), [artifactId, onInspect]);
   const interactionState = useSceneInteraction({
@@ -24,22 +26,22 @@ export function InteractPoint({ interactionId, position, artifactId, onInspect }
 
   return (
     <group ref={pointRef} position={position}>
-      {interactionState !== 'far' && (
-        <Html distanceFactor={10} center zIndexRange={[100, 0]}>
+      {(interactionState !== 'far' || guidedTarget) && (
+        <Html distanceFactor={10} center zIndexRange={SCENE_INTERACTION_HTML_Z_INDEX_RANGE}>
           <motion.div
             className='border-primary flex h-8 w-8 items-center justify-center rounded-full border'
             style={{
               background: 'radial-gradient(circle,rgba(255, 255, 255, 0) 0%, rgba(233, 196, 0, 0.5) 100%)',
             }}
             animate={{
-              opacity: isFocused ? 1 : 0.55,
+              opacity: isFocused || guidedTarget ? 1 : 0.55,
               y: [0, -4, 0],
-              scale: isFocused ? [1, 1.1, 1] : 0.9,
+              scale: isFocused || guidedTarget ? [1, 1.1, 1] : 0.9,
             }}
             transition={{
               opacity: { duration: 0.18 },
               y: { duration: 1.6, repeat: Infinity, ease: 'easeInOut' },
-              scale: isFocused ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.18 },
+              scale: isFocused || guidedTarget ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.18 },
             }}>
             {isFocused && (
               <div className='bg-primary absolute -top-9 flex aspect-square items-center justify-center rounded-md p-0.5'>

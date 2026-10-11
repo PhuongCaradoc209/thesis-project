@@ -3,7 +3,7 @@ import { useReducedMotion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-const MARKER_SIZE = 1.6;
+const MARKER_SIZE = 1;
 
 type AnnotationMarkerVisualProps = {
   active?: boolean;
@@ -16,7 +16,6 @@ type AnnotationMarkerVisualProps = {
   onPointerOver?: (event: ThreeEvent<PointerEvent>) => void;
 };
 
-/** Shared annotation dot used in both the scene and artifact preview. */
 export function AnnotationMarkerVisual({
   active = false,
   depthTest = true,
@@ -144,7 +143,7 @@ export function AnnotationMarkerVisual({
         <circleGeometry args={[0.11, 32]} />
         <meshBasicMaterial
           ref={centerMaterialRef}
-          color={active ? '#fca800' : '#ffffff'}
+          color={'#ffffff'}
           transparent
           opacity={0}
           depthTest={depthTest}

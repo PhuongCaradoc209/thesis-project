@@ -16,6 +16,97 @@
     "close": "Đóng chú thích",
     "continue": "Đóng và tiếp tục khám phá"
   },
+  "guidedTour": {
+    "intro": {
+      "eyebrow": "Hành trình có hướng dẫn",
+      "steps_one": "{{count}} điểm khám phá",
+      "steps_other": "{{count}} điểm khám phá",
+      "estimatedTime": "Khoảng 5 phút"
+    },
+    "cinematic": {
+      "eyebrow": "Toàn cảnh di sản"
+    },
+    "hud": {
+      "step": "Bước {{current}}/{{total}}"
+    },
+    "actions": {
+      "start": "Bắt đầu hành trình",
+      "open": "Hành trình khám phá",
+      "continue": "Tiếp tục",
+      "pause": "Tạm dừng",
+      "restart": "Bắt đầu lại",
+      "replay": "Khám phá lại",
+      "freeExplore": "Khám phá tự do",
+      "hint": "Xem gợi ý",
+      "hideHint": "Ẩn gợi ý",
+      "exit": "Thoát hành trình",
+      "skipCinematic": "Bỏ qua giới thiệu",
+      "journal": "Sổ tay",
+      "openJournal": "Xem sổ tay"
+    },
+    "feedback": {
+      "stepComplete": "Đã hoàn thành bước",
+      "discoveryUnlocked": "Đã thêm một mục vào Sổ tay",
+      "wrongTarget": "Đây chưa phải điểm cần khám phá"
+    },
+    "journal": {
+      "eyebrow": "Ghi chép hành trình",
+      "title": "Sổ tay khám phá",
+      "contents": "Mục lục",
+      "close": "Đóng sổ tay",
+      "unlockedEntry": "Nội dung đã mở khóa",
+      "empty": "Hoàn thành một điểm khám phá để mở khóa ghi chép đầu tiên.",
+      "fallbackSummary": "Nội dung chi tiết cho mục khám phá này sẽ được bổ sung sau."
+    },
+    "completion": {
+      "title": "Hoàn thành hành trình",
+      "description": "Bạn đã tìm hiểu một chi tiết kiến trúc và quan sát cận cảnh bia Khiêm Cung Ký."
+    },
+    "tuDuc": {
+      "title": "Khám phá kiến trúc và bia Khiêm Cung Ký",
+      "description": "Đi qua một chi tiết của công trình trước khi quan sát tấm bia và khám phá nét chạm khắc tiêu biểu.",
+      "cinematic": {
+        "title": "Một hành trình qua không gian Khiêm Lăng",
+        "caption": "Quan sát tổng thể khu vực trước khi bắt đầu khám phá từng dấu tích trong không gian 3D."
+      },
+      "steps": {
+        "reachColumn": {
+          "instruction": "Đi đến khu vực cột kiến trúc đang được đánh dấu.",
+          "hint": "Theo marker vàng và tiến lại gần khu vực công trình."
+        },
+        "inspectColumn": {
+          "instruction": "Tìm cột kiến trúc đang được đánh dấu và nhấn F để xem.",
+          "hint": "Tìm marker vàng nằm gần cột của công trình."
+        },
+        "inspectStele": {
+          "instruction": "Tiếp tục đến gần bia và nhấn F để xem hiện vật.",
+          "hint": "Đi về phía tấm bia đá lớn cho đến khi marker tương tác xuất hiện."
+        },
+        "viewSteleHeading": {
+          "instruction": "Xoay tấm bia và mở chú thích trên phần trán bia.",
+          "hint": "Kéo chuột để xoay model, sau đó chọn marker vàng ở gần phía trên."
+        }
+      },
+      "discoveries": {
+        "overview": {
+          "title": "Không gian tham quan",
+          "summary": "Bạn đã tiếp cận khu vực tham quan chính. Đây là nội dung minh họa và sẽ được thay bằng phần giới thiệu lịch sử đã kiểm chứng."
+        },
+        "column": {
+          "title": "Chi tiết cột kiến trúc",
+          "summary": "Mục ghi chép này lưu lại chi tiết kiến trúc bạn vừa quan sát. Nội dung chuyên môn sẽ được bổ sung sau."
+        },
+        "stele": {
+          "title": "Bia Khiêm Cung Ký",
+          "summary": "Bạn đã mở chế độ quan sát bia ở cự ly gần. Phần mô tả hiện tại là nội dung mẫu cho Sổ tay khám phá."
+        },
+        "steleHeading": {
+          "title": "Chi tiết trán bia",
+          "summary": "Bạn đã tìm thấy điểm chú thích trên phần trán bia. Nội dung diễn giải đã kiểm chứng sẽ được cập nhật sau."
+        }
+      }
+    }
+  },
   "brand": {
     "name": "VIETNAM VIRTUAL"
   },
