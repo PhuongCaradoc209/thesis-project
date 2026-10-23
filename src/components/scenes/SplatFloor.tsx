@@ -31,6 +31,7 @@ const DEFAULT_ROTATION: [number, number, number] = [-Math.PI / 2, 0, 0];
 const DEFAULT_SIZE: [number, number] = [80, 30];
 const DEFAULT_REPEAT: [number, number] = [15, 5];
 const DEFAULT_SEGMENTS: [number, number] = [96, 96];
+const TERRAIN_NORMAL_SCALE = new THREE.Vector2(0.45, 0.45);
 
 function asVector2(value: number[] | undefined, fallback: [number, number]): [number, number] {
   return value?.length === 2 ? [value[0], value[1]] : fallback;
@@ -44,6 +45,7 @@ function configureRepeatedTexture(texture: THREE.Texture, repeat: [number, numbe
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(repeat[0], repeat[1]);
+  texture.anisotropy = 8;
   texture.colorSpace = colorTexture ? THREE.SRGBColorSpace : THREE.NoColorSpace;
 }
 
@@ -242,9 +244,9 @@ function TerrainFloor({ config }: { config: FloorConfig }) {
         float roughnessFactor = roughness;
         #ifdef USE_ROUGHNESSMAP
           vec3 splatWeightsRoughness = getSplatWeights(vRoughnessMapUv);
-          float grassRoughness = texture2D(roughnessMap, vRoughnessMapUv).g;
-          float brickRoughness = texture2D(tBrickRoughness, vRoughnessMapUv).g;
-          float dirtRoughness = texture2D(tDirtRoughness, vRoughnessMapUv).g;
+          float grassRoughness = mix(0.82, 1.0, texture2D(roughnessMap, vRoughnessMapUv).g);
+          float brickRoughness = mix(0.62, 0.95, texture2D(tBrickRoughness, vRoughnessMapUv).g);
+          float dirtRoughness = mix(0.78, 1.0, texture2D(tDirtRoughness, vRoughnessMapUv).g);
           roughnessFactor *= dot(
             vec3(grassRoughness, brickRoughness, dirtRoughness),
             splatWeightsRoughness
@@ -302,13 +304,13 @@ function TerrainFloor({ config }: { config: FloorConfig }) {
   return (
     <RigidBody type='fixed' colliders={false} position={position}>
       <mesh geometry={terrain.geometry} receiveShadow>
-        <meshStandardMaterial
+        <meshLambertMaterial
           map={loaded.grassColor}
           normalMap={loaded.grassNormal}
-          roughnessMap={loaded.grassRoughness}
+          normalScale={TERRAIN_NORMAL_SCALE}
           aoMap={grassAo}
           onBeforeCompile={customizeShader}
-          customProgramCacheKey={() => 'three-layer-splat-terrain-v1'}
+          customProgramCacheKey={() => 'three-layer-splat-terrain-lambert-v1'}
         />
       </mesh>
       {collisionEnabled && (

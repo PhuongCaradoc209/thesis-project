@@ -1,10 +1,12 @@
 import { CompassIcon, MapPinSimpleAreaIcon, MapTrifoldIcon, XIcon } from '@phosphor-icons/react';
 import { useProgress } from '@react-three/drei';
 import { AnimatePresence, motion } from 'motion/react';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, Suspense, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import DynamicSceneRenderer from '../../components/3d/DynamicSceneRenderer';
+import { ModelErrorBoundary } from '../../components/3d/ModelErrorBoundary';
+import { InstancedGrassField } from '../../components/grass/InstancedGrassField';
 import { DevelopmentGuidedCameraDirector, GuidedCameraDirector } from '../../components/guided-tour/GuidedCameraDirector';
 import { GuidedReachTarget } from '../../components/guided-tour/GuidedReachTarget';
 import { GuidedTourUi } from '../../components/guided-tour/GuidedTourUi';
@@ -17,6 +19,7 @@ import { SceneAnnotationPoint } from '../../components/scene-annotation/SceneAnn
 import BaseScene from '../../components/scenes/BaseScene';
 import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
+import { SCENE_IDS } from '../../constants/markers';
 import { useGuidedTours } from '../../hooks/useGuidedTours';
 import { useSceneData } from '../../hooks/useScenes';
 import { NAV_PATH } from '../../router/paths';
@@ -231,6 +234,17 @@ export default function TourPage() {
         onFirstFrame={handleFirstFrame}
         eventSource={eventSource ?? undefined}>
         <DynamicSceneRenderer sceneId={sceneId} />
+
+        {sceneId === SCENE_IDS.TU_DUC && scene.floorConfig.heightMap && scene.floorConfig.splatMap && (
+          <ModelErrorBoundary
+            resetKey={`${scene.floorConfig.heightMap}:${scene.floorConfig.splatMap}`}
+            fallback={() => null}
+            onError={(error) => console.error('[Grass] Failed to create the grass field.', error)}>
+            <Suspense fallback={null}>
+              <InstancedGrassField config={scene.floorConfig} />
+            </Suspense>
+          </ModelErrorBoundary>
+        )}
 
         {guidedTour?.intro && (import.meta.env.DEV ? <DevelopmentGuidedCameraDirector /> : <GuidedCameraDirector />)}
 

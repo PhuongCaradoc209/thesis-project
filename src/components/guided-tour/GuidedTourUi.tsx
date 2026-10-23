@@ -142,7 +142,27 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
                   <p className='text-secondary text-[0.65rem] font-semibold tracking-[0.2em] uppercase'>
                     {t('guidedTour.hud.step', { current: currentStepIndex + 1, total: tour.steps.length })}
                   </p>
-                  <p className='font-headline mt-1.5 text-base leading-6 font-semibold'>{t(currentStep.instruction)}</p>
+                  <div
+                    role='progressbar'
+                    aria-valuemin={0}
+                    aria-valuemax={tour.steps.length}
+                    aria-valuenow={completedStepIds.length}
+                    aria-label={t('guidedTour.hud.step', { current: currentStepIndex + 1, total: tour.steps.length })}
+                    className='mt-2 flex gap-1'>
+                    {tour.steps.map((step, index) => (
+                      <span
+                        key={step.stepId}
+                        className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
+                          completedStepIds.includes(step.stepId)
+                            ? 'bg-[#9e0027]'
+                            : index === currentStepIndex
+                              ? 'bg-[#c79f00]'
+                              : 'bg-amber-950/15'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className='font-headline mt-2.5 text-base leading-6 font-semibold'>{t(currentStep.instruction)}</p>
                 </div>
                 <button
                   type='button'
@@ -166,24 +186,13 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
               </AnimatePresence>
 
               <div className='flex items-center justify-between border-t border-amber-950/15 bg-[#ead7b5]/55 px-3 py-2'>
-                <div className='flex items-center gap-1'>
-                  <button
-                    type='button'
-                    className='text-primary flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
-                    onClick={() => setIsHintVisible((visible) => !visible)}>
-                    <LightbulbIcon size={16} />
-                    {isHintVisible ? t('guidedTour.actions.hideHint') : t('guidedTour.actions.hint')}
-                  </button>
-                  {completedStepIds.length > 0 && (
-                    <button
-                      type='button'
-                      className='text-secondary flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
-                      onClick={openJournal}>
-                      <BookOpenIcon size={16} />
-                      {t('guidedTour.actions.journal')}
-                    </button>
-                  )}
-                </div>
+                <button
+                  type='button'
+                  className='text-primary flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
+                  onClick={() => setIsHintVisible((visible) => !visible)}>
+                  <LightbulbIcon size={16} />
+                  {isHintVisible ? t('guidedTour.actions.hideHint') : t('guidedTour.actions.hint')}
+                </button>
                 <button
                   type='button'
                   className='text-on-surface-variant flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
@@ -214,6 +223,17 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
             </motion.button>
           )}
       </AnimatePresence>
+
+      {!hideLauncher && status !== 'cinematic' && !isIntroOpen && !isCompletionOpen && !isJournalOpen && (
+        <button
+          type='button'
+          className='text-secondary-fixed-dim bg-primary hover:bg-primary-container absolute right-28 bottom-4 z-30 cursor-pointer rounded-2xl border-4 border-amber-700 p-4 transition-all duration-300 ease-in-out'
+          aria-label={t('guidedTour.actions.journal')}
+          title={t('guidedTour.actions.journal')}
+          onClick={openJournal}>
+          <BookOpenIcon size={48} weight='fill' />
+        </button>
+      )}
 
       <AnimatePresence>
         {feedback && (

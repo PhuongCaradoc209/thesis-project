@@ -1,14 +1,16 @@
 {
   "annotation": {
     "tuduc": {
-      "column": "Architectural Column",
-      "column_des": "This is a preview of an architectural annotation. The verified historical description will be added when the scene point is connected to Firestore.",
+      "column": "Brick columns of the Stele Pavilion",
+      "column_des": "The roof of the Stele Pavilion rests on four large, round brick columns. The brick structure keeps the building stable enough to shelter the stone stele, which weighs about 22 tonnes and stands in the middle of the pavilion.",
       "architectureDetail": "Architectural Detail",
       "architectureDetail_des": "This second preview point verifies that only the detail closest to the center of the camera receives the interaction.",
       "vanbia": "Stele Pediment",
       "vanbia_des": "The bell-shaped pediment of the stele features a raised dragon-and-cloud motif. A dragon’s face appears at the top, with its curling tail below, surrounded by clouds and flame-like details.",
       "thanvanbia": "An Enduring Inscription in Stone",
-      "thanvanbia_des": "Inscribed with 4,935 Chinese characters across both sides, the Khiêm Cung Ký stele bears the longest stone inscription in Vietnam. It is also the only surviving royal artifact that fully preserves Emperor Tự Đức’s own handwritten text. A remarkable work of artistry and stone carving, the inscription offers a personal glimpse into the emperor’s concerns for his changing country. It also describes the landscape around his tomb, where hills bearing the name “Khiêm” seem to gather in tribute. For visitors, the stele is both a historical record and a moving connection to the spirit of Huế."
+      "thanvanbia_des": "Inscribed with 4,935 Chinese characters across both sides, the Khiêm Cung Ký stele bears the longest stone inscription in Vietnam. It is also the only surviving royal artifact that fully preserves Emperor Tự Đức’s own handwritten text. A remarkable work of artistry and stone carving, the inscription offers a personal glimpse into the emperor’s concerns for his changing country. It also describes the landscape around his tomb, where hills bearing the name “Khiêm” seem to gather in tribute. For visitors, the stele is both a historical record and a moving connection to the spirit of Huế.",
+      "steleBase": "Stele base",
+      "steleBase_des": "The base is shaped with curved “quỳ” legs and measures 100 cm high, 309 cm wide and 162.5 cm deep. Its outer faces are carved in relief and openwork with dragons, clouds, a tiger-face motif (hổ phù) and folded S-shaped meanders."
     }
   },
   "sceneAnnotation": {
@@ -63,11 +65,11 @@
       "description": "You have explored an architectural detail and examined the Khiem Cung Ky stele up close."
     },
     "tuDuc": {
-      "title": "Architecture and the Khiem Cung Ky Stele",
-      "description": "Walk through a detail of the pavilion before examining the stele and discovering one of its carved features.",
+      "title": "The Stele Pavilion and the Khiêm Cung Ký Stele",
+      "description": "Look at the brick columns holding up the stele pavilion roof, then examine the stele Emperor Tự Đức wrote for himself.",
       "cinematic": {
-        "title": "A journey through the Khiem Tomb landscape",
-        "caption": "Take in the heritage site before exploring its individual traces in the 3D environment."
+        "title": "A journey through Khiêm Lăng",
+        "caption": "From above, look for the stele pavilion: home of the tallest and heaviest stone stele in Vietnam."
       },
       "steps": {
         "reachColumn": {
@@ -75,16 +77,20 @@
           "hint": "Follow the golden marker and approach the structure."
         },
         "inspectColumn": {
-          "instruction": "Find the highlighted architectural column and press F to inspect it.",
-          "hint": "Look for the golden annotation marker near the pavilion's column."
+          "instruction": "Go to the highlighted brick column and press F to read the note.",
+          "hint": "Look at the column with the yellow marker; press F when the F badge appears."
         },
         "inspectStele": {
-          "instruction": "Continue to the stele and press F to examine the artifact.",
-          "hint": "Approach the large stone stele until its interaction marker appears."
+          "instruction": "Go to the stele in the middle of the pavilion and press F to inspect it.",
+          "hint": "Stand in front of the stele and look at its marker until the F badge appears."
         },
         "viewSteleHeading": {
-          "instruction": "Rotate the stele and open the annotation on its pediment.",
-          "hint": "Drag to rotate the model, then select the highlighted golden marker near the top."
+          "instruction": "Rotate the stele and click the marker on its heading.",
+          "hint": "Drag to rotate the model, then click the yellow marker at the very top of the stele."
+        },
+        "viewSteleBase": {
+          "instruction": "Find and click the marker on the stele base.",
+          "hint": "Drag to rotate and scroll to zoom out until the base below the stele is visible."
         }
       },
       "discoveries": {
@@ -93,16 +99,20 @@
           "summary": "You have reached the main visitor area. This placeholder will be replaced with verified historical context."
         },
         "column": {
-          "title": "Architectural column detail",
-          "summary": "This journal entry records the architectural detail you inspected. Specialist content will be added later."
+          "title": "Four brick columns",
+          "summary": "The pavilion roof rests on four large, round brick columns placed around the stone stele, which weighs about 22 tonnes and stands in the middle of the pavilion."
         },
         "stele": {
-          "title": "The Khiem Cung Ky Stele",
-          "summary": "You opened the close inspection view of the stele. The current description is placeholder Journal content."
+          "title": "The Khiêm Cung Ký Stele",
+          "summary": "The stele is a single block of granite from Thanh Hóa (known as Thanh stone). It is 407 cm high, 259 cm wide, 48 cm at its thickest and weighs an estimated 22 tonnes. Emperor Tự Đức wrote the text himself: the front carries 2,319 characters in regular script and the back 2,537 characters in running script. The stele is recognised as a national treasure."
         },
         "steleHeading": {
-          "title": "Stele pediment detail",
-          "summary": "You found the annotation on the stele pediment. A verified interpretation will be added later."
+          "title": "The dragon-and-cloud heading",
+          "summary": "The heading is 97 cm high and 287.5 cm wide. It is shaped like a stone chime and carved in relief with a “long vân” (dragon and cloud) motif. In court art, the dragon is the image associated with the emperor."
+        },
+        "steleBase": {
+          "title": "The quỳ-leg base and stone platform",
+          "summary": "The base is 100 cm high, 309 cm wide and 162.5 cm deep, shaped with curved “quỳ” legs and finely carved: its outer faces show dragons, clouds, a tiger-face motif (hổ phù) and folded S-shaped meanders in relief and openwork. The stele and its base stand on a two-tier platform of Thanh stone with steps on all four sides."
         }
       }
     }

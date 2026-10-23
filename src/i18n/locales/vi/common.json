@@ -1,14 +1,16 @@
 {
   "annotation": {
     "tuduc": {
-      "column": "Cột kiến trúc",
-      "column_des": "Đây là nội dung xem thử cho chú thích kiến trúc. Phần mô tả lịch sử đã kiểm chứng sẽ được bổ sung khi điểm chú thích được kết nối với Firestore.",
+      "column": "Cột gạch của Bi Đình",
+      "column_des": "Mái Bi Đình được đỡ bởi bốn cột gạch tròn, to. Kết cấu gạch giúp công trình đủ vững để che chở tấm bia đá nặng khoảng 22 tấn đặt ở giữa nhà bia.",
       "architectureDetail": "Chi tiết kiến trúc",
       "architectureDetail_des": "Điểm xem thử thứ hai dùng để kiểm tra rằng chỉ chi tiết nằm gần tâm camera nhất nhận tương tác.",
       "vanbia": "Trán bia",
       "vanbia_des": "Trán bia hình khánh, chạm nổi đồ án “long vân” với hình mặt rồng chính diện ở phía trên và chòm đuôi xoắn ở phía dưới, xung quanh là hình mây và các đao lửa. ",
       "thanvanbia": "Áng Văn Khắc Đá Trường Tồn",
-      "thanvanbia_des": "Với 4.935 chữ Hán khắc trên hai mặt, bia Khiêm Cung Ký tự hào là tấm bia có số lượng văn tự khắc trên đá nhiều nhất Việt Nam. Đây cũng là bảo vật hoàng gia duy nhất lưu giữ trọn vẹn nét bút ngự phê của chính tác giả – Hoàng đế Tự Đức. Sự độc đáo này đã biến Khiêm Cung Ký trở thành kiệt tác đỉnh cao về cả nghệ thuật tạo hình lẫn kỹ thuật chạm khắc trong các lăng vua triều Nguyễn. Không chỉ là tiếng lòng đầy trăn trở của một bậc quân vương trước vận mệnh đổi thay của đất nước, văn bia còn hé lộ bức tranh phong thủy tuyệt mỹ bao quanh lăng mộ với những ngọn núi mang chữ \"Khiêm\" nối đuôi nhau chầu về như: Dẫn Khiêm, Lao Khiêm, Long Khiêm... Sinh thời, nhà vua đã gửi gắm trọn vẹn chí hướng và tâm nguyện của mình vào cảnh quan nơi đây: “Lên cao mà nhìn bốn phía thì trước mặt là đàn Nam Giao, sau lưng là chùa Linh Mụ đã đủ rõ chí hướng bình sinh của ta rồi... Bên phải gần Xương Lăng, bên trái đối diện Văn Miếu đủ để an ủi niềm yêu mến ngưỡng mộ thành thực của ta, để ngày kia hồn phách ta có nơi nương tựa dài lâu thủy chung như nhất”. Đối với du khách, mỗi dòng chữ trên tấm bia không chỉ là tư liệu lịch sử, mà còn là lời tự sự linh thiêng kết nối con người với hồn thiêng sông núi xứ Huế."
+      "thanvanbia_des": "Với 4.935 chữ Hán khắc trên hai mặt, bia Khiêm Cung Ký tự hào là tấm bia có số lượng văn tự khắc trên đá nhiều nhất Việt Nam. Đây cũng là bảo vật hoàng gia duy nhất lưu giữ trọn vẹn nét bút ngự phê của chính tác giả – Hoàng đế Tự Đức. Sự độc đáo này đã biến Khiêm Cung Ký trở thành kiệt tác đỉnh cao về cả nghệ thuật tạo hình lẫn kỹ thuật chạm khắc trong các lăng vua triều Nguyễn. Không chỉ là tiếng lòng đầy trăn trở của một bậc quân vương trước vận mệnh đổi thay của đất nước, văn bia còn hé lộ bức tranh phong thủy tuyệt mỹ bao quanh lăng mộ với những ngọn núi mang chữ \"Khiêm\" nối đuôi nhau chầu về như: Dẫn Khiêm, Lao Khiêm, Long Khiêm... Sinh thời, nhà vua đã gửi gắm trọn vẹn chí hướng và tâm nguyện của mình vào cảnh quan nơi đây: “Lên cao mà nhìn bốn phía thì trước mặt là đàn Nam Giao, sau lưng là chùa Linh Mụ đã đủ rõ chí hướng bình sinh của ta rồi... Bên phải gần Xương Lăng, bên trái đối diện Văn Miếu đủ để an ủi niềm yêu mến ngưỡng mộ thành thực của ta, để ngày kia hồn phách ta có nơi nương tựa dài lâu thủy chung như nhất”. Đối với du khách, mỗi dòng chữ trên tấm bia không chỉ là tư liệu lịch sử, mà còn là lời tự sự linh thiêng kết nối con người với hồn thiêng sông núi xứ Huế.",
+      "steleBase": "Bệ bia",
+      "steleBase_des": "Bệ bia tạo dáng chân quỳ, cao 100 cm, rộng 309 cm, dày 162,5 cm. Mặt ngoài chạm nổi và chạm lộng các đồ án rồng, mây, mặt hổ phù và hồi văn chữ S gấp khúc."
     }
   },
   "sceneAnnotation": {
@@ -63,11 +65,11 @@
       "description": "Bạn đã tìm hiểu một chi tiết kiến trúc và quan sát cận cảnh bia Khiêm Cung Ký."
     },
     "tuDuc": {
-      "title": "Khám phá kiến trúc và bia Khiêm Cung Ký",
-      "description": "Đi qua một chi tiết của công trình trước khi quan sát tấm bia và khám phá nét chạm khắc tiêu biểu.",
+      "title": "Bi Đình và bia Khiêm Cung Ký",
+      "description": "Quan sát hệ cột gạch đỡ mái nhà bia, rồi xem cận cảnh tấm bia vua Tự Đức tự soạn cho chính mình.",
       "cinematic": {
         "title": "Một hành trình qua không gian Khiêm Lăng",
-        "caption": "Quan sát tổng thể khu vực trước khi bắt đầu khám phá từng dấu tích trong không gian 3D."
+        "caption": "Từ trên cao, hãy tìm nhà bia: nơi đặt tấm bia đá cao và nặng nhất Việt Nam."
       },
       "steps": {
         "reachColumn": {
@@ -75,16 +77,20 @@
           "hint": "Theo marker vàng và tiến lại gần khu vực công trình."
         },
         "inspectColumn": {
-          "instruction": "Tìm cột kiến trúc đang được đánh dấu và nhấn F để xem.",
-          "hint": "Tìm marker vàng nằm gần cột của công trình."
+          "instruction": "Đến gần cột gạch đang được đánh dấu và nhấn F để xem chú thích.",
+          "hint": "Nhìn về phía cột có marker vàng; khi badge F xuất hiện thì nhấn F."
         },
         "inspectStele": {
-          "instruction": "Tiếp tục đến gần bia và nhấn F để xem hiện vật.",
-          "hint": "Đi về phía tấm bia đá lớn cho đến khi marker tương tác xuất hiện."
+          "instruction": "Đến gần tấm bia ở giữa nhà bia và nhấn F để xem hiện vật.",
+          "hint": "Đứng trước mặt bia, nhìn thẳng vào marker cho đến khi badge F xuất hiện."
         },
         "viewSteleHeading": {
-          "instruction": "Xoay tấm bia và mở chú thích trên phần trán bia.",
-          "hint": "Kéo chuột để xoay model, sau đó chọn marker vàng ở gần phía trên."
+          "instruction": "Xoay tấm bia và click vào marker trên phần trán bia.",
+          "hint": "Kéo chuột để xoay model, rồi click marker vàng ở phía trên cùng của bia."
+        },
+        "viewSteleBase": {
+          "instruction": "Tìm và click vào marker trên bệ bia.",
+          "hint": "Kéo chuột để xoay, cuộn để thu nhỏ cho thấy phần đế bên dưới thân bia."
         }
       },
       "discoveries": {
@@ -93,16 +99,20 @@
           "summary": "Bạn đã tiếp cận khu vực tham quan chính. Đây là nội dung minh họa và sẽ được thay bằng phần giới thiệu lịch sử đã kiểm chứng."
         },
         "column": {
-          "title": "Chi tiết cột kiến trúc",
-          "summary": "Mục ghi chép này lưu lại chi tiết kiến trúc bạn vừa quan sát. Nội dung chuyên môn sẽ được bổ sung sau."
+          "title": "Bốn cột gạch đỡ mái",
+          "summary": "Mái nhà bia được đỡ bởi bốn cột gạch tròn, to, đặt quanh tấm bia đá nặng khoảng 22 tấn ở giữa nhà bia."
         },
         "stele": {
           "title": "Bia Khiêm Cung Ký",
-          "summary": "Bạn đã mở chế độ quan sát bia ở cự ly gần. Phần mô tả hiện tại là nội dung mẫu cho Sổ tay khám phá."
+          "summary": "Tấm bia làm bằng đá hoa cương nguyên khối lấy từ Thanh Hóa (còn gọi là đá Thanh), cao 407 cm, rộng 259 cm, chỗ dày nhất 48 cm, nặng ước tính 22 tấn. Văn bia do chính vua Tự Đức soạn: mặt trước khắc 2.319 chữ theo thể chữ Khải, mặt sau khắc 2.537 chữ theo thể chữ Hành. Bia được công nhận là bảo vật quốc gia."
         },
         "steleHeading": {
-          "title": "Chi tiết trán bia",
-          "summary": "Bạn đã tìm thấy điểm chú thích trên phần trán bia. Nội dung diễn giải đã kiểm chứng sẽ được cập nhật sau."
+          "title": "Trán bia long vân",
+          "summary": "Trán bia cao 97 cm, rộng 287,5 cm, tạo hình chiếc khánh và chạm nổi đồ án “long vân” (rồng và mây). Rồng là hình tượng gắn với nhà vua trong nghệ thuật cung đình."
+        },
+        "steleBase": {
+          "title": "Bệ chân quỳ và nền đá",
+          "summary": "Bệ bia cao 100 cm, rộng 309 cm, dày 162,5 cm, tạo dáng chân quỳ và được chạm trổ công phu: mặt ngoài chạm nổi và chạm lộng các đồ án rồng, mây, mặt hổ phù và hồi văn chữ S gấp khúc. Toàn bộ bia và bệ bia được đặt trên một nền đá thanh hai tầng, bốn phía có hệ thống bậc cấp."
         }
       }
     }

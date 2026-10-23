@@ -123,7 +123,7 @@ function DevelopmentSceneContents({
 
   return (
     <>
-      {perfVisible && <Perf position='top-left' />}
+      {perfVisible && <Perf position='bottom-left' />}
       <SceneContents {...props} sunPosition={sunPosition as [number, number, number]} />
     </>
   );

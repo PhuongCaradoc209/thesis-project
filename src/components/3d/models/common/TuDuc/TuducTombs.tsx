@@ -1,9 +1,34 @@
-import { Clone, useGLTF } from '@react-three/drei';
+import { Clone, Detailed, useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import { Suspense, useMemo } from 'react';
 import * as THREE from 'three';
 import type { CollisionModel, SceneAsset } from '../../../../../types/scene.types';
 import { TuDucModel } from './tomb-of-tu-duc';
+
+const TREE_URL = 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1792638768/tree-7mb_pxoprs.glb';
+const TREE_LITE_URL = 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1792641562/tree-lite_yj0ue0.glb';
+const TREE_LOD_DISTANCES = [0, 3];
+const TREE_SCALE = 2.0;
+
+// Góc xoay Y giả ngẫu nhiên theo index: mỗi cây một hướng, nhưng giữ nguyên sau mỗi lần reload
+function treeRotationY(index: number) {
+  const hash = Math.sin((index + 1) * 12.9898) * 43758.5453;
+  return (hash - Math.floor(hash)) * Math.PI * 2;
+}
+
+function setupTreeMaterials(tree: THREE.Object3D) {
+  tree.traverse((child: any) => {
+    if (child.isMesh) {
+      const isLeaves = child.material?.name?.includes('leaves');
+      child.castShadow = !isLeaves;
+      child.receiveShadow = true;
+      if (isLeaves) {
+        child.material.transparent = false;
+        child.material.alphaTest = 0.5;
+      }
+    }
+  });
+}
 
 type ModelProps = {
   position?: [number, number, number];
@@ -17,7 +42,8 @@ export default function TuducTombs({ position, rotation, scale, asset, collision
   const floorModel = useGLTF(
     collision?.url || 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1777342022/collision_juyj5n.glb',
   );
-  const treeModel = useGLTF('https://res.cloudinary.com/djbtyhwl4/image/upload/v1775703055/tree_s2wv31.glb');
+  const treeModel = useGLTF(TREE_URL);
+  const treeLiteModel = useGLTF(TREE_LITE_URL);
   const scene = useMemo(() => {
     floorModel.scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh && (child as THREE.Mesh).material) {
@@ -40,19 +66,13 @@ export default function TuducTombs({ position, rotation, scale, asset, collision
     return floorModel.scene;
   }, [floorModel]);
 
-  useMemo(() => {
-    treeModel.scene.traverse((child: any) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-  }, [treeModel.scene]);
+  useMemo(() => setupTreeMaterials(treeModel.scene), [treeModel.scene]);
+  useMemo(() => setupTreeMaterials(treeLiteModel.scene), [treeLiteModel.scene]);
 
   const positions: [number, number, number][] = [
     [-8, -3.5, -4],
-    [0, -3.5, 9],
-    [5, -3.5, -4],
+    [-6, -3.5, 6],
+    [2, -3.5, -8],
     [5, -3.5, 7],
   ];
   return (
@@ -83,11 +103,20 @@ export default function TuducTombs({ position, rotation, scale, asset, collision
         </Instances> */}
 
         {positions.map((pos, index) => (
-          <Clone key={index} object={treeModel.scene} position={pos} scale={1} />
+          <Detailed
+            key={index}
+            distances={TREE_LOD_DISTANCES}
+            position={pos}
+            rotation={[0, treeRotationY(index), 0]}
+            scale={TREE_SCALE}>
+            <Clone object={treeModel.scene} />
+            <Clone object={treeLiteModel.scene} />
+          </Detailed>
         ))}
       </Suspense>
     </group>
   );
 }
 useGLTF.preload('https://res.cloudinary.com/djbtyhwl4/image/upload/v1777342022/collision_juyj5n.glb');
-useGLTF.preload('https://res.cloudinary.com/djbtyhwl4/image/upload/v1775703055/tree_s2wv31.glb');
+useGLTF.preload(TREE_URL);
+useGLTF.preload(TREE_LITE_URL);
