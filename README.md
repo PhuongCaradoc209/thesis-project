@@ -23,7 +23,7 @@ Bản đồ di sản → Tải scene → Tham quan tự do → Tương tác hots
 Hai địa điểm demo hiện tại:
 
 - Lăng Tự Đức — Huế.
-- Khu di tích Đền Hùng — Phú Thọ.
+- Đền thờ Vua Hùng — Cần Thơ.
 
 ## ◆ Trải nghiệm chính
 
