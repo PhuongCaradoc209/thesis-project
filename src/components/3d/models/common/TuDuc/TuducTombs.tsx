@@ -7,10 +7,9 @@ import { TuDucModel } from './tomb-of-tu-duc';
 
 const TREE_URL = 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1792638768/tree-7mb_pxoprs.glb';
 const TREE_LITE_URL = 'https://res.cloudinary.com/djbtyhwl4/image/upload/v1792641562/tree-lite_yj0ue0.glb';
-const TREE_LOD_DISTANCES = [0, 3];
+const TREE_LOD_DISTANCES = [0, 6];
 const TREE_SCALE = 2.0;
 
-// Góc xoay Y giả ngẫu nhiên theo index: mỗi cây một hướng, nhưng giữ nguyên sau mỗi lần reload
 function treeRotationY(index: number) {
   const hash = Math.sin((index + 1) * 12.9898) * 43758.5453;
   return (hash - Math.floor(hash)) * Math.PI * 2;

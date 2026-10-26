@@ -1,27 +1,34 @@
 import { useFrame, useLoader } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { RGBELoader } from 'three-stdlib';
 
 const SKY_RADIUS = 950;
+export const SKY_HDR_URL = '/common/image/citrus_orchard_puresky_1k.hdr';
 
 export function AnimateSky() {
   const meshRef = useRef<THREE.Mesh>(null!);
   const textureRef = useRef<THREE.Texture>(null);
-  const hdrTexture = useLoader(RGBELoader, '/common/image/citrus_orchard_puresky_1k.hdr', (loader) => {
-    loader.setDataType(THREE.FloatType); // Ép dùng bộ nhớ lớn để chống tràn
+  const sourceTexture = useLoader(RGBELoader, SKY_HDR_URL, (loader) => {
+    loader.setDataType(THREE.FloatType);
   });
 
-  hdrTexture.generateMipmaps = false; // Tắt tự động tạo các bản sao nhòe
-  hdrTexture.minFilter = THREE.LinearFilter; // Tắt bộ lọc chống răng cưa khi thu nhỏ
-  hdrTexture.magFilter = THREE.LinearFilter;
-  hdrTexture.mapping = THREE.UVMapping;
-
-  hdrTexture.wrapS = THREE.RepeatWrapping;
-  hdrTexture.wrapT = THREE.ClampToEdgeWrapping;
+  // <Environment> trong Lights nạp cùng file và nhận cùng object từ cache của useLoader.
+  // Bản clone giữ UVMapping + offset trôi riêng cho bầu trời, không đè mapping equirect của IBL.
+  const hdrTexture = useMemo(() => {
+    const texture = sourceTexture.clone();
+    texture.generateMipmaps = false; // Tắt tự động tạo các bản sao nhòe
+    texture.minFilter = THREE.LinearFilter; // Tắt bộ lọc chống răng cưa khi thu nhỏ
+    texture.magFilter = THREE.LinearFilter;
+    texture.mapping = THREE.UVMapping;
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    return texture;
+  }, [sourceTexture]);
 
   useEffect(() => {
     textureRef.current = hdrTexture;
+    return () => hdrTexture.dispose();
   }, [hdrTexture]);
 
   useFrame((state, delta) => {
@@ -30,7 +37,6 @@ export function AnimateSky() {
     }
 
     if (textureRef.current) {
-      // Số 0.005 là tốc độ trôi. Có thể tăng lên 0.01 nếu mây trôi quá chậm
       textureRef.current.offset.x += delta * 0.005;
     }
   });

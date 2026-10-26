@@ -7,12 +7,15 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import PreviewBackground from '../../assets/scenes/tuduc/BackgroundTuDucTomb.jpg';
+import { RESOLUTION_DPR } from '../../constants/settings';
+import { useSettingsStore } from '../../store/useSettingsStore';
 import { useTourismStore } from '../../store/useTourismStore';
 import type { Scene } from '../../types/scene.types';
 import { SceneInteractionProvider } from '../interactions/SceneInteractionManager';
 import Player, { DEFAULT_KILL_Y } from '../player/Player';
 import { AnimateSky } from './AnimateSky';
 import Lights from './Lights';
+import { DevelopmentPostFX, PostFX } from './PostFX';
 import { SplatFloor } from './SplatFloor';
 
 type BaseSceneProps = {
@@ -57,9 +60,6 @@ function FullCanvasViewport({ active }: { active: boolean }) {
   useFrame(() => {
     if (!active) return;
 
-    // Drei View renders with a scissored viewport. Its unmount cleanup clears
-    // the old view but can leave that smaller viewport active for the main
-    // scene, producing black strips where the preview header/sidebar used to be.
     gl.setScissorTest(false);
     gl.setViewport(0, 0, size.width, size.height);
     gl.setScissor(0, 0, size.width, size.height);
@@ -129,22 +129,36 @@ function DevelopmentSceneContents({
   );
 }
 
+type FogSettings = { color: string; near: number; far: number };
+
+function DevelopmentFog({ color, near, far }: FogSettings) {
+  const fog = useControls('Environment', {
+    fogColor: color,
+    fogNear: { value: near, min: 0, max: 300, step: 1 },
+    fogFar: { value: far, min: 10, max: 600, step: 1 },
+  });
+
+  return <fog attach='fog' args={[fog.fogColor, fog.fogNear, fog.fogFar]} />;
+}
+
 function BaseScene({ children, sceneConfig, loading = false, onFirstFrame, eventSource }: BaseSceneProps) {
   const { t } = useTranslation();
   const pause = useTourismStore((state) => state.pause);
   const selectedArtifactId = useTourismStore((state) => state.selectedArtifactId);
+  const graphics = useSettingsStore((state) => state.graphics);
   const [canvasGeneration, setCanvasGeneration] = useState(0);
   const [isContextLost, setIsContextLost] = useState(false);
   const handleContextLost = useCallback(() => setIsContextLost(true), []);
   const handleContextRestored = useCallback(() => setIsContextLost(false), []);
 
-  // Use scene config defaults or fallback
   const defaultSun: [number, number, number] = (sceneConfig?.environmentConfig?.sunPosition as [number, number, number]) || [
-    10, 10, 10,
+    10, 14, 10,
   ];
-  const defaultFogColor = sceneConfig?.environmentConfig?.fogColor || '#ffffff';
-  const defaultFogNear = sceneConfig?.environmentConfig?.fogNear || 30;
-  const defaultFogFar = sceneConfig?.environmentConfig?.fogFar || 100;
+  const fogSettings: FogSettings = {
+    color: sceneConfig?.environmentConfig?.fogColor || '#d0dbe7',
+    near: sceneConfig?.environmentConfig?.fogNear || 40,
+    far: sceneConfig?.environmentConfig?.fogFar || 140,
+  };
   const initialPlayerPos = sceneConfig?.playerConfig?.position as [number, number, number] | undefined;
   const configuredKillY = sceneConfig?.playerConfig?.killY;
   const killY = Number.isFinite(configuredKillY) ? (configuredKillY as number) : DEFAULT_KILL_Y;
@@ -188,8 +202,8 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame, event
           key={canvasGeneration}
           eventSource={eventSource}
           eventPrefix='client'
-          shadows={!pause}
-          dpr={[1, 1.5]}
+          shadows={!pause && graphics.shadows !== 'off'}
+          dpr={RESOLUTION_DPR[graphics.resolution]}
           frameloop='always'
           className='relative z-10'
           gl={{
@@ -203,7 +217,11 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame, event
           <FirstFrameReporter onFirstFrame={onFirstFrame} />
           <FullCanvasViewport active={!selectedArtifactId} />
           {pause || loading || <PointerLockControls makeDefault />}
-          <fog attach='fog' args={[defaultFogColor, defaultFogNear, defaultFogFar]} />
+          {import.meta.env.DEV ? (
+            <DevelopmentFog {...fogSettings} />
+          ) : (
+            <fog attach='fog' args={[fogSettings.color, fogSettings.near, fogSettings.far]} />
+          )}
           <SceneInteractionProvider active={!pause && !loading}>
             <Physics paused={pause || loading}>
               {import.meta.env.DEV ? (
@@ -213,6 +231,9 @@ function BaseScene({ children, sceneConfig, loading = false, onFirstFrame, event
               )}
             </Physics>
           </SceneInteractionProvider>
+          {/* Hậu kỳ hiện chỉ phục vụ AO: tắt AO thì bỏ cả composer, renderer tự tone map và khử răng cưa.
+              Cũng tắt khi inspect vì EffectComposer chiếm vòng render và phá preview của View.Port. */}
+          {graphics.ambientOcclusion && !selectedArtifactId && (import.meta.env.DEV ? <DevelopmentPostFX /> : <PostFX />)}
           <View.Port />
         </Canvas>
       </KeyboardControls>

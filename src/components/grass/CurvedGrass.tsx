@@ -25,7 +25,8 @@ function createCurvedBladeGeometry({
 
   const start = new THREE.Vector2(0, 0);
 
-  const control = new THREE.Vector2(bend * 0.4, height * 1.05)  const end = new THREE.Vector2(bend, height - droop);
+  const control = new THREE.Vector2(bend * 0.4, height * 1.05);
+  const end = new THREE.Vector2(bend, height - droop);
 
   const center = new THREE.Vector2();
   const tangent = new THREE.Vector2();
