@@ -1,4 +1,4 @@
-import { CompassIcon, MapPinSimpleAreaIcon, MapTrifoldIcon, XIcon } from '@phosphor-icons/react';
+import { CompassIcon, MapPinSimpleAreaIcon, XIcon } from '@phosphor-icons/react';
 import { useProgress } from '@react-three/drei';
 import { AnimatePresence, motion } from 'motion/react';
 import { Fragment, Suspense, useCallback, useEffect, useState } from 'react';
@@ -17,7 +17,9 @@ import InspectModal from '../../components/previews-modal';
 import { SceneAnnotationPanel, type SceneAnnotationPreview } from '../../components/scene-annotation/SceneAnnotationPanel';
 import { SceneAnnotationPoint } from '../../components/scene-annotation/SceneAnnotationPoint';
 import BaseScene from '../../components/scenes/BaseScene';
+import { SettingsPanel } from '../../components/settings/SettingsPanel';
 import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
+import { TourToolbar } from '../../components/tour/TourToolbar';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
 import { SCENE_IDS } from '../../constants/markers';
 import { useGuidedTours } from '../../hooks/useGuidedTours';
@@ -25,6 +27,7 @@ import { useSceneData } from '../../hooks/useScenes';
 import { NAV_PATH } from '../../router/paths';
 import { useTourismStore } from '../../store/useTourismStore';
 import { useGuidedTourStore } from '../../store/useGuidedTourStore';
+import { useSettingsStore } from '../../store/useSettingsStore';
 import { getScenePresentation } from '../../utils/scenePresentation';
 
 const CONTROLS_ONBOARDING_KEY = 'tour-controls-onboarding-seen:v1';
@@ -64,6 +67,11 @@ export default function TourPage() {
   const isGuidedIntroOpen = useGuidedTourStore((state) => state.isIntroOpen);
   const isGuidedCompletionOpen = useGuidedTourStore((state) => state.isCompletionOpen);
   const isGuidedJournalOpen = useGuidedTourStore((state) => state.isJournalOpen);
+  const isSettingsOpen = useSettingsStore((state) => state.isSettingsOpen);
+  const openSettings = useSettingsStore((state) => state.openSettings);
+  const closeSettings = useSettingsStore((state) => state.closeSettings);
+  const openGuidedJournal = useGuidedTourStore((state) => state.openJournal);
+  const closeGuidedJournal = useGuidedTourStore((state) => state.closeJournal);
   const guidedCompletionPending = useGuidedTourStore((state) => state.completionPending);
   const attachGuidedTour = useGuidedTourStore((state) => state.attachTour);
   const detachGuidedTour = useGuidedTourStore((state) => state.detachTour);
@@ -124,7 +132,7 @@ export default function TourPage() {
 
   useEffect(() => {
     const guidedOverlayOpen = isGuidedIntroOpen || isGuidedCompletionOpen || isGuidedJournalOpen || guidedStatus === 'cinematic';
-    if (guidedOverlayOpen) {
+    if (guidedOverlayOpen || isSettingsOpen) {
       setPause(true);
       return;
     }
@@ -135,6 +143,7 @@ export default function TourPage() {
     isGuidedCompletionOpen,
     isGuidedIntroOpen,
     isGuidedJournalOpen,
+    isSettingsOpen,
     isTeleportMapOpen,
     selectedArtifactId,
     selectedSceneAnnotation,
@@ -215,6 +224,23 @@ export default function TourPage() {
     setPause(next || Boolean(selectedArtifactId) || Boolean(selectedSceneAnnotation));
   };
 
+  const toggleJournal = () => (isGuidedJournalOpen ? closeGuidedJournal() : openGuidedJournal());
+
+  const toggleSettings = () => {
+    if (isSettingsOpen) {
+      closeSettings();
+      return;
+    }
+    // Panel cài đặt phủ góc phải nên đóng bản đồ trước; pause do effect isSettingsOpen đảm nhận
+    setIsTeleportMapOpen(false);
+    openSettings();
+  };
+
+  const replayControlsOnboarding = () => {
+    closeSettings();
+    setHasSeenControls(false);
+  };
+
   const dismissControlsOnboarding = () => {
     setHasSeenControls(true);
     try {
@@ -274,6 +300,7 @@ export default function TourPage() {
                   {isReachTarget && <GuidedReachTarget targetId={point.pointId} />}
                   <SceneAnnotationPoint
                     interactionId={point.pointId}
+                    title={point.title}
                     position={position}
                     maxDistance={isReachTarget ? (currentGuidedStep.radius ?? SCENE_ANNOTATION_INTERACTION_DISTANCE) : undefined}
                     guidedTarget={
@@ -308,66 +335,90 @@ export default function TourPage() {
       <AnimatePresence>
         {isTeleportMapOpen && (
           <motion.div
-            className='absolute right-4 bottom-28 z-30 flex h-120 w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/80 backdrop-blur-lg'
+            role='dialog'
+            aria-labelledby='teleport-title'
+            className='text-on-surface absolute right-4 bottom-20 z-30 flex max-h-[28rem] w-80 flex-col overflow-hidden rounded-xl border border-[#b69462]/55 bg-[#f3e7cf] shadow-[0_14px_40px_rgba(20,12,7,0.25)]'
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             onClick={(event) => event.stopPropagation()}>
-            <div className='flex h-14 w-full items-center justify-between bg-neutral-800 p-4'>
-              <div className='font-headline text-secondary-container flex items-center gap-2'>
-                <CompassIcon />
-                <p>Bản đồ di chuyển</p>
-              </div>
-              <button className='cursor-pointer' onClick={closeTeleportMap} aria-label='Đóng bản đồ di chuyển'>
+            <div className='flex items-center justify-between border-b border-amber-950/12 px-4 py-3'>
+              <h2 id='teleport-title' className='font-headline text-primary flex items-center gap-2 text-lg font-semibold'>
+                <CompassIcon size={20} />
+                {t('teleport.title')}
+              </h2>
+              <button
+                type='button'
+                className='text-on-surface-variant rounded-md p-1.5 transition-colors hover:bg-amber-950/5'
+                onClick={closeTeleportMap}
+                aria-label={t('teleport.close')}>
                 <XIcon size={18} />
               </button>
             </div>
 
-            <div className='h-40 w-full bg-black/40' />
-
-            <div className='min-h-0 w-full flex-1 space-y-2 overflow-y-auto p-2'>
+            <div className='min-h-0 w-full flex-1 overflow-y-auto p-2'>
               {teleportPoints?.length ? (
-                teleportPoints.map((point) => (
-                  <div
-                    key={point.teleportId}
-                    onClick={() => {
-                      triggerTeleport({
-                        position: point.position as [number, number, number],
-                        lookAt: point.lookAt as [number, number, number],
-                      });
-                      reportGuidedEvent({ type: 'teleport_selected', targetId: point.teleportId });
-                      closeTeleportMap();
-                    }}
-                    className='group flex w-full cursor-pointer space-x-4 rounded-2xl p-4 transition-all duration-200 ease-in-out hover:bg-white/10'>
-                    <div className='bg-primary aspect-square rounded-xl p-4'>
-                      <MapPinSimpleAreaIcon size={20} />
-                    </div>
-                    <div className='space-y-2'>
-                      <p className='font-headline text-white'>{point.label}</p>
-                      <p className='font-manrope group-hover:text-secondary-container text-xs text-gray-500 uppercase transition-all ease-in-out'>
-                        {point.label}
-                      </p>
-                    </div>
-                  </div>
-                ))
+                <ul className='space-y-1'>
+                  {teleportPoints.map((point) => (
+                    <li key={point.teleportId}>
+                      <button
+                        type='button'
+                        onClick={() => {
+                          triggerTeleport({
+                            position: point.position as [number, number, number],
+                            lookAt: point.lookAt as [number, number, number],
+                          });
+                          reportGuidedEvent({ type: 'teleport_selected', targetId: point.teleportId });
+                          closeTeleportMap();
+                        }}
+                        className='flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/40'>
+                        <span className='bg-primary text-on-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-lg'>
+                          <MapPinSimpleAreaIcon size={18} />
+                        </span>
+                        <span className='font-headline text-[15px]'>{t(point.label)}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               ) : (
-                <div className='p-4 text-sm text-slate-300'>Chưa có điểm dịch chuyển.</div>
+                <p className='text-on-surface-variant p-4 text-sm leading-6'>{t('teleport.empty')}</p>
               )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {guidedStatus !== 'cinematic' && !isGuidedJournalOpen && (
-        <button
-          type='button'
-          onClick={toggleTeleportMap}
-          className='text-secondary-fixed-dim bg-primary hover:bg-primary-container absolute right-4 bottom-4 z-30 cursor-pointer rounded-2xl border-4 border-amber-700 p-4 transition-all duration-300 ease-in-out'
-          aria-label={isTeleportMapOpen ? 'Đóng bản đồ di chuyển' : 'Mở bản đồ di chuyển'}>
-          <MapTrifoldIcon size={48} weight='fill' />
-        </button>
-      )}
+      <TourToolbar
+        visible={
+          isLoadingOverlayGone &&
+          guidedStatus !== 'cinematic' &&
+          !isGuidedIntroOpen &&
+          !isGuidedCompletionOpen &&
+          !isGuidedJournalOpen &&
+          !selectedArtifactId &&
+          !selectedSceneAnnotation
+        }
+        shortcutsEnabled={
+          isLoadingOverlayGone &&
+          guidedStatus !== 'cinematic' &&
+          !isGuidedIntroOpen &&
+          !isGuidedCompletionOpen &&
+          !selectedArtifactId &&
+          !selectedSceneAnnotation
+        }
+        showJournal={Boolean(guidedTour)}
+        isMapOpen={isTeleportMapOpen}
+        isJournalOpen={isGuidedJournalOpen}
+        isSettingsOpen={isSettingsOpen}
+        onToggleMap={toggleTeleportMap}
+        onToggleJournal={toggleJournal}
+        onToggleSettings={toggleSettings}
+      />
+
+      <AnimatePresence>
+        {isSettingsOpen && <SettingsPanel onClose={closeSettings} onReplayControls={replayControlsOnboarding} />}
+      </AnimatePresence>
 
       {isSceneReady &&
         !showLoadingOverlay &&

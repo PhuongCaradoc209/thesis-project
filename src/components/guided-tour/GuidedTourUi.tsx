@@ -133,7 +133,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
           (status === 'active' || status === 'paused') &&
           currentStep && (
             <motion.aside
-              className='text-on-surface absolute top-24 left-4 z-40 w-[min(25rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-l-4 border-amber-950/20 border-l-[#9e0027] bg-[#f3e7cf]/95 shadow-[0_14px_40px_rgba(20,12,7,0.25)]'
+              className='text-on-surface absolute top-24 left-4 z-40 w-[min(25rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-amber-950/20 bg-[#f3e7cf]/95 shadow-[0_14px_40px_rgba(20,12,7,0.25)]'
               initial={reduceMotion ? false : { opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               exit={reduceMotion ? undefined : { opacity: 0, x: -12 }}>
@@ -213,7 +213,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
           (status === 'idle' || status === 'completed') && (
             <motion.button
               type='button'
-              className='text-primary absolute top-24 left-4 z-30 flex items-center gap-2 rounded-lg border border-l-4 border-amber-950/20 border-l-[#9e0027] bg-[#f3e7cf]/95 px-4 py-3 text-sm font-semibold shadow-lg transition-colors hover:bg-[#f8edd9]'
+              className='text-primary absolute top-24 left-4 z-30 flex items-center gap-2 rounded-lg border border-amber-950/20 bg-[#f3e7cf]/95 px-4 py-3 text-sm font-semibold shadow-lg transition-colors hover:bg-[#f8edd9]'
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -12 }}
@@ -224,22 +224,11 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
           )}
       </AnimatePresence>
 
-      {!hideLauncher && status !== 'cinematic' && !isIntroOpen && !isCompletionOpen && !isJournalOpen && (
-        <button
-          type='button'
-          className='text-secondary-fixed-dim bg-primary hover:bg-primary-container absolute right-28 bottom-4 z-30 cursor-pointer rounded-2xl border-4 border-amber-700 p-4 transition-all duration-300 ease-in-out'
-          aria-label={t('guidedTour.actions.journal')}
-          title={t('guidedTour.actions.journal')}
-          onClick={openJournal}>
-          <BookOpenIcon size={48} weight='fill' />
-        </button>
-      )}
-
       <AnimatePresence>
         {feedback && (
           <motion.div
             key={feedback.id}
-            className='text-on-surface absolute top-24 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-l-4 border-amber-950/20 border-l-[#c79f00] bg-[#f3e7cf]/95 px-4 py-2.5 text-sm font-semibold shadow-lg'
+            className='text-on-surface absolute top-24 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-amber-950/20 bg-[#f3e7cf]/95 px-4 py-2.5 text-sm font-semibold shadow-lg'
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8 }}>

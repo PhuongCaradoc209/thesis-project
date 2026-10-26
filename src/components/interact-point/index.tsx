@@ -1,7 +1,10 @@
 import { Html } from '@react-three/drei';
 import { motion } from 'motion/react';
 import { useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
+import { useArtifactData } from '../../hooks/useArtifacts';
+import { InteractionPrompt } from '../interactions/InteractionPrompt';
 import { SCENE_INTERACTION_HTML_Z_INDEX_RANGE } from '../interactions/sceneInteraction.constants';
 import { useSceneInteraction } from '../interactions/useSceneInteraction';
 
@@ -14,6 +17,7 @@ type InteractPointProps = {
 };
 
 export function InteractPoint({ interactionId, position, artifactId, onInspect, guidedTarget = false }: InteractPointProps) {
+  const { t } = useTranslation();
   const pointRef = useRef<THREE.Group>(null);
   const handleInteract = useCallback(() => onInspect(artifactId), [artifactId, onInspect]);
   const interactionState = useSceneInteraction({
@@ -22,40 +26,36 @@ export function InteractPoint({ interactionId, position, artifactId, onInspect, 
     maxDistance: 5,
     onInteract: handleInteract,
   });
+  // Dùng chung cache với InspectModal nên mở modal sau đó không phải tải lại
+  const { data: artifact } = useArtifactData(interactionState === 'far' ? null : artifactId);
   const isFocused = interactionState === 'focused';
+  const label = artifact?.title ? t('interaction.inspect', { name: t(artifact.title) }) : t('interaction.inspectArtifact');
 
   return (
     <group ref={pointRef} position={position}>
       {(interactionState !== 'far' || guidedTarget) && (
         <Html distanceFactor={10} center zIndexRange={SCENE_INTERACTION_HTML_Z_INDEX_RANGE}>
-          <motion.div
-            className='border-primary flex h-8 w-8 items-center justify-center rounded-full border'
-            style={{
-              background: 'radial-gradient(circle,rgba(255, 255, 255, 0) 0%, rgba(233, 196, 0, 0.5) 100%)',
-            }}
-            animate={{
-              opacity: isFocused || guidedTarget ? 1 : 0.55,
-              y: [0, -4, 0],
-              scale: isFocused || guidedTarget ? [1, 1.1, 1] : 0.9,
-            }}
-            transition={{
-              opacity: { duration: 0.18 },
-              y: { duration: 1.6, repeat: Infinity, ease: 'easeInOut' },
-              scale: isFocused || guidedTarget ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.18 },
-            }}>
+          <div className='relative flex flex-col items-center'>
             {isFocused && (
-              <div className='bg-primary absolute -top-9 flex aspect-square items-center justify-center rounded-md p-0.5'>
-                <span className='bg-secondary/50 flex aspect-square h-6 w-6 items-center justify-center rounded-sm border-gray-200 text-center text-white shadow-[0px_0px_24px_17px_rgba(0,0,0,0.1)]'>
-                  F
-                </span>
+              <div className='absolute bottom-full mb-3'>
+                <InteractionPrompt label={label} />
               </div>
             )}
             <motion.div
-              className='h-4 w-4 rounded-full bg-white'
-              animate={{ scale: isFocused ? [1, 0.8, 1] : 0.85 }}
-              transition={isFocused ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.18 }}
-            />
-          </motion.div>
+              className='border-primary/80 flex h-8 w-8 items-center justify-center rounded-full border-[1.5px] bg-[#f3e7cf]/90 shadow-[0_4px_12px_rgba(20,12,7,0.3)]'
+              animate={{
+                opacity: isFocused || guidedTarget ? 1 : 0.6,
+                y: [0, -4, 0],
+                scale: isFocused || guidedTarget ? [1, 1.1, 1] : 0.9,
+              }}
+              transition={{
+                opacity: { duration: 0.18 },
+                y: { duration: 1.6, repeat: Infinity, ease: 'easeInOut' },
+                scale: isFocused || guidedTarget ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.18 },
+              }}>
+              <span className='bg-primary h-2.5 w-2.5 rounded-full' />
+            </motion.div>
+          </div>
         </Html>
       )}
     </group>
