@@ -124,7 +124,10 @@
     "home": "Home",
     "map": "Map",
     "heritage": "Heritage",
-    "contact": "Contact"
+    "about": "About",
+    "label": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "actions": {
     "startExploring": "Start exploring",
@@ -136,11 +139,11 @@
   "sites": {
     "tuDuc": {
       "name": "Tomb of Tu Duc",
-      "description": "Tomb of Emperor Tu Duc (Khiem Lang) is considered the most beautiful in the Nguyen dynasty mausoleum system and a hallmark of Vietnamese feudal tomb architecture."
+      "description": "The tomb of Emperor Tự Đức (Khiêm Lăng) in Huế. The scene recreates the Stele Pavilion and the Khiêm Cung Ký stele the emperor wrote himself."
     },
     "denHung": {
-      "name": "Hung Kings Temple",
-      "description": "Hung Kings Temple is an especially important national historical relic complex in Vietnam, associated with legends about the origin of the Vietnamese people."
+      "name": "Hùng Kings Temple",
+      "description": "A temple to the Hùng Kings in Cần Thơ, recreated in 3D for free exploration."
     }
   },
   "home": {
@@ -153,7 +156,6 @@
       "sectionTitle": "Heritage Wonders",
       "hue": {
         "title": "Imperial City of Hue",
-        "description": "Explore the ancient and solemn beauty of the Nguyen Dynasty through immersive 3D virtual reality.",
         "alt": "Aerial view of Hue Imperial City - Ngo Mon Gate"
       },
       "hoiAn": {
@@ -166,32 +168,36 @@
       },
       "trangAn": {
         "title": "Trang An - Ninh Binh",
-        "description": "Drift along the Ngo Dong River and admire the grandeur of \"Ha Long Bay on land\".",
         "alt": "Trang An landscape complex with boats and karst mountains"
+      },
+      "enter": "Enter the site",
+      "comingSoon": "Coming soon",
+      "comingSoonTitle": "Coming soon",
+      "sites": {
+        "tu-duc": "Follow the guided journey through the Stele Pavilion and the Khiêm Cung Ký stele.",
+        "den-hung": "Explore the temple freely in 3D."
       }
     },
     "about": {
       "sectionLabel": "Technology & Tradition",
       "heading": {
-        "line1": "Heritage experience",
-        "line2": "without limits"
+        "line1": "Visit heritage sites",
+        "line2": "right in your browser"
       },
       "p1": {
-        "beforeBrand": "Welcome to ",
-        "afterBrand": ", where we combine the essence of history with the power of modern virtual reality technology. We don’t just show images; we open a doorway into the heart of dynastic relics."
+        "beforeBrand": "With ",
+        "afterBrand": ", you walk through a 3D recreation of each site with your keyboard and mouse, with no installation or VR headset needed."
       },
-      "p2": "By recreating monuments with the highest fidelity, we bring you a vivid, lifelike experience—letting you explore every corner, admire every exquisite detail, and feel the grandeur of ancient architecture.",
+      "p2": "Artifacts are scanned so you can rotate them, zoom in and read notes placed exactly on the model. Historical content in the guided journeys is checked against public sources.",
       "stats": {
-        "panoramicValue": "360°",
-        "panoramicLabel": "Panoramic view",
-        "resolutionValue": "4K+",
-        "resolutionLabel": "True-to-life resolution"
+        "sitesLabel": "Sites open now",
+        "languagesValue": "VI · EN",
+        "languagesLabel": "Bilingual content"
       },
       "imageAlt": {
-        "dragonRelief": "Dragon relief sculpture",
-        "aoDaiEmbroidery": "Ao Dai phoenix embroidery",
-        "bronzeDrum": "Bronze drum pattern close-up",
-        "huePavilion": "Hue royal pavilion interior"
+        "tuDucPavilion": "Stele Pavilion, Tomb of Tự Đức, Huế",
+        "tuDuc": "Tomb of Tự Đức, Huế",
+        "denHung": "Gate of the Hùng Kings Temple, Cần Thơ"
       }
     }
   },
@@ -221,7 +227,8 @@
     "expandPanel": "Expand information panel",
     "collapsePanel": "Collapse information panel",
     "reviewPanel": "Review panel",
-    "resetCamera": "Reset camera"
+    "resetCamera": "Reset camera",
+    "close": "Close artifact view"
   },
   "previewControls": "Drag to rotate · Scroll to zoom",
   "tourControls": {
@@ -234,7 +241,9 @@
     "inspect": "Inspect a nearby artifact",
     "map": "Open the map and teleport",
     "unlockMouse": "Press Esc to release the mouse cursor.",
-    "dismiss": "Got it"
+    "dismiss": "Got it",
+    "settings": "Open settings",
+    "journal": "Open the Journal (on sites with a guided journey)"
   },
   "sceneAsset": {
     "loading": "Loading scene asset...",
@@ -248,11 +257,106 @@
   },
   "footer": {
     "tagline": "A journey to preserve and spread national heritage values through modern digital technology.",
-    "links": {
-      "privacy": "Privacy policy",
-      "terms": "Terms of use",
-      "about": "About us"
+    "copyright": "© {{year}} VIETNAM VIRTUAL."
+  },
+  "toolbar": {
+    "label": "Tour tools",
+    "map": "Teleport map",
+    "journal": "Journal",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close settings",
+    "levels": {
+      "off": "Off",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
     },
-    "copyright": "© 2024 VIETNAM VIRTUAL TOURISM. The spirit of Lac Viet."
+    "graphics": {
+      "title": "Graphics",
+      "presets": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "custom": "Custom"
+      },
+      "presetDescriptions": {
+        "low": "Smoothest; best for older devices or laptops on battery.",
+        "medium": "A balance between visual quality and smooth motion.",
+        "high": "Best looking; needs a strong graphics card.",
+        "custom": "You have adjusted the Advanced options."
+      },
+      "advanced": "Advanced",
+      "resolution": "Resolution",
+      "resolutionHint": "Has the biggest effect on smoothness.",
+      "shadows": "Shadows",
+      "ambientOcclusion": "Contact shadows (AO)",
+      "ambientOcclusionHint": "Darkens column bases, wall corners and where objects meet."
+    },
+    "controls": {
+      "title": "Controls",
+      "walkSpeed": "Walking speed",
+      "speeds": {
+        "slow": "Slow",
+        "normal": "Normal",
+        "fast": "Fast"
+      },
+      "replayOnboarding": "Show the controls guide again"
+    },
+    "comfort": {
+      "title": "Comfort",
+      "headBob": "Head bob while walking",
+      "headBobHint": "Turn off if moving makes you feel dizzy."
+    },
+    "reset": "Restore defaults"
+  },
+  "heritagePage": {
+    "label": "Catalogue",
+    "title": "Heritage",
+    "intro": "The sites available in Vietnam Virtual today, and the places being digitised next.",
+    "viewOnMap": "View on the map",
+    "comingSoonIntro": "These places are being digitised and cannot be visited yet."
+  },
+  "aboutPage": {
+    "label": "About the website",
+    "title": "About",
+    "intro": "Vietnam Virtual lets you visit Vietnamese heritage sites in 3D, right in your browser. Preview a site, walk around freely and learn the story behind it before you go in person.",
+    "howTo": {
+      "title": "How to visit",
+      "map": {
+        "title": "Pick a site on the map",
+        "body": "Open the Map, choose a place to fly to, then enter the 3D scene."
+      },
+      "walk": {
+        "title": "Walk through the site",
+        "body": "Click the scene to take control: W A S D to walk, the mouse to look around, F to inspect a nearby artifact, Esc to release the cursor."
+      },
+      "journal": {
+        "title": "Follow a journey",
+        "body": "At sites with a guided journey, each stop unlocks a Journal page you can read again later."
+      }
+    },
+    "content": {
+      "title": "Historical content",
+      "body": "Information in the guided journeys is checked against public sources, including the National Museum of Vietnamese History.",
+      "sourceLink": "National Museum of Vietnamese History: the tallest and heaviest stone stele in Vietnam (Vietnamese)"
+    },
+    "tech": {
+      "title": "Technology",
+      "body": "The website uses WebGL to render the 3D scenes, with collision physics and site data managed in Firebase."
+    },
+    "thesis": "Graduation thesis · Virtual Tourist based on WebGL",
+    "cta": "Open the heritage map"
+  },
+  "interaction": {
+    "inspect": "Inspect {{name}}",
+    "inspectArtifact": "Inspect artifact"
+  },
+  "teleport": {
+    "title": "Teleport map",
+    "close": "Close teleport map",
+    "empty": "This site has no teleport points yet. Walk around to explore."
   }
 }

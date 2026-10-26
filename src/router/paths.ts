@@ -1,6 +1,8 @@
 export const NAV_PATH = {
   HOME: '/',
   MAP: '/map',
+  HERITAGE: '/heritage',
+  ABOUT: '/about',
   LOADING: '/loading',
   TOUR: '/tour/:sceneId',
   REVIEW: '/review',

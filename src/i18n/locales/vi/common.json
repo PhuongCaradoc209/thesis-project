@@ -124,7 +124,10 @@
     "home": "Trang chủ",
     "map": "Bản đồ",
     "heritage": "Di sản",
-    "contact": "Liên hệ"
+    "about": "Giới thiệu",
+    "label": "Điều hướng chính",
+    "openMenu": "Mở menu",
+    "closeMenu": "Đóng menu"
   },
   "actions": {
     "startExploring": "Bắt đầu khám phá",
@@ -136,11 +139,11 @@
   "sites": {
     "tuDuc": {
       "name": "Lăng Tự Đức",
-      "description": "Lăng vua Tự Đức (Khiêm Lăng) được xem là công trình đẹp nhất trong hệ thống lăng tẩm triều Nguyễn và tiêu biểu cho kiến trúc lăng mộ phong kiến Việt Nam."
+      "description": "Lăng của vua Tự Đức (Khiêm Lăng) ở Huế. Scene tái hiện Bi Đình và tấm bia Khiêm Cung Ký do chính nhà vua soạn."
     },
     "denHung": {
-      "name": "Đền Hùng",
-      "description": "Đền Hùng là quần thể di tích lịch sử quốc gia đặc biệt quan trọng của Việt Nam, gắn liền với truyền thuyết về nguồn gốc dân tộc Việt Nam."
+      "name": "Đền thờ Vua Hùng",
+      "description": "Đền thờ các Vua Hùng tại Cần Thơ, được dựng lại trong không gian 3D để tham quan tự do."
     }
   },
   "home": {
@@ -153,7 +156,6 @@
       "sectionTitle": "Kỳ Quan Di Sản",
       "hue": {
         "title": "Cố đô Huế",
-        "description": "Khám phá vẻ đẹp cổ kính và trang nghiêm của triều đại nhà Nguyễn qua công nghệ 3D thực tế ảo.",
         "alt": "Toàn cảnh Đại Nội Huế - Cổng Ngọ Môn"
       },
       "hoiAn": {
@@ -166,32 +168,36 @@
       },
       "trangAn": {
         "title": "Tràng An - Ninh Bình",
-        "description": "Hành trình xuôi dòng Ngô Đồng, chiêm ngưỡng sự kỳ vĩ của 'Hạ Long trên cạn'.",
         "alt": "Quần thể danh thắng Tràng An với thuyền và núi đá vôi"
+      },
+      "enter": "Vào tham quan",
+      "comingSoon": "Sắp ra mắt",
+      "comingSoonTitle": "Sắp ra mắt",
+      "sites": {
+        "tu-duc": "Đi theo hành trình có hướng dẫn qua Bi Đình và bia Khiêm Cung Ký.",
+        "den-hung": "Tự do tham quan ngôi đền trong không gian 3D."
       }
     },
     "about": {
       "sectionLabel": "Công nghệ & Truyền thống",
       "heading": {
-        "line1": "Trải nghiệm di sản",
-        "line2": "không giới hạn"
+        "line1": "Tham quan di tích",
+        "line2": "ngay trên trình duyệt"
       },
       "p1": {
-        "beforeBrand": "Chào mừng bạn đến với ",
-        "afterBrand": ", nơi chúng tôi kết hợp tinh hoa lịch sử với sức mạnh công nghệ thực tế ảo hiện đại nhất. Chúng tôi không chỉ cung cấp hình ảnh; chúng tôi mở ra cánh cửa dẫn bạn vào lòng các di tích triều đại."
+        "beforeBrand": "Với ",
+        "afterBrand": ", bạn đi bộ trong không gian 3D của di tích bằng bàn phím và chuột, không cần cài đặt hay kính thực tế ảo."
       },
-      "p2": "Bằng việc mô phỏng lại các di tích với độ trung thực cao nhất, chúng tôi mang đến cho bạn trải nghiệm sống động như thật, cho phép bạn khám phá mọi ngóc ngách, chiêm ngưỡng từng chi tiết tinh xảo và cảm nhận được sự vĩ đại của các công trình kiến trúc cổ kính.",
+      "p2": "Hiện vật được scan để bạn xoay, phóng to và đọc chú thích đặt đúng vị trí trên model. Nội dung lịch sử trong các hành trình được đối chiếu với nguồn công khai.",
       "stats": {
-        "panoramicValue": "360°",
-        "panoramicLabel": "Tầm nhìn toàn cảnh",
-        "resolutionValue": "4K+",
-        "resolutionLabel": "Độ phân giải thực tế"
+        "sitesLabel": "Di tích đã mở cửa",
+        "languagesValue": "VI · EN",
+        "languagesLabel": "Nội dung song ngữ"
       },
       "imageAlt": {
-        "dragonRelief": "Phù điêu rồng",
-        "aoDaiEmbroidery": "Thêu phượng trên áo dài",
-        "bronzeDrum": "Họa tiết trống đồng cận cảnh",
-        "huePavilion": "Nội thất lầu son gác tía ở Huế"
+        "tuDucPavilion": "Bi Đình, Lăng Tự Đức, Huế",
+        "tuDuc": "Lăng Tự Đức, Huế",
+        "denHung": "Cổng Đền thờ Vua Hùng, Cần Thơ"
       }
     }
   },
@@ -221,7 +227,8 @@
     "expandPanel": "Mở rộng bảng thông tin",
     "collapsePanel": "Thu gọn bảng thông tin",
     "reviewPanel": "Bảng thông tin",
-    "resetCamera": "Đặt lại camera"
+    "resetCamera": "Đặt lại camera",
+    "close": "Đóng xem hiện vật"
   },
   "previewControls": "Kéo chuột để xoay · Cuộn để phóng to/thu nhỏ",
   "tourControls": {
@@ -234,7 +241,9 @@
     "inspect": "Xem hiện vật ở gần",
     "map": "Mở bản đồ và dịch chuyển",
     "unlockMouse": "Nhấn Esc để hiện lại con trỏ chuột.",
-    "dismiss": "Đã hiểu"
+    "dismiss": "Đã hiểu",
+    "settings": "Mở cài đặt",
+    "journal": "Mở Sổ tay (ở di tích có hành trình)"
   },
   "sceneAsset": {
     "loading": "Đang tải mô hình trong cảnh...",
@@ -248,11 +257,106 @@
   },
   "footer": {
     "tagline": "Hành trình gìn giữ và lan tỏa giá trị di sản dân tộc thông qua công nghệ số hiện đại.",
-    "links": {
-      "privacy": "Chính sách bảo mật",
-      "terms": "Điều khoản sử dụng",
-      "about": "Về chúng tôi"
+    "copyright": "© {{year}} VIETNAM VIRTUAL. Hào khí Lạc Việt."
+  },
+  "toolbar": {
+    "label": "Công cụ tham quan",
+    "map": "Bản đồ di chuyển",
+    "journal": "Sổ tay",
+    "settings": "Cài đặt"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "close": "Đóng cài đặt",
+    "levels": {
+      "off": "Tắt",
+      "low": "Thấp",
+      "medium": "Vừa",
+      "high": "Cao"
     },
-    "copyright": "© 2024 VIETNAM VIRTUAL TOURISM. Hào khí Lạc Việt."
+    "graphics": {
+      "title": "Đồ họa",
+      "presets": {
+        "low": "Thấp",
+        "medium": "Vừa",
+        "high": "Cao",
+        "custom": "Tùy chỉnh"
+      },
+      "presetDescriptions": {
+        "low": "Mượt nhất, phù hợp máy yếu hoặc laptop đang dùng pin.",
+        "medium": "Cân bằng giữa hình ảnh đẹp và chuyển động mượt.",
+        "high": "Đẹp nhất, cần card đồ họa mạnh.",
+        "custom": "Bạn đã tự chỉnh trong phần Nâng cao."
+      },
+      "advanced": "Nâng cao",
+      "resolution": "Độ phân giải",
+      "resolutionHint": "Ảnh hưởng mạnh nhất tới độ mượt.",
+      "shadows": "Bóng đổ",
+      "ambientOcclusion": "Bóng tiếp xúc (AO)",
+      "ambientOcclusionHint": "Làm tối chân cột, góc tường và chỗ các vật chạm nhau."
+    },
+    "controls": {
+      "title": "Điều khiển",
+      "walkSpeed": "Tốc độ đi",
+      "speeds": {
+        "slow": "Chậm",
+        "normal": "Thường",
+        "fast": "Nhanh"
+      },
+      "replayOnboarding": "Xem lại hướng dẫn điều khiển"
+    },
+    "comfort": {
+      "title": "Thoải mái",
+      "headBob": "Rung lắc khi đi",
+      "headBobHint": "Tắt nếu bạn thấy chóng mặt khi di chuyển."
+    },
+    "reset": "Khôi phục mặc định"
+  },
+  "heritagePage": {
+    "label": "Danh mục",
+    "title": "Di sản",
+    "intro": "Các di tích đã có trong Vietnam Virtual và những địa điểm đang được số hóa.",
+    "viewOnMap": "Xem trên bản đồ",
+    "comingSoonIntro": "Những địa điểm này đang được số hóa và chưa thể tham quan."
+  },
+  "aboutPage": {
+    "label": "Về website",
+    "title": "Giới thiệu",
+    "intro": "Vietnam Virtual là website tham quan di sản Việt Nam trong không gian 3D, chạy trực tiếp trên trình duyệt. Bạn có thể xem trước một di tích, đi lại tự do và tìm hiểu câu chuyện phía sau trước khi đến tận nơi.",
+    "howTo": {
+      "title": "Cách tham quan",
+      "map": {
+        "title": "Chọn di tích trên bản đồ",
+        "body": "Mở Bản đồ, chọn một địa điểm để bay tới rồi vào không gian 3D."
+      },
+      "walk": {
+        "title": "Đi bộ trong di tích",
+        "body": "Bấm vào cảnh để điều khiển: W A S D để đi, chuột để nhìn quanh, F để xem cận cảnh hiện vật ở gần, Esc để hiện lại con trỏ."
+      },
+      "journal": {
+        "title": "Đi theo hành trình",
+        "body": "Ở di tích có hành trình hướng dẫn, mỗi điểm dừng mở khóa một trang Sổ tay để bạn xem lại."
+      }
+    },
+    "content": {
+      "title": "Nội dung lịch sử",
+      "body": "Thông tin trong các hành trình được đối chiếu với nguồn công khai, trong đó có Bảo tàng Lịch sử Quốc gia.",
+      "sourceLink": "Bảo tàng Lịch sử Quốc gia: Độc đáo tấm bia đá cao và nặng nhất Việt Nam"
+    },
+    "tech": {
+      "title": "Công nghệ",
+      "body": "Website dùng WebGL để hiển thị không gian 3D, có vật lý va chạm, và quản lý dữ liệu di tích trên Firebase."
+    },
+    "thesis": "Đồ án tốt nghiệp · Virtual Tourist based on WebGL",
+    "cta": "Mở bản đồ di sản"
+  },
+  "interaction": {
+    "inspect": "Xem {{name}}",
+    "inspectArtifact": "Xem hiện vật"
+  },
+  "teleport": {
+    "title": "Bản đồ dịch chuyển",
+    "close": "Đóng bản đồ dịch chuyển",
+    "empty": "Địa điểm này chưa có điểm dịch chuyển. Hãy đi bộ để khám phá."
   }
 }

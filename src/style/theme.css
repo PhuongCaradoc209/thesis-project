@@ -56,10 +56,9 @@
 
     /* Typography */
     --font-noto-serif: "Noto Serif", serif;
-    --font-manrope: "Manrope", sans-serif;
     --font-headline: "Noto Serif", serif;
-    --font-body: "Manrope", sans-serif;
-    --font-label: "Manrope", sans-serif;
+    --font-body: "Be Vietnam Pro", system-ui, sans-serif;
+    --font-label: "Be Vietnam Pro", system-ui, sans-serif;
 }
 
 @utility imperial-gradient {
