@@ -5,6 +5,7 @@ import { Fragment, Suspense, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import DynamicSceneRenderer from '../../components/3d/DynamicSceneRenderer';
+import { GalleryExhibits } from '../../components/gallery/GalleryExhibits';
 import { ModelErrorBoundary } from '../../components/3d/ModelErrorBoundary';
 import { InstancedGrassField } from '../../components/grass/InstancedGrassField';
 import { DevelopmentGuidedCameraDirector, GuidedCameraDirector } from '../../components/guided-tour/GuidedCameraDirector';
@@ -17,6 +18,7 @@ import InspectModal from '../../components/previews-modal';
 import { SceneAnnotationPanel, type SceneAnnotationPreview } from '../../components/scene-annotation/SceneAnnotationPanel';
 import { SceneAnnotationPoint } from '../../components/scene-annotation/SceneAnnotationPoint';
 import BaseScene from '../../components/scenes/BaseScene';
+import IndoorScene from '../../components/scenes/indoor/IndoorScene';
 import { SettingsPanel } from '../../components/settings/SettingsPanel';
 import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
 import { TourToolbar } from '../../components/tour/TourToolbar';
@@ -193,6 +195,8 @@ export default function TourPage() {
   }
 
   const { scene, interactionPoints, teleportPoints } = data;
+  // Ngoài trời (mặc định) hay phòng trong nhà, theo trường `layout` của scene trên Firestore
+  const SceneView = scene.layout === 'indoor' ? IndoorScene : BaseScene;
   const loadingProgress = isSceneReady
     ? 100
     : firstFrameRendered && !assetsActive
@@ -253,7 +257,7 @@ export default function TourPage() {
   return (
     <div ref={setEventSource} className='relative h-screen w-screen overflow-hidden bg-black text-white'>
       <TeleportTransition />
-      <BaseScene
+      <SceneView
         key={sceneId}
         sceneConfig={scene}
         loading={!isSceneReady}
@@ -261,7 +265,10 @@ export default function TourPage() {
         eventSource={eventSource ?? undefined}>
         <DynamicSceneRenderer sceneId={sceneId} />
 
-        {sceneId === SCENE_IDS.TU_DUC && scene.floorConfig.heightMap && scene.floorConfig.splatMap && (
+        {/* Phòng trưng bày: hiện vật lấy từ Firestore, đặt lên bục theo số `pedestal` */}
+        {scene.layout === 'indoor' && <GalleryExhibits sceneId={sceneId} onInspect={handleInspect} />}
+
+        {sceneId === SCENE_IDS.TU_DUC && scene.floorConfig?.heightMap && scene.floorConfig.splatMap && (
           <ModelErrorBoundary
             resetKey={`${scene.floorConfig.heightMap}:${scene.floorConfig.splatMap}`}
             fallback={() => null}
@@ -330,7 +337,7 @@ export default function TourPage() {
               />
             );
           })}
-      </BaseScene>
+      </SceneView>
 
       <AnimatePresence>
         {isTeleportMapOpen && (

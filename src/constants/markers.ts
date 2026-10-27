@@ -5,7 +5,9 @@ import type { MarkerData } from '../types/marker';
 
 export const SCENE_IDS = {
   TU_DUC: 'DvuvR5oMnH9hwief9pqn',
+  // Giữ id cũ để quay lại được; marker đã chuyển sang phòng trưng bày
   DEN_HUNG: 'lo1jCATp6QcaQFFAUz6G',
+  GALLERY: 'vn-antiquities-gallery',
 } as const;
 
 export const MARKER_DATA: MarkerData[] = [
@@ -20,12 +22,14 @@ export const MARKER_DATA: MarkerData[] = [
     descriptionKey: 'sites.tuDuc.description',
   },
   {
-    id: 'den-hung',
-    latitude: 10.0663,
-    longitude: 105.7337,
+    id: 'gallery',
+    // Bảo tàng Lịch sử Quốc gia, Hà Nội
+    latitude: 21.0245,
+    longitude: 105.8592,
+    // TODO: thay bằng ảnh chụp phòng trưng bày khi đã có hiện vật
     thumbnail: DenHung,
-    sceneId: SCENE_IDS.DEN_HUNG,
-    nameKey: 'sites.denHung.name',
-    descriptionKey: 'sites.denHung.description',
+    sceneId: SCENE_IDS.GALLERY,
+    nameKey: 'sites.gallery.name',
+    descriptionKey: 'sites.gallery.description',
   },
 ];

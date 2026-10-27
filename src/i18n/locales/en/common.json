@@ -144,6 +144,10 @@
     "denHung": {
       "name": "Hùng Kings Temple",
       "description": "A temple to the Hùng Kings in Cần Thơ, recreated in 3D for free exploration."
+    },
+    "gallery": {
+      "name": "Vietnamese Antiquities Gallery",
+      "description": "A 3D gallery room for walking among Vietnamese antiquities: ceramics, statues, guardian creatures and architectural models."
     }
   },
   "home": {
@@ -175,7 +179,8 @@
       "comingSoonTitle": "Coming soon",
       "sites": {
         "tu-duc": "Follow the guided journey through the Stele Pavilion and the Khiêm Cung Ký stele.",
-        "den-hung": "Explore the temple freely in 3D."
+        "den-hung": "Explore the temple freely in 3D.",
+        "gallery": "Walk between the pedestals and inspect each antiquity up close."
       }
     },
     "about": {

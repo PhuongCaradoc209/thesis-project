@@ -1,3 +1,5 @@
+import type { LocalizedText } from '../utils/pickLang';
+
 export interface FloorMaterialConfig {
   color: string;
   normal: string;
@@ -31,9 +33,11 @@ export interface FloorConfig {
 // 1. SCENES
 export interface Scene {
   sceneId: string;
-  environmentConfig: { sunPosition: number[]; fogColor: string; fogNear: number; fogFar: number };
+  /** 'indoor' = phòng trưng bày (IndoorScene). Thiếu trường này thì là ngoài trời (BaseScene) */
+  layout?: 'outdoor' | 'indoor';
+  environmentConfig?: { sunPosition: number[]; fogColor: string; fogNear: number; fogFar: number };
   playerConfig: { position: number[]; killY?: number };
-  floorConfig: FloorConfig;
+  floorConfig?: FloorConfig;
 }
 
 // 2. SCENE ASSETS (Low-poly models)
@@ -80,7 +84,7 @@ export interface ArtifactAnnotation {
 // 5. ARTIFACTS (High-poly models & i18n Data for Review Mode)
 export interface Artifact {
   artifactId: string;
-  title: string;
+  title: LocalizedText;
   type?: string;
   subtitle: string;
   modelUrl: string;
@@ -91,7 +95,20 @@ export interface Artifact {
   dynasty?: string;
   material?: string;
   year?: number | string;
-  history: string;
+  history: LocalizedText;
+
+  // Chỉ hiện vật trong phòng trưng bày mới có các trường dưới đây
+  sceneId?: string; // phòng trưng bày chứa hiện vật
+  pedestal?: number; // số thứ tự bục, bắt đầu từ 0
+  display?: {
+    height?: number; // chiều cao model khi đặt trên bục (m), mặc định 0.6
+    rotationY?: number; // xoay model quanh trục đứng (độ)
+  };
+  credit?: {
+    author: string;
+    license: string; // ví dụ "CC BY 4.0"
+    sourceUrl?: string; // link Sketchfab
+  };
 }
 
 // 6. INTERACTION POINTS (Hotspots attached to placements)

@@ -4,6 +4,7 @@ import { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import { useArtifactData } from '../../hooks/useArtifacts';
+import { pickLang } from '../../utils/pickLang';
 import { InteractionPrompt } from '../interactions/InteractionPrompt';
 import { SCENE_INTERACTION_HTML_Z_INDEX_RANGE } from '../interactions/sceneInteraction.constants';
 import { useSceneInteraction } from '../interactions/useSceneInteraction';
@@ -17,7 +18,7 @@ type InteractPointProps = {
 };
 
 export function InteractPoint({ interactionId, position, artifactId, onInspect, guidedTarget = false }: InteractPointProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const pointRef = useRef<THREE.Group>(null);
   const handleInteract = useCallback(() => onInspect(artifactId), [artifactId, onInspect]);
   const interactionState = useSceneInteraction({
@@ -29,7 +30,8 @@ export function InteractPoint({ interactionId, position, artifactId, onInspect, 
   // Dùng chung cache với InspectModal nên mở modal sau đó không phải tải lại
   const { data: artifact } = useArtifactData(interactionState === 'far' ? null : artifactId);
   const isFocused = interactionState === 'focused';
-  const label = artifact?.title ? t('interaction.inspect', { name: t(artifact.title) }) : t('interaction.inspectArtifact');
+  const title = pickLang(artifact?.title, i18n.language);
+  const label = title ? t('interaction.inspect', { name: t(title) }) : t('interaction.inspectArtifact');
 
   return (
     <group ref={pointRef} position={position}>

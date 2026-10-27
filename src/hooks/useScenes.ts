@@ -7,7 +7,17 @@ import {
   getScenePlacements,
   getTeleportPoints,
 } from '../api/scenes/scenes.api';
-import type { ResolvedScenePlacement } from '../types/scene.types';
+import { SCENE_IDS } from '../constants/markers';
+import type { ResolvedScenePlacement, Scene } from '../types/scene.types';
+
+// Cấu hình tạm để xem phòng khi chưa tạo document trên Firestore. Không dùng ở bản build.
+const DEV_FALLBACK_SCENES: Record<string, Scene> = {
+  [SCENE_IDS.GALLERY]: {
+    sceneId: SCENE_IDS.GALLERY,
+    layout: 'indoor',
+    playerConfig: { position: [-7, 1, -3.5] },
+  },
+};
 
 export const useSceneData = (sceneId: string | null) => {
   return useQuery({
@@ -15,11 +25,13 @@ export const useSceneData = (sceneId: string | null) => {
     queryFn: async () => {
       if (!sceneId) throw new Error('Scene ID is required');
 
-      const [scene, placements, teleportPoints] = await Promise.all([
+      const [firestoreScene, placements, teleportPoints] = await Promise.all([
         getSceneById(sceneId),
         getScenePlacements(sceneId),
         getTeleportPoints(sceneId),
       ]);
+      // Chỉ khi dev: xem trước phòng trưng bày khi Firestore chưa có document
+      const scene = firestoreScene ?? (import.meta.env.DEV ? (DEV_FALLBACK_SCENES[sceneId] ?? null) : null);
 
       if (!scene) {
         throw new Error(`Scene not found for id: ${sceneId}`);

@@ -144,6 +144,10 @@
     "denHung": {
       "name": "Đền thờ Vua Hùng",
       "description": "Đền thờ các Vua Hùng tại Cần Thơ, được dựng lại trong không gian 3D để tham quan tự do."
+    },
+    "gallery": {
+      "name": "Phòng trưng bày cổ vật Việt Nam",
+      "description": "Một phòng trưng bày 3D để đi bộ ngắm cổ vật Việt Nam: gốm, tượng, linh vật và mô hình kiến trúc."
     }
   },
   "home": {
@@ -175,7 +179,8 @@
       "comingSoonTitle": "Sắp ra mắt",
       "sites": {
         "tu-duc": "Đi theo hành trình có hướng dẫn qua Bi Đình và bia Khiêm Cung Ký.",
-        "den-hung": "Tự do tham quan ngôi đền trong không gian 3D."
+        "den-hung": "Tự do tham quan ngôi đền trong không gian 3D.",
+        "gallery": "Đi dạo giữa các bục trưng bày và xem cận cảnh từng cổ vật."
       }
     },
     "about": {

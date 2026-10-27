@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ModelErrorBoundary } from '../3d/ModelErrorBoundary';
 import ModelLoadingBar from '../loading/ModelLoadingBar';
 import { useArtifactData } from '../../hooks/useArtifacts';
+import { pickLang } from '../../utils/pickLang';
 import { useTourismStore } from '../../store/useTourismStore';
 import { ArtifactPreviewScene } from './ModelPreviewCanvas';
 
@@ -15,7 +16,7 @@ type InspectModalProps = {
 };
 
 function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const selectedArtifactId = useTourismStore((state) => state.selectedArtifactId);
   const clear = useTourismStore((state) => state.clear);
   const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
@@ -60,7 +61,7 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
                 <p className='text-secondary text-[0.7rem] font-semibold tracking-[0.24em] uppercase'>{t(previewConfig.type)}</p>
               )}
               <h1 className='font-headline text-primary truncate text-xl font-semibold md:text-2xl'>
-                {previewConfig ? t(previewConfig.title) : ''}
+                {previewConfig ? t(pickLang(previewConfig.title, i18n.language)) : ''}
               </h1>
             </div>
 
@@ -228,7 +229,9 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
                           </dl>
                         )}
                         <p className='text-on-surface-variant text-[15px] leading-7'>
-                          {previewConfig.history ? t(previewConfig.history) : t('artifact.noInformation')}
+                          {previewConfig.history
+                            ? t(pickLang(previewConfig.history, i18n.language))
+                            : t('artifact.noInformation')}
                         </p>
                       </>
                     ) : (
