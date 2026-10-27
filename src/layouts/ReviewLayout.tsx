@@ -1,12 +1,15 @@
 import { ArrowLeftIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet } from 'react-router';
+import { NavLink, Outlet, useParams } from 'react-router';
 import { NAV_PATH } from '../router/paths';
 import { useTourismStore } from '../store/useTourismStore';
+import { getScenePresentation } from '../utils/scenePresentation';
 
 const ReviewLayout = () => {
   const { t } = useTranslation();
   const selectedArtifactId = useTourismStore((state) => state.selectedArtifactId);
+  const { sceneId } = useParams<{ sceneId: string }>();
+  const presentation = getScenePresentation(sceneId ?? null, t);
 
   return (
     <div className='flex min-h-screen flex-col bg-white text-white'>
@@ -19,7 +22,9 @@ const ReviewLayout = () => {
             </NavLink>
 
             <div className='flex items-center gap-8'>
-              <span className='text-primary border-primary border-b-2 p-2 text-lg font-semibold'>{t('sites.tuDuc.name')}</span>
+              {presentation && (
+                <span className='text-primary border-primary border-b-2 p-2 text-lg font-semibold'>{presentation.name}</span>
+              )}
               <NavLink to={NAV_PATH.MAP}>
                 <button className='bg-primary hover:bg-primary-container flex items-center gap-2 rounded-md px-4 py-2 text-white shadow transition-colors ease-in-out'>
                   <ArrowLeftIcon size={16} weight='bold' />
