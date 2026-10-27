@@ -1,132 +1,35 @@
-import { KeyboardControls, PointerLockControls, View } from '@react-three/drei';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Physics } from '@react-three/rapier';
 import { useControls } from 'leva';
-import { Perf } from 'r3f-perf';
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import * as THREE from 'three';
-import PreviewBackground from '../../assets/scenes/tuduc/BackgroundTuDucTomb.jpg';
-import { RESOLUTION_DPR } from '../../constants/settings';
-import { useSettingsStore } from '../../store/useSettingsStore';
-import { useTourismStore } from '../../store/useTourismStore';
 import type { Scene } from '../../types/scene.types';
-import { SceneInteractionProvider } from '../interactions/SceneInteractionManager';
-import Player, { DEFAULT_KILL_Y } from '../player/Player';
 import { AnimateSky } from './AnimateSky';
 import Lights from './Lights';
-import { DevelopmentPostFX, PostFX } from './PostFX';
+import SceneShell, { type SceneShellProps } from './SceneShell';
 import { SplatFloor } from './SplatFloor';
 
-type BaseSceneProps = {
-  children?: ReactNode;
+type BaseSceneProps = Omit<SceneShellProps, 'environment' | 'atmosphere' | 'playerConfig'> & {
   sceneConfig?: Scene;
-  loading?: boolean;
-  onFirstFrame?: () => void;
-  eventSource?: HTMLElement;
 };
 
-type WebGLContextEventsProps = {
-  onLost: () => void;
-  onRestored: () => void;
-};
-
-function WebGLContextEvents({ onLost, onRestored }: WebGLContextEventsProps) {
-  const gl = useThree((state) => state.gl);
-
-  useEffect(() => {
-    const canvas = gl.domElement;
-    const handleLost = (event: Event) => {
-      event.preventDefault();
-      onLost();
-    };
-    const handleRestored = () => onRestored();
-
-    canvas.addEventListener('webglcontextlost', handleLost);
-    canvas.addEventListener('webglcontextrestored', handleRestored);
-    return () => {
-      canvas.removeEventListener('webglcontextlost', handleLost);
-      canvas.removeEventListener('webglcontextrestored', handleRestored);
-    };
-  }, [gl, onLost, onRestored]);
-
-  return null;
-}
-
-function FullCanvasViewport({ active }: { active: boolean }) {
-  const gl = useThree((state) => state.gl);
-  const size = useThree((state) => state.size);
-
-  useFrame(() => {
-    if (!active) return;
-
-    gl.setScissorTest(false);
-    gl.setViewport(0, 0, size.width, size.height);
-    gl.setScissor(0, 0, size.width, size.height);
-  }, -100);
-
-  return null;
-}
-
-function FirstFrameReporter({ onFirstFrame }: { onFirstFrame?: () => void }) {
-  const renderedFrames = useRef(0);
-  const reported = useRef(false);
-
-  useFrame(() => {
-    if (reported.current || !onFirstFrame) return;
-
-    renderedFrames.current += 1;
-    if (renderedFrames.current >= 2) {
-      reported.current = true;
-      onFirstFrame();
-    }
-  });
-
-  return null;
-}
-
-type SceneContentsProps = {
-  children?: ReactNode;
-  sceneConfig?: Scene;
-  initialPlayerPos?: [number, number, number];
-  killY: number;
-  active: boolean;
-  visible: boolean;
+type OutdoorEnvironmentProps = {
   sunPosition: [number, number, number];
+  floorConfig?: Scene['floorConfig'];
 };
 
-function SceneContents({ children, sceneConfig, initialPlayerPos, killY, active, visible, sunPosition }: SceneContentsProps) {
-  return (
-    <group visible={visible}>
-      <AnimateSky />
-      <Lights sunPosition={sunPosition} />
-      <SplatFloor config={sceneConfig?.floorConfig} />
-      <Player active={active} initialPosition={initialPlayerPos} killY={killY} />
-      {children}
-    </group>
-  );
-}
-
-function DevelopmentSceneContents({
-  defaultSun,
-  ...props
-}: Omit<SceneContentsProps, 'sunPosition'> & { defaultSun: [number, number, number] }) {
-  const { sunPosition, perfVisible } = useControls('Environment', {
-    sunPosition: {
-      value: defaultSun,
-      step: 0.1,
-    },
-    perfVisible: {
-      value: true,
-    },
-  });
-
+function OutdoorEnvironment({ sunPosition, floorConfig }: OutdoorEnvironmentProps) {
   return (
     <>
-      {perfVisible && <Perf position='bottom-left' />}
-      <SceneContents {...props} sunPosition={sunPosition as [number, number, number]} />
+      <AnimateSky />
+      <Lights sunPosition={sunPosition} />
+      <SplatFloor config={floorConfig} />
     </>
   );
+}
+
+function DevelopmentOutdoorEnvironment({ sunPosition: defaultSun, floorConfig }: OutdoorEnvironmentProps) {
+  const { sunPosition } = useControls('Environment', {
+    sunPosition: { value: defaultSun, step: 0.1 },
+  });
+
+  return <OutdoorEnvironment sunPosition={sunPosition as [number, number, number]} floorConfig={floorConfig} />;
 }
 
 type FogSettings = { color: string; near: number; far: number };
@@ -141,121 +44,32 @@ function DevelopmentFog({ color, near, far }: FogSettings) {
   return <fog attach='fog' args={[fog.fogColor, fog.fogNear, fog.fogFar]} />;
 }
 
-function BaseScene({ children, sceneConfig, loading = false, onFirstFrame, eventSource }: BaseSceneProps) {
-  const { t } = useTranslation();
-  const pause = useTourismStore((state) => state.pause);
-  const selectedArtifactId = useTourismStore((state) => state.selectedArtifactId);
-  const graphics = useSettingsStore((state) => state.graphics);
-  const [canvasGeneration, setCanvasGeneration] = useState(0);
-  const [isContextLost, setIsContextLost] = useState(false);
-  const handleContextLost = useCallback(() => setIsContextLost(true), []);
-  const handleContextRestored = useCallback(() => setIsContextLost(false), []);
-
-  const defaultSun: [number, number, number] = (sceneConfig?.environmentConfig?.sunPosition as [number, number, number]) || [
+/** Scene ngoài trời: bầu trời, mặt trời, fog và mặt đất, đặt trên vỏ chung SceneShell. */
+function BaseScene({ sceneConfig, children, ...shellProps }: BaseSceneProps) {
+  const sunPosition: [number, number, number] = (sceneConfig?.environmentConfig?.sunPosition as [number, number, number]) || [
     10, 14, 10,
   ];
-  const fogSettings: FogSettings = {
+  const fog: FogSettings = {
     color: sceneConfig?.environmentConfig?.fogColor || '#d0dbe7',
     near: sceneConfig?.environmentConfig?.fogNear || 40,
     far: sceneConfig?.environmentConfig?.fogFar || 140,
   };
-  const initialPlayerPos = sceneConfig?.playerConfig?.position as [number, number, number] | undefined;
-  const configuredKillY = sceneConfig?.playerConfig?.killY;
-  const killY = Number.isFinite(configuredKillY) ? (configuredKillY as number) : DEFAULT_KILL_Y;
-  const sceneContentsProps = {
-    children,
-    sceneConfig,
-    initialPlayerPos,
-    killY,
-    active: !pause && !loading,
-    visible: !selectedArtifactId,
-  };
-
-  useEffect(() => {
-    if (pause || loading) {
-      if (document.pointerLockElement) {
-        document.exitPointerLock();
-      }
-    }
-  }, [loading, pause]);
+  const floorConfig = sceneConfig?.floorConfig;
 
   return (
-    <div className='relative h-screen w-screen'>
-      {selectedArtifactId && (
-        <div className='pointer-events-none absolute inset-0 overflow-hidden bg-black'>
-          <div
-            className='absolute -inset-6 scale-105 bg-cover bg-center blur-xl'
-            style={{ backgroundImage: `url('${PreviewBackground}')` }}
-          />
-          <div className='absolute inset-0 bg-white/50' />
-        </div>
-      )}
-      <KeyboardControls
-        map={[
-          { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
-          { name: 'backward', keys: ['ArrowDown', 'KeyS'] },
-          { name: 'left', keys: ['ArrowLeft', 'KeyA'] },
-          { name: 'right', keys: ['ArrowRight', 'KeyD'] },
-          { name: 'jump', keys: ['Space'] },
-        ]}>
-        <Canvas
-          key={canvasGeneration}
-          eventSource={eventSource}
-          eventPrefix='client'
-          shadows={!pause && graphics.shadows !== 'off'}
-          dpr={RESOLUTION_DPR[graphics.resolution]}
-          frameloop='always'
-          className='relative z-10'
-          gl={{
-            alpha: true,
-            antialias: true,
-            powerPreference: 'high-performance',
-            stencil: false,
-            toneMapping: THREE.ACESFilmicToneMapping,
-          }}>
-          <WebGLContextEvents onLost={handleContextLost} onRestored={handleContextRestored} />
-          <FirstFrameReporter onFirstFrame={onFirstFrame} />
-          <FullCanvasViewport active={!selectedArtifactId} />
-          {pause || loading || <PointerLockControls makeDefault />}
-          {import.meta.env.DEV ? (
-            <DevelopmentFog {...fogSettings} />
-          ) : (
-            <fog attach='fog' args={[fogSettings.color, fogSettings.near, fogSettings.far]} />
-          )}
-          <SceneInteractionProvider active={!pause && !loading}>
-            <Physics paused={pause || loading}>
-              {import.meta.env.DEV ? (
-                <DevelopmentSceneContents {...sceneContentsProps} defaultSun={defaultSun} />
-              ) : (
-                <SceneContents {...sceneContentsProps} sunPosition={defaultSun} />
-              )}
-            </Physics>
-          </SceneInteractionProvider>
-          {/* Hậu kỳ hiện chỉ phục vụ AO: tắt AO thì bỏ cả composer, renderer tự tone map và khử răng cưa.
-              Cũng tắt khi inspect vì EffectComposer chiếm vòng render và phá preview của View.Port. */}
-          {graphics.ambientOcclusion && !selectedArtifactId && (import.meta.env.DEV ? <DevelopmentPostFX /> : <PostFX />)}
-          <View.Port />
-        </Canvas>
-      </KeyboardControls>
-
-      {isContextLost && (
-        <div className='absolute inset-0 z-100 flex items-center justify-center bg-black/85 px-6 text-center text-white'>
-          <div className='max-w-md rounded-2xl border border-white/15 bg-neutral-950 p-6 shadow-2xl'>
-            <p className='text-lg font-semibold'>{t('webgl.contextLost')}</p>
-            <p className='mt-2 text-sm text-white/70'>{t('webgl.restoring')}</p>
-            <button
-              type='button'
-              className='bg-primary hover:bg-primary-container mt-5 rounded-md px-5 py-2 font-semibold text-white'
-              onClick={() => {
-                setCanvasGeneration((current) => current + 1);
-                setIsContextLost(false);
-              }}>
-              {t('webgl.resetCanvas')}
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    <SceneShell
+      {...shellProps}
+      playerConfig={sceneConfig?.playerConfig}
+      atmosphere={import.meta.env.DEV ? <DevelopmentFog {...fog} /> : <fog attach='fog' args={[fog.color, fog.near, fog.far]} />}
+      environment={
+        import.meta.env.DEV ? (
+          <DevelopmentOutdoorEnvironment sunPosition={sunPosition} floorConfig={floorConfig} />
+        ) : (
+          <OutdoorEnvironment sunPosition={sunPosition} floorConfig={floorConfig} />
+        )
+      }>
+      {children}
+    </SceneShell>
   );
 }
 

@@ -8,9 +8,6 @@ type PostFXProps = {
   aoOnly?: boolean;
 };
 
-// Hậu kỳ cho scene chính, chỉ được gắn khi cài đặt bật AO.
-// EffectComposer vẽ scene vào render target trước, nên tone mapping của renderer không còn
-// được áp dụng: phải thêm ToneMapping (giữ ACES như Canvas) ở cuối chuỗi.
 export function PostFX({ aoRadius = 4, aoIntensity = 5, aoOnly = false }: PostFXProps) {
   return (
     <EffectComposer multisampling={0}>
@@ -28,10 +25,10 @@ export function PostFX({ aoRadius = 4, aoIntensity = 5, aoOnly = false }: PostFX
   );
 }
 
-export function DevelopmentPostFX() {
+export function DevelopmentPostFX({ aoRadius = 1.5, aoIntensity = 2.6 }: PostFXProps) {
   const settings = useControls('Post FX', {
-    aoRadius: { value: 4, min: 0.1, max: 10, step: 0.1 },
-    aoIntensity: { value: 5, min: 0, max: 10, step: 0.1 },
+    aoRadius: { value: aoRadius, min: 0.1, max: 10, step: 0.1 },
+    aoIntensity: { value: aoIntensity, min: 0, max: 10, step: 0.1 },
     aoOnly: false,
   });
 
