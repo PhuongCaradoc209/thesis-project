@@ -33,7 +33,6 @@ export interface FloorConfig {
 // 1. SCENES
 export interface Scene {
   sceneId: string;
-  /** 'indoor' = phòng trưng bày (IndoorScene). Thiếu trường này thì là ngoài trời (BaseScene) */
   layout?: 'outdoor' | 'indoor';
   environmentConfig?: { sunPosition: number[]; fogColor: string; fogNear: number; fogFar: number };
   playerConfig: { position: number[]; killY?: number };
@@ -88,7 +87,8 @@ export interface Artifact {
   type?: string;
   subtitle: string;
   modelUrl: string;
-  cameraPosition: number[];
+  sceneModelUrl?: string;
+  cameraPosition?: number[];
   modelPosition?: number[];
   orbitTarget?: number[];
   annotation?: ArtifactAnnotation[];
@@ -97,17 +97,19 @@ export interface Artifact {
   year?: number | string;
   history: LocalizedText;
 
-  // Chỉ hiện vật trong phòng trưng bày mới có các trường dưới đây
-  sceneId?: string; // phòng trưng bày chứa hiện vật
-  pedestal?: number; // số thứ tự bục, bắt đầu từ 0
+  sceneId?: string;
+  spot?: number;
+  mount?: 'pedestal' | 'wall';
   display?: {
-    height?: number; // chiều cao model khi đặt trên bục (m), mặc định 0.6
-    rotationY?: number; // xoay model quanh trục đứng (độ)
+    height?: number;
+    width?: number;
+    rotationX?: number;
+    rotationY?: number;
   };
   credit?: {
     author: string;
-    license: string; // ví dụ "CC BY 4.0"
-    sourceUrl?: string; // link Sketchfab
+    license: string;
+    sourceUrl?: string;
   };
 }
 

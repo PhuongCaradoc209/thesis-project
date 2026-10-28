@@ -19,26 +19,30 @@ import { SceneAnnotationPanel, type SceneAnnotationPreview } from '../../compone
 import { SceneAnnotationPoint } from '../../components/scene-annotation/SceneAnnotationPoint';
 import BaseScene from '../../components/scenes/BaseScene';
 import IndoorScene from '../../components/scenes/indoor/IndoorScene';
+import { getViewpoint } from '../../components/scenes/indoor/roomLayout';
 import { SettingsPanel } from '../../components/settings/SettingsPanel';
 import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
 import { TourToolbar } from '../../components/tour/TourToolbar';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
 import { SCENE_IDS } from '../../constants/markers';
+import { useGalleryArtifacts } from '../../hooks/useArtifacts';
 import { useGuidedTours } from '../../hooks/useGuidedTours';
 import { useSceneData } from '../../hooks/useScenes';
 import { NAV_PATH } from '../../router/paths';
 import { useTourismStore } from '../../store/useTourismStore';
 import { useGuidedTourStore } from '../../store/useGuidedTourStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
+import { pickLang } from '../../utils/pickLang';
 import { getScenePresentation } from '../../utils/scenePresentation';
 
 const CONTROLS_ONBOARDING_KEY = 'tour-controls-onboarding-seen:v1';
 
 export default function TourPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { sceneId } = useParams<{ sceneId: string }>();
   const { data, isLoading, isError } = useSceneData(sceneId || null);
   const { data: guidedTours = [], isError: isGuidedToursError } = useGuidedTours(sceneId || null);
+  const { data: galleryArtifacts = [] } = useGalleryArtifacts(sceneId ?? '', data?.scene.layout === 'indoor');
   const { active: assetsActive, progress: assetsProgress } = useProgress();
   const [eventSource, setEventSource] = useState<HTMLDivElement | null>(null);
 
@@ -195,6 +199,16 @@ export default function TourPage() {
   }
 
   const { scene, interactionPoints, teleportPoints } = data;
+  const teleportList: { teleportId: string; label: string; position: number[]; lookAt: number[] }[] =
+    scene.layout === 'indoor'
+      ? galleryArtifacts
+          .filter((artifact) => artifact.spot !== undefined)
+          .map((artifact) => ({
+            teleportId: artifact.artifactId,
+            label: pickLang(artifact.title, i18n.language),
+            ...getViewpoint(artifact.mount === 'wall', artifact.spot ?? 0),
+          }))
+      : teleportPoints;
   // Ngoài trời (mặc định) hay phòng trong nhà, theo trường `layout` của scene trên Firestore
   const SceneView = scene.layout === 'indoor' ? IndoorScene : BaseScene;
   const loadingProgress = isSceneReady
@@ -364,10 +378,10 @@ export default function TourPage() {
               </button>
             </div>
 
-            <div className='min-h-0 w-full flex-1 overflow-y-auto p-2'>
-              {teleportPoints?.length ? (
+            <div className='annotation-scrollbar min-h-0 w-full flex-1 overflow-y-auto overscroll-contain p-2'>
+              {teleportList.length ? (
                 <ul className='space-y-1'>
-                  {teleportPoints.map((point) => (
+                  {teleportList.map((point) => (
                     <li key={point.teleportId}>
                       <button
                         type='button'

@@ -9,13 +9,11 @@ export const useArtifactData = (artifactId: string | null) => {
       return getArtifactById(artifactId);
     },
     enabled: !!artifactId,
-    staleTime: 10 * 60 * 1000, // Cache for 10 minutes
+    staleTime: 10 * 60 * 1000,
   });
 };
 
-// Hiện vật của phòng trưng bày. Lưu luôn từng hiện vật vào cache của useArtifactData,
-// để nút F và modal dùng lại, không phải đọc Firestore thêm lần nữa.
-export const useGalleryArtifacts = (sceneId: string) => {
+export const useGalleryArtifacts = (sceneId: string, enabled = true) => {
   const queryClient = useQueryClient();
 
   return useQuery({
@@ -25,6 +23,7 @@ export const useGalleryArtifacts = (sceneId: string) => {
       artifacts.forEach((artifact) => queryClient.setQueryData(['artifact', artifact.artifactId], artifact));
       return artifacts;
     },
+    enabled,
     staleTime: 10 * 60 * 1000,
   });
 };

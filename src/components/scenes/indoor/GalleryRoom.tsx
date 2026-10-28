@@ -1,15 +1,6 @@
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useTiledTextures, type TextureUrls } from '../../../hooks/useTiledTextures';
-import { Pedestal } from './Pedestal';
-import {
-  CORRIDOR_EDGE_Z,
-  PARTITION_XS,
-  PEDESTAL_POSITIONS,
-  ROOM_HEIGHT,
-  ROOM_LENGTH,
-  ROOM_WIDTH,
-  WALL_THICKNESS,
-} from './roomLayout';
+import { CORRIDOR_EDGE_Z, PARTITION_XS, ROOM_HEIGHT, ROOM_LENGTH, ROOM_WIDTH, WALL_THICKNESS } from './roomLayout';
 
 const FLOOR_TEXTURES: TextureUrls = {
   map: '/scenes/gallery/floor/terracotta_floor_tiles_diff_1k.jpg',
@@ -94,10 +85,6 @@ export function GalleryRoom() {
           {...wall}
           skirting
         />
-      ))}
-
-      {PEDESTAL_POSITIONS.map((position, index) => (
-        <Pedestal key={index} position={position} />
       ))}
     </RigidBody>
   );

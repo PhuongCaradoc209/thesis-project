@@ -11,7 +11,6 @@ export const getArtifactById = async (artifactId: string): Promise<Artifact | nu
   return { artifactId: snapshot.id, ...snapshot.data() } as Artifact;
 };
 
-// Lấy mọi hiện vật được trưng trong một phòng (document có sceneId trùng)
 export const getArtifactsByScene = async (sceneId: string): Promise<Artifact[]> => {
   const q = query(collection(db, 'artifacts'), where('sceneId', '==', sceneId));
   const snapshot = await getDocs(q);
