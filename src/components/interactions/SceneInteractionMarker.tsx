@@ -26,7 +26,7 @@ export function SceneInteractionMarker({
     <Billboard>
       <AnnotationMarkerVisual visible active={isFocused || emphasized} depthTest={false} intensity={intensity} />
       {isFocused && (
-        <Html position={[0, 0.36, 0]} center distanceFactor={8} zIndexRange={SCENE_INTERACTION_HTML_Z_INDEX_RANGE}>
+        <Html position={[0, 0.36, 0]} center zIndexRange={SCENE_INTERACTION_HTML_Z_INDEX_RANGE}>
           <InteractionPrompt label={label} />
         </Html>
       )}

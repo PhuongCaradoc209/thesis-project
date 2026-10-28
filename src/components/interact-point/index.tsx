@@ -15,9 +15,17 @@ type InteractPointProps = {
   artifactId: string;
   onInspect: (id: string) => void;
   guidedTarget?: boolean;
+  promptSide?: 'top' | 'bottom';
 };
 
-export function InteractPoint({ interactionId, position, artifactId, onInspect, guidedTarget = false }: InteractPointProps) {
+export function InteractPoint({
+  interactionId,
+  position,
+  artifactId,
+  onInspect,
+  guidedTarget = false,
+  promptSide = 'top',
+}: InteractPointProps) {
   const { t, i18n } = useTranslation();
   const pointRef = useRef<THREE.Group>(null);
   const handleInteract = useCallback(() => onInspect(artifactId), [artifactId, onInspect]);
@@ -36,10 +44,10 @@ export function InteractPoint({ interactionId, position, artifactId, onInspect, 
   return (
     <group ref={pointRef} position={position}>
       {(interactionState !== 'far' || guidedTarget) && (
-        <Html distanceFactor={10} center zIndexRange={SCENE_INTERACTION_HTML_Z_INDEX_RANGE}>
+        <Html center zIndexRange={SCENE_INTERACTION_HTML_Z_INDEX_RANGE}>
           <div className='relative flex flex-col items-center'>
             {isFocused && (
-              <div className='absolute bottom-full mb-3'>
+              <div className={promptSide === 'bottom' ? 'absolute top-full mt-3' : 'absolute bottom-full mb-3'}>
                 <InteractionPrompt label={label} />
               </div>
             )}
