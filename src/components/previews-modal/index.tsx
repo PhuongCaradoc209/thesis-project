@@ -111,6 +111,8 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
                             cameraPosition={previewConfig.cameraPosition}
                             modelPosition={previewConfig.modelPosition}
                             orbitTarget={previewConfig.orbitTarget}
+                            rotationX={previewConfig.display?.rotationX}
+                            rotationY={previewConfig.display?.rotationY}
                             annotations={previewAnnotations}
                             resetRequest={cameraResetRequest}
                             guidedAnnotationId={guidedAnnotationId}

@@ -9,6 +9,11 @@ lerna-debug.log*
 
 node_modules
 firestore-tools
+.agents
+*.agents
+.codex/
+.claude
+.impeccable
 dist
 dist-ssr
 *.local
