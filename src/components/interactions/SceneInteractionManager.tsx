@@ -77,8 +77,10 @@ export function SceneInteractionProvider({ active, children }: SceneInteractionP
       const distance = targetPosition.distanceTo(camera.position);
       if (distance > registration.maxDistance || distance === 0) continue;
 
-      nextNearbyIds.add(registration.id);
       projectedPosition.copy(targetPosition).project(camera);
+      if (projectedPosition.z > 1) continue;
+
+      nextNearbyIds.add(registration.id);
       const isOnScreen =
         projectedPosition.z >= -1 &&
         projectedPosition.z <= 1 &&
