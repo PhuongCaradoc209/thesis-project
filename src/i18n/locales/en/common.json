@@ -233,7 +233,9 @@
     "collapsePanel": "Collapse information panel",
     "reviewPanel": "Review panel",
     "resetCamera": "Reset camera",
-    "close": "Close artifact view"
+    "close": "Close artifact view",
+    "credit": "Model: {{author}}",
+    "creditSource": "View source"
   },
   "previewControls": "Drag to rotate · Scroll to zoom",
   "tourControls": {
@@ -262,7 +264,8 @@
   },
   "footer": {
     "tagline": "A journey to preserve and spread national heritage values through modern digital technology.",
-    "copyright": "© {{year}} VIETNAM VIRTUAL."
+    "copyright": "© {{year}} VIETNAM VIRTUAL.",
+    "credits": "3D asset credits"
   },
   "toolbar": {
     "label": "Tour tools",
@@ -353,7 +356,14 @@
       "body": "The website uses WebGL to render the 3D scenes, with collision physics and site data managed in Firebase."
     },
     "thesis": "Graduation thesis · Virtual Tourist based on WebGL",
-    "cta": "Open the heritage map"
+    "cta": "Open the heritage map",
+    "credits": {
+      "title": "Credits",
+      "body": "3D models and textures on this website are used under their authors’ licenses. Thanks to the creators and museums who shared them.",
+      "models": "3D models",
+      "textures": "Textures",
+      "by": "By {{author}}"
+    }
   },
   "interaction": {
     "inspect": "Inspect {{name}}",

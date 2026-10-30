@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
+import { NAV_PATH } from '../../router/paths';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -11,9 +13,16 @@ const Footer = () => {
           </div>
           <p className='font-body text-inverse-on-surface/75 max-w-sm text-sm'>{t('footer.tagline')}</p>
         </div>
-        <p className='font-body text-inverse-on-surface/60 text-xs'>
-          {t('footer.copyright', { year: new Date().getFullYear() })}
-        </p>
+        <div className='flex flex-col items-center gap-2 md:items-end'>
+          <Link
+            to={`${NAV_PATH.ABOUT}#credits`}
+            className='font-body text-inverse-on-surface/75 hover:text-inverse-on-surface text-xs underline underline-offset-4'>
+            {t('footer.credits')}
+          </Link>
+          <p className='font-body text-inverse-on-surface/60 text-xs'>
+            {t('footer.copyright', { year: new Date().getFullYear() })}
+          </p>
+        </div>
       </div>
     </footer>
   );

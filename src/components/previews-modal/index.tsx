@@ -5,6 +5,7 @@ import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ModelErrorBoundary } from '../3d/ModelErrorBoundary';
 import ModelLoadingBar from '../loading/ModelLoadingBar';
+import { getLicenseUrl } from '../../constants/credits';
 import { useArtifactData } from '../../hooks/useArtifacts';
 import { pickLang } from '../../utils/pickLang';
 import { useTourismStore } from '../../store/useTourismStore';
@@ -34,6 +35,8 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
   ]
     .filter((fact) => fact.value !== undefined && fact.value !== null && fact.value !== '')
     .map((fact) => ({ label: fact.label, value: t(String(fact.value)) }));
+  const credit = previewConfig?.credit?.author ? previewConfig.credit : null;
+  const licenseUrl = credit ? getLicenseUrl(credit.license) : undefined;
 
   return (
     <AnimatePresence>
@@ -230,11 +233,39 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
                             ))}
                           </dl>
                         )}
-                        <p className='text-on-surface-variant text-[15px] leading-7'>
+                        <p className='text-on-surface-variant mb-6 text-[15px] leading-7'>
                           {previewConfig.history
                             ? t(pickLang(previewConfig.history, i18n.language))
                             : t('artifact.noInformation')}
                         </p>
+                        {credit && (
+                          <p className='text-on-surface-variant mt-auto border-t border-amber-950/12 pt-3 text-xs leading-5'>
+                            {t('artifact.credit', { author: credit.author })} ·{' '}
+                            {licenseUrl ? (
+                              <a
+                                href={licenseUrl}
+                                target='_blank'
+                                rel='noreferrer'
+                                className='text-on-surface-variant underline underline-offset-2 hover:no-underline'>
+                                {credit.license}
+                              </a>
+                            ) : (
+                              credit.license
+                            )}
+                            {credit.sourceUrl && (
+                              <>
+                                {' · '}
+                                <a
+                                  href={credit.sourceUrl}
+                                  target='_blank'
+                                  rel='noreferrer'
+                                  className='text-primary font-semibold underline underline-offset-2 hover:no-underline'>
+                                  {t('artifact.creditSource')} ↗
+                                </a>
+                              </>
+                            )}
+                          </p>
+                        )}
                       </>
                     ) : (
                       <div className='text-on-surface-variant text-center'>{t('artifact.noDetails')}</div>

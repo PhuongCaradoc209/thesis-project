@@ -233,7 +233,9 @@
     "collapsePanel": "Thu gọn bảng thông tin",
     "reviewPanel": "Bảng thông tin",
     "resetCamera": "Đặt lại camera",
-    "close": "Đóng xem hiện vật"
+    "close": "Đóng xem hiện vật",
+    "credit": "Mô hình: {{author}}",
+    "creditSource": "Xem nguồn"
   },
   "previewControls": "Kéo chuột để xoay · Cuộn để phóng to/thu nhỏ",
   "tourControls": {
@@ -262,7 +264,8 @@
   },
   "footer": {
     "tagline": "Hành trình gìn giữ và lan tỏa giá trị di sản dân tộc thông qua công nghệ số hiện đại.",
-    "copyright": "© {{year}} VIETNAM VIRTUAL. Hào khí Lạc Việt."
+    "copyright": "© {{year}} VIETNAM VIRTUAL. Hào khí Lạc Việt.",
+    "credits": "Ghi nguồn tài nguyên 3D"
   },
   "toolbar": {
     "label": "Công cụ tham quan",
@@ -353,7 +356,14 @@
       "body": "Website dùng WebGL để hiển thị không gian 3D, có vật lý va chạm, và quản lý dữ liệu di tích trên Firebase."
     },
     "thesis": "Đồ án tốt nghiệp · Virtual Tourist based on WebGL",
-    "cta": "Mở bản đồ di sản"
+    "cta": "Mở bản đồ di sản",
+    "credits": {
+      "title": "Ghi nguồn",
+      "body": "Mô hình 3D và texture trong website được sử dụng theo giấy phép của tác giả. Cảm ơn các tác giả và bảo tàng đã chia sẻ.",
+      "models": "Mô hình 3D",
+      "textures": "Texture",
+      "by": "Tác giả: {{author}}"
+    }
   },
   "interaction": {
     "inspect": "Xem {{name}}",

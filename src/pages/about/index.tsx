@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
+import { MODEL_CREDITS, TEXTURE_CREDITS, getLicenseUrl, type AssetCredit } from '../../constants/credits';
 import { NAV_PATH } from '../../router/paths';
 
 const STEPS = ['map', 'walk', 'journal'] as const;
@@ -12,8 +14,53 @@ const TECHNOLOGIES = [
 ];
 const SOURCE_URL = 'https://baotanglichsu.vn/vi/Articles/3096/9778/djoc-djao-tam-bia-dja-cao-va-nang-nhat-viet-nam.html';
 
+function CreditList({ title, credits }: { title: string; credits: AssetCredit[] }) {
+  const { t } = useTranslation();
+
+  return (
+    <div className='mt-8'>
+      <h3 className='font-label text-secondary mb-2 text-xs tracking-[0.2em] uppercase'>{title}</h3>
+      <ul className='border-outline/20 border-t'>
+        {credits.map((credit) => {
+          const licenseUrl = getLicenseUrl(credit.license);
+          return (
+            <li key={credit.sourceUrl} className='border-outline/20 border-b py-3'>
+              <a
+                href={credit.sourceUrl}
+                target='_blank'
+                rel='noreferrer'
+                className='text-on-surface font-semibold underline-offset-4 hover:underline'>
+                {credit.name} ↗
+              </a>
+              <p className='text-on-surface-variant mt-1 text-sm'>
+                {t('aboutPage.credits.by', { author: credit.author })} ·{' '}
+                {licenseUrl ? (
+                  <a
+                    href={licenseUrl}
+                    target='_blank'
+                    rel='noreferrer'
+                    className='text-on-surface-variant underline underline-offset-4 hover:no-underline'>
+                    {credit.license}
+                  </a>
+                ) : (
+                  credit.license
+                )}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 const AboutPage = () => {
   const { t } = useTranslation();
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+  }, [hash]);
 
   return (
     <div className='bg-background text-on-background font-body min-h-screen'>
@@ -59,6 +106,13 @@ const AboutPage = () => {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section id='credits' className='mt-16 scroll-mt-28'>
+          <h2 className='font-headline mb-4 text-2xl font-semibold'>{t('aboutPage.credits.title')}</h2>
+          <p className='text-on-surface-variant leading-relaxed'>{t('aboutPage.credits.body')}</p>
+          <CreditList title={t('aboutPage.credits.models')} credits={MODEL_CREDITS} />
+          <CreditList title={t('aboutPage.credits.textures')} credits={TEXTURE_CREDITS} />
         </section>
 
         <div className='border-outline/20 mt-16 flex flex-wrap items-center justify-between gap-4 border-t pt-10'>
