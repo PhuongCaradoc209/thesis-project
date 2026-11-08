@@ -43,7 +43,7 @@ export function GuidedTourJournal({ tour, completedStepIds, onClose }: GuidedTou
 
   return (
     <motion.div
-      className='absolute inset-x-0 top-20 bottom-0 z-60 flex items-center justify-center bg-black/45 p-3 backdrop-blur-[2px] sm:p-6'
+      className='absolute inset-0 z-60 flex items-center justify-center bg-black/45 p-3 backdrop-blur-[2px] sm:p-6'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
@@ -52,7 +52,7 @@ export function GuidedTourJournal({ tour, completedStepIds, onClose }: GuidedTou
         aria-modal='true'
         aria-labelledby='guided-journal-title'
         style={journalStyle}
-        className='text-on-surface relative grid max-h-[calc(100vh-7rem)] w-full max-w-5xl overflow-hidden rounded-xl border border-amber-950/20 bg-[var(--journal-paper)] shadow-2xl md:grid-cols-[0.8fr_1.2fr]'
+        className='text-on-surface relative grid max-h-[calc(100vh-7rem)] w-full max-w-5xl overflow-hidden border border-amber-950/20 bg-[var(--journal-paper)] md:grid-cols-[0.8fr_1.2fr]'
         initial={reduceMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduceMotion ? undefined : { opacity: 0, y: 12, scale: 0.99 }}>
@@ -64,7 +64,7 @@ export function GuidedTourJournal({ tour, completedStepIds, onClose }: GuidedTou
           <XIcon size={19} />
         </button>
 
-        <aside className='min-h-0 border-b border-amber-950/15 bg-[#ead8b8] p-5 md:border-r md:border-b-0 md:p-8'>
+        <aside className='border-on-background/20 min-h-0 border-b bg-[#ead8b8] p-5 md:border-r md:border-b-0 md:p-8'>
           <div className='mb-6 pr-10'>
             <p className='text-[0.65rem] font-semibold tracking-[0.24em] text-amber-950/55 uppercase'>
               {t('guidedTour.journal.title')}
@@ -85,7 +85,7 @@ export function GuidedTourJournal({ tour, completedStepIds, onClose }: GuidedTou
                 key={entry.discoveryId}
                 type='button'
                 disabled={!entry.unlocked}
-                className={`group relative flex min-w-56 items-center gap-4 border-b border-amber-950/12 px-2 py-4 text-left transition-colors md:min-w-0 ${
+                className={`group border-on-background/20 relative flex min-w-56 items-center gap-4 border-b px-2 py-4 text-left transition-colors md:min-w-0 ${
                   entry.unlocked
                     ? entry.discoveryId === selectedEntry?.discoveryId
                       ? 'bg-amber-50/35 text-amber-950 before:absolute before:inset-y-2 before:left-0 before:w-0.5 before:bg-amber-800'
@@ -131,7 +131,7 @@ export function GuidedTourJournal({ tour, completedStepIds, onClose }: GuidedTou
                         key={image}
                         src={image}
                         alt={t(selectedEntry.title)}
-                        className='aspect-4/3 w-full rounded-xl border border-amber-950/15 object-cover'
+                        className='border-on-background/20 aspect-4/3 w-full border object-cover'
                       />
                     ))}
                   </div>
