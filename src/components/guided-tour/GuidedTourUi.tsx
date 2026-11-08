@@ -10,6 +10,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTourismStore } from '../../store/useTourismStore';
 import { useGuidedTourStore } from '../../store/useGuidedTourStore';
 import { GuidedCinematicOverlay } from './GuidedCinematicOverlay';
 import { GuidedTourJournal } from './GuidedTourJournal';
@@ -20,6 +21,8 @@ type GuidedTourUiProps = {
 };
 
 export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTourUiProps) {
+  const isInspecting = useTourismStore((state) => Boolean(state.selectedArtifactId));
+  const cornerPosition = isInspecting ? 'top-4 left-4 md:top-6 md:left-6' : 'top-32 left-4 md:top-36 md:left-6';
   const { t } = useTranslation();
   const reduceMotion = useReducedMotion();
   const tour = useGuidedTourStore((state) => state.tour);
@@ -62,7 +65,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
       <AnimatePresence>
         {isIntroOpen && (
           <motion.div
-            className='absolute inset-x-0 top-20 bottom-0 z-40 flex items-center justify-center bg-[#170f09]/55 px-4'
+            className='absolute inset-0 z-40 flex items-center justify-center bg-[#170f09]/55 px-4'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
@@ -70,7 +73,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
               role='dialog'
               aria-modal='true'
               aria-labelledby='guided-tour-intro-title'
-              className='text-on-surface w-full max-w-xl overflow-hidden rounded-xl border border-[#b69462]/55 bg-[#f3e7cf] shadow-[0_24px_80px_rgba(18,10,5,0.4)]'
+              className='text-on-surface border-on-background bg-surface-bright w-full max-w-xl overflow-hidden border-[1.5px]'
               initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0, y: 16, scale: 0.98 }}
@@ -91,31 +94,31 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
 
               <div className='px-7 pb-7 sm:px-9'>
                 <p className='text-on-surface-variant max-w-lg text-sm leading-7'>{t(tour.description)}</p>
-                <div className='mt-6 flex items-center gap-5 border-y border-amber-950/15 py-3 text-xs tracking-wide text-amber-950/65 uppercase'>
+                <div className='border-on-background/20 mt-6 flex items-center gap-5 border-y py-3 text-xs tracking-wide text-amber-950/65 uppercase'>
                   <span>{t('guidedTour.intro.steps', { count: tour.steps.length })}</span>
                   <span className='h-3 w-px bg-amber-950/20' />
                   <span>{t('guidedTour.intro.estimatedTime')}</span>
                 </div>
               </div>
 
-              <div className='flex flex-col-reverse gap-2 border-t border-amber-950/15 bg-[#ead7b5]/60 px-7 py-4 sm:flex-row sm:justify-end sm:px-9'>
+              <div className='border-on-background/20 flex flex-col-reverse gap-2 border-t bg-[#ead7b5]/60 px-7 py-4 sm:flex-row sm:justify-end sm:px-9'>
                 <button
                   type='button'
-                  className='text-on-surface-variant rounded-md px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
+                  className='text-on-surface-variant px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
                   onClick={exploreFreely}>
                   {t('guidedTour.actions.freeExplore')}
                 </button>
                 {canResume && (
                   <button
                     type='button'
-                    className='border-primary/50 text-primary rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
+                    className='border-primary/50 text-primary border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
                     onClick={resumeTour}>
                     {t('guidedTour.actions.continue')}
                   </button>
                 )}
                 <button
                   type='button'
-                  className='bg-primary hover:bg-primary-container rounded-md px-5 py-2.5 text-sm font-semibold text-white transition-colors'
+                  className='bg-primary hover:bg-primary-container px-5 py-2.5 text-sm font-semibold text-white transition-colors'
                   onClick={() => beginTour(status === 'completed' || canResume)}>
                   {status === 'completed' || canResume ? t('guidedTour.actions.restart') : t('guidedTour.actions.start')}
                 </button>
@@ -133,7 +136,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
           (status === 'active' || status === 'paused') &&
           currentStep && (
             <motion.aside
-              className='text-on-surface absolute top-24 left-4 z-40 w-[min(25rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-amber-950/20 bg-[#f3e7cf]/95 shadow-[0_14px_40px_rgba(20,12,7,0.25)]'
+              className={`text-on-surface border-on-background bg-surface-bright absolute z-40 w-[min(25rem,calc(100vw-2rem))] overflow-hidden border-[1.5px] ${cornerPosition}`}
               initial={reduceMotion ? false : { opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               exit={reduceMotion ? undefined : { opacity: 0, x: -12 }}>
@@ -167,7 +170,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
                 <button
                   type='button'
                   aria-label={t('guidedTour.actions.exit')}
-                  className='text-on-surface-variant rounded-md p-1.5 transition-colors hover:bg-amber-950/5'
+                  className='text-on-surface-variant p-1.5 transition-colors hover:bg-amber-950/5'
                   onClick={exitTour}>
                   <XIcon size={17} />
                 </button>
@@ -185,17 +188,17 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
                 )}
               </AnimatePresence>
 
-              <div className='flex items-center justify-between border-t border-amber-950/15 bg-[#ead7b5]/55 px-3 py-2'>
+              <div className='border-on-background/20 flex items-center justify-between border-t bg-[#ead7b5]/55 px-3 py-2'>
                 <button
                   type='button'
-                  className='text-primary flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
+                  className='text-primary flex items-center gap-1.5 px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
                   onClick={() => setIsHintVisible((visible) => !visible)}>
                   <LightbulbIcon size={16} />
                   {isHintVisible ? t('guidedTour.actions.hideHint') : t('guidedTour.actions.hint')}
                 </button>
                 <button
                   type='button'
-                  className='text-on-surface-variant flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
+                  className='text-on-surface-variant flex items-center gap-1.5 px-2 py-1.5 text-xs font-semibold transition-colors hover:bg-white/30'
                   onClick={status === 'active' ? pauseTour : resumeTour}>
                   {status === 'active' ? <PauseIcon size={16} /> : <PlayIcon size={16} />}
                   {status === 'active' ? t('guidedTour.actions.pause') : t('guidedTour.actions.continue')}
@@ -213,7 +216,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
           (status === 'idle' || status === 'completed') && (
             <motion.button
               type='button'
-              className='text-primary absolute top-24 left-4 z-30 flex items-center gap-2 rounded-lg border border-amber-950/20 bg-[#f3e7cf]/95 px-4 py-3 text-sm font-semibold shadow-lg transition-colors hover:bg-[#f8edd9]'
+              className={`text-primary border-on-background bg-surface-bright hover:bg-surface-container-high absolute z-30 flex items-center gap-2 border-[1.5px] px-4 py-3 text-sm font-semibold transition-colors ${cornerPosition}`}
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -12 }}
@@ -228,7 +231,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
         {feedback && (
           <motion.div
             key={feedback.id}
-            className='text-on-surface absolute top-24 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-amber-950/20 bg-[#f3e7cf]/95 px-4 py-2.5 text-sm font-semibold shadow-lg'
+            className='text-on-surface border-on-background bg-surface-bright absolute top-6 left-1/2 z-50 -translate-x-1/2 border-[1.5px] px-4 py-2.5 text-sm font-semibold'
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8 }}>
@@ -244,14 +247,14 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
       <AnimatePresence>
         {isCompletionOpen && (
           <motion.div
-            className='absolute inset-x-0 top-20 bottom-0 z-40 flex items-center justify-center bg-[#170f09]/55 px-4'
+            className='absolute inset-0 z-40 flex items-center justify-center bg-[#170f09]/55 px-4'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
             <motion.section
               role='dialog'
               aria-modal='true'
-              className='text-on-surface w-full max-w-md rounded-xl border border-[#b69462]/55 bg-[#f3e7cf] p-8 text-center shadow-2xl'
+              className='text-on-surface border-on-background bg-surface-bright w-full max-w-md border-[1.5px] p-8 text-center'
               initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0, y: 12 }}>
@@ -265,20 +268,20 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
               <div className='mt-6 flex flex-col-reverse justify-center gap-2 sm:flex-row'>
                 <button
                   type='button'
-                  className='text-primary rounded-md px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
+                  className='text-primary px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
                   onClick={closeCompletion}>
                   {t('guidedTour.actions.freeExplore')}
                 </button>
                 <button
                   type='button'
-                  className='border-secondary text-secondary flex items-center justify-center gap-2 rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
+                  className='border-secondary text-secondary flex items-center justify-center gap-2 border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/30'
                   onClick={openJournal}>
                   <BookOpenIcon size={18} />
                   {t('guidedTour.actions.openJournal')}
                 </button>
                 <button
                   type='button'
-                  className='bg-primary hover:bg-primary-container rounded-md px-5 py-2.5 text-sm font-semibold text-white transition-colors'
+                  className='bg-primary hover:bg-primary-container px-5 py-2.5 text-sm font-semibold text-white transition-colors'
                   onClick={() => beginTour(true)}>
                   {t('guidedTour.actions.restart')}
                 </button>
