@@ -38,7 +38,7 @@ export function SceneAnnotationPanel({ annotation, onClose }: SceneAnnotationPan
 
   return (
     <motion.div
-      className='pointer-events-none absolute inset-x-0 top-20 bottom-0 z-30 flex justify-end bg-[#170f09]/15'
+      className='pointer-events-none absolute inset-0 z-30 flex justify-end bg-[#170f09]/15'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -47,13 +47,13 @@ export function SceneAnnotationPanel({ annotation, onClose }: SceneAnnotationPan
         role='dialog'
         aria-modal='true'
         aria-label={title}
-        className='text-on-surface pointer-events-auto m-4 flex h-[calc(100%-2rem)] w-[min(25rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-xl border border-[#b69462]/55 bg-[#f3e7cf] shadow-[0_24px_80px_rgba(18,10,5,0.3)]'
+        className='text-on-surface border-on-background bg-surface-bright pointer-events-auto m-4 flex h-[calc(100%-2rem)] w-[min(25rem,calc(100vw-2rem))] flex-col overflow-hidden border-[1.5px]'
         initial={reduceMotion ? false : { x: '100%' }}
         animate={{ x: 0 }}
         exit={reduceMotion ? undefined : { x: '100%' }}
         transition={{ duration: reduceMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] }}
         onClick={(event) => event.stopPropagation()}>
-        <header className='flex shrink-0 items-center justify-between border-b border-amber-950/12 px-5 py-4'>
+        <header className='border-on-background/20 flex shrink-0 items-center justify-between border-b px-5 py-4'>
           <div className='flex min-w-0 items-center gap-3'>
             <InfoIcon size={21} className='text-primary shrink-0' />
             <div className='min-w-0'>
@@ -72,8 +72,8 @@ export function SceneAnnotationPanel({ annotation, onClose }: SceneAnnotationPan
 
         <div className='annotation-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain'>
           {images.length > 0 && (
-            <div className='border-b border-amber-950/12 p-4'>
-              <div className='aspect-video overflow-hidden rounded-lg bg-[#ead7b5]'>
+            <div className='border-on-background/20 border-b p-4'>
+              <div className='aspect-video overflow-hidden bg-[#ead7b5]'>
                 <img
                   src={images[selectedImageIndex]}
                   alt={`${title} ${selectedImageIndex + 1}`}
@@ -90,7 +90,7 @@ export function SceneAnnotationPanel({ annotation, onClose }: SceneAnnotationPan
                       type='button'
                       aria-label={`${title} ${index + 1}`}
                       aria-pressed={selectedImageIndex === index}
-                      className={`h-14 w-20 shrink-0 overflow-hidden rounded-lg border-2 transition-colors ${
+                      className={`h-14 w-20 shrink-0 overflow-hidden border-2 transition-colors ${
                         selectedImageIndex === index ? 'border-primary' : 'border-transparent'
                       }`}
                       onClick={() => setSelectedImageIndex(index)}>
@@ -107,10 +107,10 @@ export function SceneAnnotationPanel({ annotation, onClose }: SceneAnnotationPan
           </div>
         </div>
 
-        <footer className='flex shrink-0 justify-end border-t border-amber-950/12 bg-[#ead7b5] px-5 py-3'>
+        <footer className='border-on-background/20 flex shrink-0 justify-end border-t bg-[#ead7b5] px-5 py-3'>
           <button
             type='button'
-            className='text-primary font-body rounded-md px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/30'
+            className='text-primary font-body px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/30'
             onClick={onClose}>
             {t('sceneAnnotation.continue')}
           </button>
