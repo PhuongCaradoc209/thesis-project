@@ -1,132 +1,273 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import DenHungImage from '../../assets/scenes/denhung/DenHung.jpg';
-import TuDucImage from '../../assets/scenes/tuduc/TuDuc.jpg';
-import TuDucPavilionImage from '../../assets/scenes/tuduc/TuDucLoading.jpg';
-import { ComingSoonGrid, SiteCard } from '../../components/heritage/SiteCards';
+import HeroPoster from '../../assets/home/hero-poster.jpg';
+import TuDucLakeImage from '../../assets/home/tuduc-lake.jpg';
+import PhotoCredit from '../../components/home/PhotoCredit';
+import DriftStamp from '../../components/home/DriftStamp';
+import GuideTicket from '../../components/home/GuideTicket';
+import TicketCard from '../../components/home/TicketCard';
+import { PHOTO_CREDITS } from '../../constants/credits';
+import { COMING_SOON_SITES } from '../../constants/comingSoon';
 import { MARKER_DATA } from '../../constants/markers';
+import { ARTIFACT_COUNT, GALLERY_ITEMS, SITE_DETAILS, formatCoords, formatTicketNumber } from '../../constants/siteDetails';
 import { NAV_PATH } from '../../router/paths';
+
+const WRAP = 'mx-auto max-w-[1312px] px-5 md:px-16';
+const LABEL = 'text-on-surface-variant font-mono text-[12.5px] tracking-[.12em] uppercase';
+const DISPLAY = 'font-headline font-extrabold uppercase';
+const BUTTON =
+  'inline-flex h-14 items-center justify-center gap-3 px-7 font-mono text-sm font-semibold tracking-[.08em] uppercase transition-colors';
+const BUTTON_PRIMARY = `${BUTTON} bg-primary text-on-primary hover:bg-on-background hover:text-background`;
+const BUTTON_GHOST = `${BUTTON} bg-surface-bright border-on-background text-on-background hover:bg-surface-container-high border-[1.5px]`;
+const SECTION = 'border-on-background/85 border-b-[1.5px] py-18 md:py-28';
+
+type SectionHeadProps = {
+  label: string;
+  title: string;
+  intro: string;
+};
+
+const SectionHead = ({ label, title, intro }: SectionHeadProps) => (
+  <div className='mb-12 flex flex-col items-start gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-12'>
+    <div>
+      <div className={LABEL}>{label}</div>
+      <h2 className={`${DISPLAY} mt-7 text-[42px] leading-[1.15] [font-stretch:75%] md:text-6xl lg:text-[72px]`}>{title}</h2>
+    </div>
+    <p className='text-on-surface-variant max-w-[400px] text-[16.5px] leading-[1.65]'>{intro}</p>
+  </div>
+);
 
 const Hero = () => {
   const { t } = useTranslation();
 
   return (
-    <section className='relative flex h-screen w-full items-center justify-center overflow-hidden'>
-      <div className='absolute inset-0 z-0 bg-gray-100'>
-        <video
-          className='h-full w-full object-cover'
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload='auto'
-          src='/common/video/heroSection.mp4'
-        />
-      </div>
-      <div className='relative z-10 px-4 text-center'>
-        <h1 className='font-headline mb-6 text-5xl font-bold tracking-tight text-white md:text-8xl'>{t('home.hero.title')}</h1>
-        <p className='font-label mx-auto max-w-2xl text-lg leading-relaxed font-light text-white/90 md:text-2xl'>
+    <section className='relative mt-17 grid h-[calc(100svh-68px)] max-h-[860px] min-h-[620px] place-items-center overflow-hidden text-center text-white'>
+      <video
+        className='absolute inset-0 h-full w-full object-cover'
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload='auto'
+        poster={HeroPoster}
+        src='/common/video/heroSection.mp4'
+      />
+      <div className='from-on-background/20 to-on-background/40 absolute inset-0 bg-linear-to-b' />
+      <div className='relative z-10 px-6'>
+        <div className='font-mono text-[13px] font-semibold tracking-[.12em] text-[#fbe7c2] uppercase'>
+          {t('home.hero.eyebrow')}
+        </div>
+        <h1
+          className={`${DISPLAY} mt-7 text-[60px] leading-[1.15] [font-stretch:72%] [text-shadow:0_2px_30px_rgba(0,0,0,.3)] md:mt-9 md:text-[124px]`}>
+          {t('home.hero.title')}
+          <br />
+          <span className='text-secondary-fixed'>{t('home.hero.titleAccent')}</span>
+        </h1>
+        <p className='mx-auto mt-6 max-w-[600px] text-lg leading-relaxed [text-shadow:0_1px_14px_rgba(0,0,0,.55)] md:text-xl'>
           {t('home.hero.subtitle')}
         </p>
-        <div className='mt-12'>
-          <Link
-            to={NAV_PATH.MAP}
-            className='bg-primary text-on-primary font-label inline-block px-10 py-4 text-sm font-bold tracking-widest uppercase shadow-xl transition-transform hover:scale-105 active:scale-95'>
-            {t('actions.startExploring')}
+        <div className='mt-8 flex flex-col justify-center gap-3.5 md:flex-row'>
+          <Link to={NAV_PATH.MAP} className={BUTTON_PRIMARY}>
+            {t('actions.startExploring')} <span aria-hidden='true'>→</span>
           </Link>
+          <a
+            href='#tickets'
+            className={`${BUTTON} border-[1.5px] border-[#fffaf0] bg-[#fffaf0]/10 text-[#fffaf0] hover:bg-[#fffaf0]/25 hover:text-[#fffaf0]`}>
+            {t('home.hero.secondary')}
+          </a>
         </div>
       </div>
     </section>
   );
 };
 
-const DestinationsGrid = () => {
+const Ticker = () => {
   const { t } = useTranslation();
 
   return (
-    <section className='mx-auto max-w-7xl px-8 py-24'>
-      <div className='mb-16 flex flex-col items-center'>
-        <span className='font-label text-secondary mb-4 text-xs tracking-[0.3em] uppercase'>
-          {t('home.destinations.sectionLabel')}
-        </span>
-        <h2 className='font-headline text-on-background text-4xl font-bold italic md:text-5xl'>
-          {t('home.destinations.sectionTitle')}
-        </h2>
+    <div className='bg-primary text-on-primary'>
+      <div
+        className={`${WRAP} flex h-13 items-center justify-between font-mono text-[11px] tracking-[.1em] uppercase md:text-[13px]`}>
+        <span>{t('home.ticker.open', { count: MARKER_DATA.length })}</span>
+        <span>{t('home.ticker.artifacts', { count: ARTIFACT_COUNT })}</span>
+        <span className='hidden sm:inline'>{t('home.ticker.soon', { count: COMING_SOON_SITES.length })}</span>
+        <span className='hidden md:inline'>{t('home.ticker.always')}</span>
       </div>
+    </div>
+  );
+};
 
-      <div className='grid grid-cols-1 gap-8 md:grid-cols-12'>
-        {MARKER_DATA.map((marker, index) => (
-          <SiteCard key={marker.id} marker={marker} featured={index === 0} />
-        ))}
+const Tickets = () => {
+  const { t } = useTranslation();
+
+  return (
+    <section id='tickets' className={`${SECTION} scroll-mt-17`}>
+      <div className={WRAP}>
+        <SectionHead label={t('home.tickets.label')} title={t('home.tickets.title')} intro={t('home.tickets.intro')} />
+        <div className='grid grid-cols-1 gap-7 xl:grid-cols-2'>
+          {MARKER_DATA.map((marker, index) => {
+            const extra = SITE_DETAILS[marker.id];
+            if (!extra) return null;
+            const facts = [
+              { label: t('home.tickets.coords'), value: formatCoords(marker) },
+              { label: t(`home.tickets.${extra.countKey}`), value: String(extra.count) },
+              {
+                label: t('home.tickets.duration'),
+                value: extra.minutes ? t('home.tickets.minutes', { count: extra.minutes }) : t('home.tickets.free'),
+              },
+            ];
+            return (
+              <TicketCard
+                key={marker.id}
+                marker={marker}
+                no={formatTicketNumber(index)}
+                image={extra.image}
+                imagePosition={extra.imagePosition}
+                credit={extra.credit}
+                facts={facts}
+              />
+            );
+          })}
+        </div>
       </div>
-
-      <h3 className='font-label text-secondary mt-16 mb-6 text-xs tracking-[0.3em] uppercase'>
-        {t('home.destinations.comingSoonTitle')}
-      </h3>
-      <ComingSoonGrid />
     </section>
   );
 };
 
-const AboutSection = () => {
+const Steps = () => {
   const { t } = useTranslation();
 
   return (
-    <section className='bg-surface-container relative overflow-hidden py-24'>
-      <div className='lac-viet-mask pointer-events-none absolute inset-0 opacity-[0.03]'></div>
-      <div className='mx-auto grid max-w-7xl grid-cols-1 items-center gap-20 px-8 lg:grid-cols-2'>
-        <div className='order-2 lg:order-1'>
-          <span className='text-primary mb-6 block text-xs font-bold tracking-widest uppercase'>
-            {t('home.about.sectionLabel')}
-          </span>
-          <h2 className='font-headline text-on-background mb-8 text-5xl leading-tight'>
-            {t('home.about.heading.line1')} <br />
-            <span className='text-secondary italic'>{t('home.about.heading.line2')}</span>
+    <section className={`${SECTION} bg-[url(/common/image/background.webp)] bg-cover bg-center`}>
+      <div className={WRAP}>
+        <SectionHead label={t('home.steps.label')} title={t('home.steps.title')} intro={t('home.steps.intro')} />
+        <GuideTicket />
+      </div>
+    </section>
+  );
+};
+
+const Collection = () => {
+  const { t } = useTranslation();
+
+  return (
+    <section className={SECTION}>
+      <div className={WRAP}>
+        <SectionHead label={t('home.collection.label')} title={t('home.collection.title')} intro={t('home.collection.intro')} />
+        <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8'>
+          {GALLERY_ITEMS.map((item) => {
+            const name = t(`home.collection.items.${item.key}.name`);
+            return (
+              <DriftStamp key={item.key}>
+                <div className='stamp-edge p-[7px] transition-transform duration-300 hover:-translate-y-1 hover:-rotate-1'>
+                  <div className='bg-surface-bright border border-black/10 px-3 pt-3 pb-3.5'>
+                    <div className='border-on-background aspect-[4/3.4] overflow-hidden border-[1.5px] bg-[#fbe7c2]'>
+                      <img className='block h-full w-full object-cover' src={item.img} alt={name} loading='lazy' />
+                    </div>
+                    <div className='mt-3 flex items-baseline justify-between gap-2'>
+                      <b className={`${DISPLAY} text-[19px] leading-[1.05] [font-stretch:85%]`}>{name}</b>
+                    </div>
+                    <small className='text-on-surface-variant mt-1.5 block font-mono text-xs'>
+                      {t(`home.collection.items.${item.key}.era`)}
+                    </small>
+                    <a
+                      href={item.credit.sourceUrl}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='text-on-surface-variant/80 hover:text-on-surface mt-1 block font-mono text-[10.5px]'>
+                      {t('home.photo', { author: item.credit.author, license: item.credit.license })}
+                    </a>
+                  </div>
+                </div>
+              </DriftStamp>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Departures = () => {
+  const { t } = useTranslation();
+  const row = 'grid grid-cols-[84px_1fr_auto] items-center gap-x-3 lg:grid-cols-[90px_80px_1fr_220px_240px_140px] lg:gap-x-0';
+
+  return (
+    <section className={SECTION}>
+      <div className={WRAP}>
+        <SectionHead label={t('home.board.label')} title={t('home.board.title')} intro={t('home.board.intro')} />
+        <div className='border-on-background border-t-[1.5px] font-mono text-[13.5px]'>
+          <div
+            className={`${row} text-on-surface-variant hidden border-b border-black/20 py-3 text-[11.5px] tracking-[.12em] uppercase lg:grid`}>
+            <span>{t('home.board.no')}</span>
+            <span />
+            <span>{t('home.board.site')}</span>
+            <span>{t('home.board.province')}</span>
+            <span>{t('home.board.kind')}</span>
+            <span className='text-right'>{t('home.board.status')}</span>
+          </div>
+          {COMING_SOON_SITES.map((site) => (
+            <div key={site.key} className={`${row} border-b border-black/20 py-3.5`}>
+              <span className='hidden lg:block'>{site.no}</span>
+              <span>
+                <span className='border-on-background block h-14 w-18 overflow-hidden border-[1.5px]'>
+                  <img
+                    className='block h-full w-full object-cover saturate-[.85]'
+                    src={site.img}
+                    alt={t(`home.destinations.${site.key}.alt`)}
+                    loading='lazy'
+                  />
+                </span>
+              </span>
+              <span className={`${DISPLAY} text-[22px] [font-stretch:85%] md:text-[26px]`}>
+                {t(`home.destinations.${site.key}.title`)}
+                <span className='text-on-surface-variant mt-0.5 block font-mono text-[10.5px] font-normal normal-case'>
+                  {t('home.photo', { author: site.credit.author, license: site.credit.license })}
+                </span>
+              </span>
+              <span className='hidden lg:block'>{t(`home.destinations.${site.key}.province`)}</span>
+              <span className='hidden lg:block'>{t(`home.destinations.${site.key}.kind`)}</span>
+              <span className='text-right'>
+                <span className='border-on-background border-[1.5px] px-2 py-1 text-xs font-semibold tracking-[.06em] whitespace-nowrap uppercase'>
+                  {t('home.destinations.comingSoon')}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const FinalCall = () => {
+  const { t } = useTranslation();
+
+  return (
+    <section className='bg-surface-container-high py-18 md:py-26'>
+      <div className={`${WRAP} grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_420px] lg:gap-16`}>
+        <div>
+          <div className={LABEL}>{t('home.final.label')}</div>
+          <h2 className={`${DISPLAY} mt-7 text-[42px] leading-[1.15] [font-stretch:75%] md:text-[84px]`}>
+            {t('home.final.title')}
           </h2>
-          <div className='text-on-surface-variant space-y-6 leading-relaxed'>
-            <p>
-              {t('home.about.p1.beforeBrand')}
-              <strong>{t('brand.name')}</strong>
-              {t('home.about.p1.afterBrand')}
-            </p>
-            <p>{t('home.about.p2')}</p>
+          <div className='mt-8 flex flex-col gap-3.5 md:flex-row'>
+            <Link to={NAV_PATH.MAP} className={BUTTON_PRIMARY}>
+              {t('actions.startExploring')} <span aria-hidden='true'>→</span>
+            </Link>
+            <Link to={NAV_PATH.ABOUT} className={BUTTON_GHOST}>
+              {t('actions.learnMore')}
+            </Link>
           </div>
-          <div className='border-outline/10 mt-10 grid grid-cols-2 gap-8 border-t pt-10'>
-            <div>
-              <div className='font-headline text-primary mb-2 text-3xl font-bold'>{MARKER_DATA.length}</div>
-              <p className='font-label text-on-surface-variant text-xs tracking-wider uppercase'>
-                {t('home.about.stats.sitesLabel')}
-              </p>
-            </div>
-            <div>
-              <div className='font-headline text-primary mb-2 text-3xl font-bold'>{t('home.about.stats.languagesValue')}</div>
-              <p className='font-label text-on-surface-variant text-xs tracking-wider uppercase'>
-                {t('home.about.stats.languagesLabel')}
-              </p>
-            </div>
-          </div>
-          <Link
-            to={NAV_PATH.ABOUT}
-            className='bg-on-background group hover:bg-primary font-label mt-12 inline-flex items-center gap-3 px-8 py-3 text-sm font-bold tracking-widest text-white uppercase transition-colors'>
-            {t('actions.learnMore')}{' '}
-            <span className='material-symbols-outlined transition-transform group-hover:translate-x-2'>trending_flat</span>
-          </Link>
         </div>
-        <div className='relative order-1 lg:order-2'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='overflow-hidden rounded-lg shadow-2xl'>
-              <img className='h-full w-full object-cover' alt={t('home.about.imageAlt.tuDucPavilion')} src={TuDucPavilionImage} />
-            </div>
-            <div className='space-y-4'>
-              <div className='overflow-hidden rounded-lg shadow-2xl'>
-                <img className='aspect-square w-full object-cover' alt={t('home.about.imageAlt.tuDuc')} src={TuDucImage} />
-              </div>
-              <div className='overflow-hidden rounded-lg shadow-2xl'>
-                <img className='aspect-square w-full object-cover' alt={t('home.about.imageAlt.denHung')} src={DenHungImage} />
-              </div>
-            </div>
-          </div>
-          <div className='bg-secondary/10 absolute -right-10 -bottom-10 -z-10 h-64 w-64 rounded-full blur-3xl'></div>
+        <div className='border-on-background relative h-[420px] overflow-hidden border-[1.5px] bg-[#fbe7c2]'>
+          <img
+            className='absolute inset-0 h-full w-full object-cover'
+            src={TuDucLakeImage}
+            alt={t('sites.tuDuc.name')}
+            loading='lazy'
+          />
+          <PhotoCredit credit={PHOTO_CREDITS.tuDucLake} />
         </div>
       </div>
     </section>
@@ -135,10 +276,14 @@ const AboutSection = () => {
 
 const VietnamVirtualHomePage = () => {
   return (
-    <div className='bg-background text-on-background font-body min-h-screen'>
+    <div className='bg-background text-on-background font-body min-h-screen overflow-x-clip'>
       <Hero />
-      <DestinationsGrid />
-      <AboutSection />
+      <Ticker />
+      <Tickets />
+      <Steps />
+      <Collection />
+      <Departures />
+      <FinalCall />
     </div>
   );
 };
