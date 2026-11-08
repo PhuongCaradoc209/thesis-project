@@ -77,8 +77,97 @@ export const TEXTURE_CREDITS: AssetCredit[] = [
   },
 ];
 
+export const PHOTO_CREDITS = {
+  tuDucBiDinh: {
+    name: 'Hue Vietnam Tomb-of-Emperor-Tu-Duc-07',
+    author: 'CEphoto, Uwe Aranas',
+    license: 'CC BY-SA 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Hue_Vietnam_Tomb-of-Emperor-Tu-Duc-07.jpg',
+  },
+  tuDucLake: {
+    name: 'Lăng Tự Đức - NKS',
+    author: 'NKSTTSSHNVN',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:L%C4%83ng_T%E1%BB%B1_%C4%90%E1%BB%A9c_-_NKS.jpg',
+  },
+  ceramics: {
+    name: 'Vietnamese Ceramics (15242615159)',
+    author: 'Gary Todd',
+    license: 'CC0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Vietnamese_Ceramics_(15242615159).jpg',
+  },
+  drum: {
+    name: 'Tambour-song-da2',
+    author: 'Wikimedia Commons',
+    license: 'Public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Tambour-song-da2.jpg',
+  },
+  nghe: {
+    name: 'Tượng con Nghê chầu ở Đại nội Huế, tháng 3 năm 2021 (4)',
+    author: 'Phương Huy',
+    license: 'CC BY-SA 4.0',
+    sourceUrl:
+      'https://commons.wikimedia.org/wiki/File:T%C6%B0%E1%BB%A3ng_con_Ngh%C3%AA_ch%E1%BA%A7u_%E1%BB%9F_%C4%90%E1%BA%A1i_n%E1%BB%99i_Hu%E1%BA%BF,_th%C3%A1ng_3_n%C4%83m_2021_(4).jpg',
+  },
+  vase: {
+    name: 'Bottle with Waves and Auspicious Emblems',
+    author: 'The Metropolitan Museum of Art',
+    license: 'CC0',
+    sourceUrl: 'https://www.metmuseum.org/art/collection/search/37450',
+  },
+  jar: {
+    name: 'Covered jar, Tran dynasty, 14th century AD - Museum of Vietnamese History',
+    author: 'Daderot',
+    license: 'CC0',
+    sourceUrl:
+      'https://commons.wikimedia.org/wiki/File:Covered_jar,_Tran_dynasty,_14th_century_AD,_stoneware_-_Museum_of_Vietnamese_History_-_Ho_Chi_Minh_City_-_DSC06203.JPG',
+  },
+  ewer: {
+    name: 'Ewer, Ly-Tran dynasty, 11th-14th century AD - National Museum of Vietnamese History',
+    author: 'Daderot',
+    license: 'CC0',
+    sourceUrl:
+      'https://commons.wikimedia.org/wiki/File:Ewer,_Ly-Tran_dynasty,_11th-14th_century_AD,_white_and_celadon_glazed_ceramic_-_National_Museum_of_Vietnamese_History_-_Hanoi,_Vietnam_-_DSC05524.JPG',
+  },
+  brownJar: {
+    name: 'Jar, Tran Dynasty, Red River Delta, Vietnam, 13-14th Century (10433589773)',
+    author: 'Gary Todd',
+    license: 'CC0',
+    sourceUrl:
+      'https://commons.wikimedia.org/wiki/File:Jar,_Tran_Dynasty,_Red_River_Delta,_Vietnam,_13-14th_Century_(10433589773).jpg',
+  },
+  hue: {
+    name: 'DGJ 1178 - Ngo Mon Gate (3442074085)',
+    author: 'Dennis G. Jarvis',
+    license: 'CC BY-SA 2.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:DGJ_1178_-_Ngo_Mon_Gate_(3442074085).jpg',
+  },
+  hoiAn: {
+    name: 'Hội An, Ancient Town, 2020-01 CN-11',
+    author: 'Steffen Schmitz',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:H%E1%BB%99i_An,_Ancient_Town,_2020-01_CN-11.jpg',
+  },
+  fansipan: {
+    name: 'Fansipan summit pagoda stupa sea of clouds aerial view Sa Pa Vietnam',
+    author: 'Vivu Vietnam',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Fansipan_summit_pagoda_stupa_sea_of_clouds_aerial_view_Sa_Pa_Vietnam.jpg',
+  },
+  trangAn: {
+    name: 'Trang An Landscape Complex, Ninh Binh Province, Vietnam',
+    author: 'Jakub Hałun',
+    license: 'CC BY 4.0',
+    sourceUrl:
+      'https://commons.wikimedia.org/wiki/File:Trang_An_Landscape_Complex,_Ninh_Binh_Province,_Vietnam,_20240202_1447_5310.jpg',
+  },
+} satisfies Record<string, AssetCredit>;
+
 const LICENSE_URLS: Record<string, string> = {
   'CC BY 4.0': 'https://creativecommons.org/licenses/by/4.0/',
+  'CC BY-SA 2.0': 'https://creativecommons.org/licenses/by-sa/2.0/',
+  'CC BY-SA 3.0': 'https://creativecommons.org/licenses/by-sa/3.0/',
+  'CC BY-SA 4.0': 'https://creativecommons.org/licenses/by-sa/4.0/',
   CC0: 'https://creativecommons.org/publicdomain/zero/1.0/',
 };
 
