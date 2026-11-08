@@ -4,6 +4,7 @@ import { MARKER_DATA } from '../constants/markers';
 export type ScenePresentation = {
   sceneId: string;
   name: string;
+  city: string;
   description: string;
   thumbnail: string;
   loadingBackground: string;
@@ -22,6 +23,7 @@ export const getScenePresentation = (sceneId: string | null, t: TFunction): Scen
   return {
     sceneId,
     name: t(marker.nameKey),
+    city: t(marker.nameKey.replace('.name', '.city')),
     description: t(marker.descriptionKey),
     thumbnail: marker.thumbnail,
     loadingBackground: marker.loadingBackground ?? marker.thumbnail,
