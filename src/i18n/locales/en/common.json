@@ -127,88 +127,170 @@
     "about": "About",
     "label": "Main navigation",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "enterMap": "Open map"
   },
   "actions": {
     "startExploring": "Start exploring",
-    "view3dTour": "View 3D Tour",
     "learnMore": "Learn more",
-    "backToMap": "Back to map",
     "switchLanguage": "Switch language"
   },
   "sites": {
     "tuDuc": {
       "name": "Tomb of Tu Duc",
-      "description": "The tomb of Emperor Tự Đức (Khiêm Lăng) in Huế. The scene recreates the Stele Pavilion and the Khiêm Cung Ký stele the emperor wrote himself."
-    },
-    "denHung": {
-      "name": "Hùng Kings Temple",
-      "description": "A temple to the Hùng Kings in Cần Thơ, recreated in 3D for free exploration."
+      "description": "The tomb of Emperor Tự Đức (Khiêm Lăng) in Huế. The scene recreates the Stele Pavilion and the Khiêm Cung Ký stele the emperor wrote himself.",
+      "city": "Huế"
     },
     "gallery": {
       "name": "Vietnamese Antiquities Gallery",
-      "description": "A 3D gallery room for walking among Vietnamese antiquities: ceramics, statues, guardian creatures and architectural models."
+      "description": "A 3D gallery room for walking among Vietnamese antiquities: ceramics, statues, guardian creatures and architectural models.",
+      "city": "Hanoi"
     }
   },
   "home": {
     "hero": {
-      "title": "The beauty of Vietnam",
-      "subtitle": "A journey through time and space across the most brilliant heritages of the S-shaped land."
+      "eyebrow": "3D heritage tours · right in your browser",
+      "title": "The beauty",
+      "titleAccent": "of Vietnam",
+      "subtitle": "A journey through time and space across the most brilliant heritages of the S-shaped land.",
+      "secondary": "See the sites"
     },
+    "ticker": {
+      "open": "● {{count}} sites open",
+      "artifacts": "{{count}} 3D artifacts",
+      "soon": "{{count}} sites coming soon",
+      "always": "Open 24/7 · nothing to install"
+    },
+    "tickets": {
+      "label": "Places to visit",
+      "title": "Where to today?",
+      "intro": "Two places are open. Click the gate to begin, nothing to install.",
+      "number": "Ticket {{no}}",
+      "enter": "Enter the gate",
+      "coords": "Location",
+      "stops": "Stops",
+      "artifacts": "Artifacts",
+      "duration": "Duration",
+      "minutes": "~{{count}} min",
+      "free": "Your pace",
+      "sites": {
+        "tu-duc": {
+          "tag": "Guided journey",
+          "text": "The Stele Pavilion, the Khiêm Cung Ký stele and a travel journal."
+        },
+        "gallery": {
+          "tag": "Free roam",
+          "text": "Ceramics, statues, a bronze drum and 1945 documents."
+        }
+      }
+    },
+    "steps": {
+      "label": "Before you enter",
+      "title": "How does it work?",
+      "intro": "Everything you need is printed on the back of the ticket. Hover or tap it to flip.",
+      "map": {
+        "title": "Pick a place",
+        "text": "Open the map, choose where to go and press Enter the gate."
+      },
+      "walk": {
+        "title": "Wander around",
+        "text": "Walk with <k>W</k> <k>A</k> <k>S</k> <k>D</k>, drag to look. Press <k>Esc</k> to get the cursor back."
+      },
+      "inspect": {
+        "title": "Look closer",
+        "text": "Walk up to an artifact and press <k>F</k> to turn and zoom in."
+      },
+      "front": {
+        "kind": "Admission ticket",
+        "price": "Price",
+        "priceValue": "Free",
+        "hours": "Opening hours",
+        "hoursValue": "All day",
+        "need": "You need",
+        "needValue": "Mouse and keyboard",
+        "flip": "Flip"
+      },
+      "back": {
+        "title": "Visitor guide",
+        "note": "Valid for every visit. Please treat the artifacts as you would in a real museum."
+      }
+    },
+    "collection": {
+      "label": "The gallery",
+      "title": "On display now",
+      "intro": "Bronze drums, celadon, a Nghê statue… turn and zoom into every piece.",
+      "items": {
+        "drum": {
+          "name": "Đông Sơn bronze drum",
+          "era": "Đông Sơn culture"
+        },
+        "nghe": {
+          "name": "Nghê statue",
+          "era": "Nguyễn dynasty · Huế"
+        },
+        "vase": {
+          "name": "Blue-and-white bottle",
+          "era": "Vietnamese blue-and-white"
+        },
+        "jar": {
+          "name": "Covered jar",
+          "era": "Trần dynasty ceramics"
+        },
+        "ewer": {
+          "name": "Celadon ewer",
+          "era": "Lý – Trần · 11th – 14th c."
+        },
+        "brownJar": {
+          "name": "Brown-painted jar",
+          "era": "Trần dynasty · 13th – 14th c."
+        }
+      }
+    },
+    "board": {
+      "label": "Coming soon",
+      "title": "Where we are going next",
+      "intro": "We are building these places right now.",
+      "no": "No.",
+      "site": "Site",
+      "province": "Province",
+      "kind": "Type",
+      "status": "Status"
+    },
+    "final": {
+      "label": "Ready?",
+      "title": "The gates are open, come in"
+    },
+    "photo": "Photo: {{author}} · {{license}}",
     "destinations": {
-      "sectionLabel": "Featured destinations",
-      "sectionTitle": "Heritage Wonders",
       "hue": {
         "title": "Imperial City of Hue",
-        "alt": "Aerial view of Hue Imperial City - Ngo Mon Gate"
+        "alt": "Aerial view of Hue Imperial City - Ngo Mon Gate",
+        "province": "Thừa Thiên Huế",
+        "kind": "Imperial monument"
       },
       "hoiAn": {
         "title": "Hoi An Ancient Town",
-        "alt": "Hoi An ancient town street at night"
+        "alt": "Hoi An ancient town street at night",
+        "province": "Quảng Nam",
+        "kind": "Ancient town"
       },
       "fansipan": {
         "title": "Fansipan Peak",
-        "alt": "Summit monument of Mount Fansipan"
+        "alt": "Summit monument of Mount Fansipan",
+        "province": "Lào Cai",
+        "kind": "Mountain landscape"
       },
       "trangAn": {
-        "title": "Trang An - Ninh Binh",
-        "alt": "Trang An landscape complex with boats and karst mountains"
+        "title": "Tràng An",
+        "alt": "Trang An landscape complex with boats and karst mountains",
+        "province": "Ninh Bình",
+        "kind": "River landscape"
       },
-      "enter": "Enter the site",
-      "comingSoon": "Coming soon",
-      "comingSoonTitle": "Coming soon",
-      "sites": {
-        "tu-duc": "Follow the guided journey through the Stele Pavilion and the Khiêm Cung Ký stele.",
-        "den-hung": "Explore the temple freely in 3D.",
-        "gallery": "Walk between the pedestals and inspect each antiquity up close."
-      }
-    },
-    "about": {
-      "sectionLabel": "Technology & Tradition",
-      "heading": {
-        "line1": "Visit heritage sites",
-        "line2": "right in your browser"
-      },
-      "p1": {
-        "beforeBrand": "With ",
-        "afterBrand": ", you walk through a 3D recreation of each site with your keyboard and mouse, with no installation or VR headset needed."
-      },
-      "p2": "Artifacts are scanned so you can rotate them, zoom in and read notes placed exactly on the model. Historical content in the guided journeys is checked against public sources.",
-      "stats": {
-        "sitesLabel": "Sites open now",
-        "languagesValue": "VI · EN",
-        "languagesLabel": "Bilingual content"
-      },
-      "imageAlt": {
-        "tuDucPavilion": "Stele Pavilion, Tomb of Tự Đức, Huế",
-        "tuDuc": "Tomb of Tự Đức, Huế",
-        "denHung": "Gate of the Hùng Kings Temple, Cần Thơ"
-      }
+      "comingSoon": "Coming soon"
     }
   },
   "loading": {
     "title": "Loading heritage...",
-    "didYouKnow": "Did you know?",
     "status": {
       "preparing": "Preparing 3D experience...",
       "optimizingMeshes": "Optimizing meshes...",
@@ -217,7 +299,6 @@
     }
   },
   "artifact": {
-    "statistics": "Artifact details",
     "dynasty": "Dynasty",
     "material": "Material",
     "year": "Year",
@@ -229,8 +310,6 @@
     "dataLoadError": "The artifact information could not be loaded.",
     "modelLoadError": "The 3D artifact model could not be loaded.",
     "retry": "Try again",
-    "expandPanel": "Expand information panel",
-    "collapsePanel": "Collapse information panel",
     "reviewPanel": "Review panel",
     "resetCamera": "Reset camera",
     "close": "Close artifact view",
@@ -263,9 +342,10 @@
     "resetCanvas": "Restart 3D renderer"
   },
   "footer": {
-    "tagline": "A journey to preserve and spread national heritage values through modern digital technology.",
+    "tagline": "Preserving and sharing Vietnamese heritage through digital technology.",
     "copyright": "© {{year}} VIETNAM VIRTUAL.",
-    "credits": "3D asset credits"
+    "credits": "Photo and 3D asset credits",
+    "photoSources": "Photos: Wikimedia Commons, The Met"
   },
   "toolbar": {
     "label": "Tour tools",
@@ -321,48 +401,33 @@
     "reset": "Restore defaults"
   },
   "heritagePage": {
-    "label": "Catalogue",
+    "label": "Collection · 2026",
     "title": "Heritage",
-    "intro": "The sites available in Vietnam Virtual today, and the places being digitised next.",
-    "viewOnMap": "View on the map",
-    "comingSoonIntro": "These places are being digitised and cannot be visited yet."
+    "titleAccent": "album",
+    "stamped": "stamps postmarked",
+    "postmark": "GATE OPEN · VIETNAM VIRTUAL · ",
+    "stops": "{{count}} stops",
+    "artifacts": "{{count}} artifacts",
+    "freeRoam": "free roam",
+    "sites": {
+      "tu-duc": "Stele Pavilion and the Khiêm Cung Ký stele",
+      "gallery": "Ceramics, statues, a bronze drum"
+    },
+    "insideLabel": "Extra stamps · No.{{no}}",
+    "insideTitle": "Inside",
+    "insideAccent": "the gallery"
   },
   "aboutPage": {
-    "label": "About the website",
-    "title": "About",
-    "intro": "Vietnam Virtual lets you visit Vietnamese heritage sites in 3D, right in your browser. Preview a site, walk around freely and learn the story behind it before you go in person.",
-    "howTo": {
-      "title": "How to visit",
-      "map": {
-        "title": "Pick a site on the map",
-        "body": "Open the Map, choose a place to fly to, then enter the 3D scene."
-      },
-      "walk": {
-        "title": "Walk through the site",
-        "body": "Click the scene to take control: W A S D to walk, the mouse to look around, F to inspect a nearby artifact, Esc to release the cursor."
-      },
-      "journal": {
-        "title": "Follow a journey",
-        "body": "At sites with a guided journey, each stop unlocks a Journal page you can read again later."
-      }
-    },
-    "content": {
-      "title": "Historical content",
-      "body": "Information in the guided journeys is checked against public sources, including the National Museum of Vietnamese History.",
-      "sourceLink": "National Museum of Vietnamese History: the tallest and heaviest stone stele in Vietnam (Vietnamese)"
-    },
-    "tech": {
-      "title": "Technology",
-      "body": "The website uses WebGL to render the 3D scenes, with collision physics and site data managed in Firebase."
-    },
-    "thesis": "Graduation thesis · Virtual Tourist based on WebGL",
-    "cta": "Open the heritage map",
+    "label": "About",
+    "p1": "Vietnam Virtual is a website for visiting Vietnamese heritage sites in 3D. Open the map, pick a place and walk around it right in your browser, with nothing to install.",
+    "p2": "Right now you can visit the Tomb of Tự Đức in Huế and a gallery of antiquities. Every artifact has a 3D model you can turn, zoom and read notes on.",
+    "p3": "It is a graduation project built with photos and 3D models from many authors. Their credits are listed below.",
+    "cta": "Open the map",
     "credits": {
       "title": "Credits",
-      "body": "3D models and textures on this website are used under their authors’ licenses. Thanks to the creators and museums who shared them.",
       "models": "3D models",
       "textures": "Textures",
-      "by": "By {{author}}"
+      "photos": "Photos"
     }
   },
   "interaction": {
@@ -373,5 +438,21 @@
     "title": "Teleport map",
     "close": "Close teleport map",
     "empty": "This site has no teleport points yet. Walk around to explore."
+  },
+  "mapPage": {
+    "label": "Atlas · sheet 01 · {{count}} gates open",
+    "title": "Tear the ticket,",
+    "titleAccent": "step inside",
+    "flyTo": "Fly there",
+    "compass": "Reset the map to north",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "recenter": "Show all of Vietnam"
+  },
+  "tourHud": {
+    "visiting": "Now visiting",
+    "leave": "Leave",
+    "walk": "walk",
+    "cursor": "cursor"
   }
 }
