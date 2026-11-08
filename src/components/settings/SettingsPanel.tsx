@@ -30,17 +30,15 @@ function Segmented<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div role='radiogroup' aria-label={label} className='flex rounded-lg bg-[#ead7b5] p-0.5'>
+    <div role='radiogroup' aria-label={label} className='flex bg-[#ead7b5] p-0.5'>
       {options.map((option) => (
         <button
           key={option.value}
           type='button'
           role='radio'
           aria-checked={option.value === value}
-          className={`flex-1 rounded-md px-2.5 py-1.5 text-xs font-semibold transition-colors ${
-            option.value === value
-              ? 'text-primary bg-[#fff8f5] shadow-[0_1px_3px_rgba(20,12,7,0.18)]'
-              : 'text-on-surface-variant hover:bg-white/40'
+          className={`flex-1 px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+            option.value === value ? 'text-primary bg-[#fff8f5]' : 'text-on-surface-variant hover:bg-white/40'
           }`}
           onClick={() => onChange(option.value)}>
           {option.label}
@@ -99,7 +97,7 @@ function ToggleRow({
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className='border-b border-amber-950/12 py-5 last:border-b-0'>
+    <section className='border-on-background/20 border-b py-5 last:border-b-0'>
       <h3 className='text-secondary mb-3 text-[0.7rem] font-semibold tracking-[0.24em] uppercase'>{title}</h3>
       {children}
     </section>
@@ -133,7 +131,7 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
 
   return (
     <motion.div
-      className='absolute inset-x-0 top-20 bottom-0 z-50 flex justify-end'
+      className='absolute inset-0 z-50 flex justify-end'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
@@ -149,12 +147,12 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
         role='dialog'
         aria-modal='true'
         aria-labelledby='settings-title'
-        className='text-on-surface relative flex h-full w-[min(25rem,100vw)] flex-col border-l border-[#b69462]/55 bg-[#f3e7cf] shadow-[-24px_0_60px_rgba(18,10,5,0.25)]'
+        className='text-on-surface border-on-background bg-surface-bright relative flex h-full w-[min(25rem,100vw)] flex-col border-l-[1.5px]'
         initial={reduceMotion ? false : { x: '100%' }}
         animate={{ x: 0 }}
         exit={reduceMotion ? undefined : { x: '100%' }}
         transition={{ duration: reduceMotion ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}>
-        <header className='flex items-start justify-between border-b border-amber-950/12 px-7 pt-6 pb-4'>
+        <header className='border-on-background/20 flex items-start justify-between border-b px-7 pt-6 pb-4'>
           <div>
             <h2 id='settings-title' className='font-headline text-primary text-2xl font-semibold'>
               {t('settings.title')}
@@ -167,7 +165,7 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
           <button
             type='button'
             aria-label={t('settings.close')}
-            className='text-on-surface-variant rounded-md p-2 transition-colors hover:bg-amber-950/5'
+            className='text-on-surface-variant p-2 transition-colors hover:bg-amber-950/5'
             onClick={onClose}>
             <XIcon size={18} />
           </button>
@@ -182,10 +180,10 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
                   type='button'
                   role='radio'
                   aria-checked={activePreset === preset}
-                  className={`rounded-lg border px-2 py-3 text-sm font-semibold transition-colors ${
+                  className={`border px-2 py-3 text-sm font-semibold transition-colors ${
                     activePreset === preset
                       ? 'border-primary bg-primary text-on-primary'
-                      : 'text-on-surface border-[#b69462]/55 bg-[#faf3e3] hover:border-[#b69462]'
+                      : 'text-on-surface border-on-background/30 bg-surface-bright hover:border-on-background'
                   }`}
                   onClick={() => applyPreset(preset)}>
                   {t(`settings.graphics.presets.${preset}`)}
@@ -202,7 +200,7 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
             <button
               type='button'
               aria-expanded={isAdvancedOpen}
-              className='mt-3 flex w-full items-center justify-between rounded-md py-1.5 text-sm font-semibold transition-colors hover:text-amber-950'
+              className='mt-3 flex w-full items-center justify-between py-1.5 text-sm font-semibold transition-colors hover:text-amber-950'
               onClick={() => setIsAdvancedOpen((open) => !open)}>
               {t('settings.graphics.advanced')}
               <CaretDownIcon size={16} className={`transition-transform ${isAdvancedOpen ? 'rotate-180' : ''}`} />
@@ -253,7 +251,7 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
             </Field>
             <button
               type='button'
-              className='border-secondary/50 text-secondary mt-2 w-full rounded-lg border px-4 py-2.5 text-[13px] font-semibold transition-colors hover:bg-white/30'
+              className='border-secondary/50 text-secondary mt-2 w-full border px-4 py-2.5 text-[13px] font-semibold transition-colors hover:bg-white/30'
               onClick={onReplayControls}>
               {t('settings.controls.replayOnboarding')}
             </button>
@@ -269,10 +267,10 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
           </Section>
         </div>
 
-        <footer className='flex justify-end border-t border-amber-950/12 bg-[#ead7b5] px-7 py-3'>
+        <footer className='border-on-background/20 flex justify-end border-t bg-[#ead7b5] px-7 py-3'>
           <button
             type='button'
-            className='text-on-surface-variant flex items-center gap-2 rounded-md px-3 py-2 text-[13px] font-semibold transition-colors hover:bg-white/30'
+            className='text-on-surface-variant flex items-center gap-2 px-3 py-2 text-[13px] font-semibold transition-colors hover:bg-white/30'
             onClick={resetDefaults}>
             <ArrowCounterClockwiseIcon size={16} />
             {t('settings.reset')}
