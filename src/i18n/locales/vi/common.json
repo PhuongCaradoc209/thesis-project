@@ -127,88 +127,170 @@
     "about": "Giới thiệu",
     "label": "Điều hướng chính",
     "openMenu": "Mở menu",
-    "closeMenu": "Đóng menu"
+    "closeMenu": "Đóng menu",
+    "enterMap": "Vào bản đồ"
   },
   "actions": {
     "startExploring": "Bắt đầu khám phá",
-    "view3dTour": "Xem tour 3D",
     "learnMore": "Tìm hiểu thêm",
-    "backToMap": "Quay lại bản đồ",
     "switchLanguage": "Đổi ngôn ngữ"
   },
   "sites": {
     "tuDuc": {
       "name": "Lăng Tự Đức",
-      "description": "Lăng của vua Tự Đức (Khiêm Lăng) ở Huế. Scene tái hiện Bi Đình và tấm bia Khiêm Cung Ký do chính nhà vua soạn."
-    },
-    "denHung": {
-      "name": "Đền thờ Vua Hùng",
-      "description": "Đền thờ các Vua Hùng tại Cần Thơ, được dựng lại trong không gian 3D để tham quan tự do."
+      "description": "Lăng của vua Tự Đức (Khiêm Lăng) ở Huế. Scene tái hiện Bi Đình và tấm bia Khiêm Cung Ký do chính nhà vua soạn.",
+      "city": "Huế"
     },
     "gallery": {
       "name": "Phòng trưng bày cổ vật Việt Nam",
-      "description": "Một phòng trưng bày 3D để đi bộ ngắm cổ vật Việt Nam: gốm, tượng, linh vật và mô hình kiến trúc."
+      "description": "Một phòng trưng bày 3D để đi bộ ngắm cổ vật Việt Nam: gốm, tượng, linh vật và mô hình kiến trúc.",
+      "city": "Hà Nội"
     }
   },
   "home": {
     "hero": {
-      "title": "Vẻ đẹp Việt Nam",
-      "subtitle": "Hành trình xuyên thời gian và không gian qua những di sản rực rỡ nhất của dải đất hình chữ S."
+      "eyebrow": "Tham quan di sản 3D · ngay trên trình duyệt",
+      "title": "Vẻ đẹp",
+      "titleAccent": "Việt Nam",
+      "subtitle": "Hành trình xuyên thời gian và không gian qua những di sản rực rỡ nhất của dải đất hình chữ S.",
+      "secondary": "Xem điểm tham quan"
     },
+    "ticker": {
+      "open": "● {{count}} điểm đang mở",
+      "artifacts": "{{count}} hiện vật 3D",
+      "soon": "{{count}} điểm sắp mở",
+      "always": "Mở cửa 24/7 · không cần cài đặt"
+    },
+    "tickets": {
+      "label": "Điểm tham quan",
+      "title": "Hôm nay bạn muốn đi đâu?",
+      "intro": "Hai điểm đang mở cửa. Bấm vào cổng là bắt đầu, không cần cài thêm gì.",
+      "number": "Vé số {{no}}",
+      "enter": "Vào cổng",
+      "coords": "Toạ độ",
+      "stops": "Điểm dừng",
+      "artifacts": "Hiện vật",
+      "duration": "Thời lượng",
+      "minutes": "~{{count}} phút",
+      "free": "Tuỳ bạn",
+      "sites": {
+        "tu-duc": {
+          "tag": "Hành trình có hướng dẫn",
+          "text": "Bi Đình, bia Khiêm Cung Ký và Sổ tay hành trình."
+        },
+        "gallery": {
+          "tag": "Tự do tham quan",
+          "text": "Gốm, tượng, trống đồng và tư liệu năm 1945."
+        }
+      }
+    },
+    "steps": {
+      "label": "Trước khi vào cổng",
+      "title": "Tham quan thế nào?",
+      "intro": "Mọi hướng dẫn đều in ở mặt sau tấm vé. Rê chuột hoặc chạm vào vé để lật.",
+      "map": {
+        "title": "Chọn điểm đến",
+        "text": "Mở bản đồ, chọn nơi bạn muốn ghé rồi bấm Vào cổng."
+      },
+      "walk": {
+        "title": "Dạo quanh",
+        "text": "Đi bằng <k>W</k> <k>A</k> <k>S</k> <k>D</k>, kéo chuột để nhìn. Bấm <k>Esc</k> khi cần dùng lại con trỏ."
+      },
+      "inspect": {
+        "title": "Ngắm hiện vật",
+        "text": "Lại gần hiện vật và bấm <k>F</k> để xoay, phóng to từng chi tiết."
+      },
+      "front": {
+        "kind": "Vé tham quan",
+        "price": "Giá vé",
+        "priceValue": "Miễn phí",
+        "hours": "Giờ mở cửa",
+        "hoursValue": "Cả ngày",
+        "need": "Cần có",
+        "needValue": "Chuột và bàn phím",
+        "flip": "Lật vé"
+      },
+      "back": {
+        "title": "Hướng dẫn tham quan",
+        "note": "Vé có giá trị cho mọi lần ghé thăm. Xin giữ gìn hiện vật như ở bảo tàng thật."
+      }
+    },
+    "collection": {
+      "label": "Phòng trưng bày",
+      "title": "Cổ vật đang trưng bày",
+      "intro": "Trống đồng, gốm men ngọc, tượng Nghê… mỗi hiện vật đều xoay và phóng to được.",
+      "items": {
+        "drum": {
+          "name": "Trống đồng Đông Sơn",
+          "era": "Văn hoá Đông Sơn"
+        },
+        "nghe": {
+          "name": "Tượng Nghê",
+          "era": "Triều Nguyễn · Huế"
+        },
+        "vase": {
+          "name": "Bình gốm hoa lam",
+          "era": "Gốm vẽ lam Việt Nam"
+        },
+        "jar": {
+          "name": "Thạp gốm có nắp",
+          "era": "Gốm thời Trần"
+        },
+        "ewer": {
+          "name": "Bình rót men ngọc",
+          "era": "Lý – Trần · XI – XIV"
+        },
+        "brownJar": {
+          "name": "Thạp gốm hoa nâu",
+          "era": "Thời Trần · XIII – XIV"
+        }
+      }
+    },
+    "board": {
+      "label": "Sắp ra mắt",
+      "title": "Những điểm đến tiếp theo",
+      "intro": "Chúng tôi đang dựng thêm các di tích dưới đây.",
+      "no": "Số",
+      "site": "Điểm tham quan",
+      "province": "Tỉnh thành",
+      "kind": "Loại",
+      "status": "Trạng thái"
+    },
+    "final": {
+      "label": "Sẵn sàng chưa?",
+      "title": "Cổng đã mở, mời bạn vào"
+    },
+    "photo": "Ảnh: {{author}} · {{license}}",
     "destinations": {
-      "sectionLabel": "Điểm đến tâm điểm",
-      "sectionTitle": "Kỳ Quan Di Sản",
       "hue": {
         "title": "Cố đô Huế",
-        "alt": "Toàn cảnh Đại Nội Huế - Cổng Ngọ Môn"
+        "alt": "Toàn cảnh Đại Nội Huế - Cổng Ngọ Môn",
+        "province": "Thừa Thiên Huế",
+        "kind": "Di tích cung đình"
       },
       "hoiAn": {
         "title": "Phố cổ Hội An",
-        "alt": "Phố cổ Hội An về đêm"
+        "alt": "Phố cổ Hội An về đêm",
+        "province": "Quảng Nam",
+        "kind": "Đô thị cổ"
       },
       "fansipan": {
         "title": "Đỉnh Fansipan",
-        "alt": "Cột mốc trên đỉnh Fansipan"
+        "alt": "Cột mốc trên đỉnh Fansipan",
+        "province": "Lào Cai",
+        "kind": "Danh thắng núi"
       },
       "trangAn": {
-        "title": "Tràng An - Ninh Bình",
-        "alt": "Quần thể danh thắng Tràng An với thuyền và núi đá vôi"
+        "title": "Tràng An",
+        "alt": "Quần thể danh thắng Tràng An với thuyền và núi đá vôi",
+        "province": "Ninh Bình",
+        "kind": "Danh thắng sông nước"
       },
-      "enter": "Vào tham quan",
-      "comingSoon": "Sắp ra mắt",
-      "comingSoonTitle": "Sắp ra mắt",
-      "sites": {
-        "tu-duc": "Đi theo hành trình có hướng dẫn qua Bi Đình và bia Khiêm Cung Ký.",
-        "den-hung": "Tự do tham quan ngôi đền trong không gian 3D.",
-        "gallery": "Đi dạo giữa các bục trưng bày và xem cận cảnh từng cổ vật."
-      }
-    },
-    "about": {
-      "sectionLabel": "Công nghệ & Truyền thống",
-      "heading": {
-        "line1": "Tham quan di tích",
-        "line2": "ngay trên trình duyệt"
-      },
-      "p1": {
-        "beforeBrand": "Với ",
-        "afterBrand": ", bạn đi bộ trong không gian 3D của di tích bằng bàn phím và chuột, không cần cài đặt hay kính thực tế ảo."
-      },
-      "p2": "Hiện vật được scan để bạn xoay, phóng to và đọc chú thích đặt đúng vị trí trên model. Nội dung lịch sử trong các hành trình được đối chiếu với nguồn công khai.",
-      "stats": {
-        "sitesLabel": "Di tích đã mở cửa",
-        "languagesValue": "VI · EN",
-        "languagesLabel": "Nội dung song ngữ"
-      },
-      "imageAlt": {
-        "tuDucPavilion": "Bi Đình, Lăng Tự Đức, Huế",
-        "tuDuc": "Lăng Tự Đức, Huế",
-        "denHung": "Cổng Đền thờ Vua Hùng, Cần Thơ"
-      }
+      "comingSoon": "Sắp ra mắt"
     }
   },
   "loading": {
     "title": "Đang tải di sản...",
-    "didYouKnow": "Bạn có biết?",
     "status": {
       "preparing": "Đang chuẩn bị trải nghiệm 3D...",
       "optimizingMeshes": "Đang tối ưu lưới (meshes)...",
@@ -217,7 +299,6 @@
     }
   },
   "artifact": {
-    "statistics": "Thông tin hiện vật",
     "dynasty": "Triều đại",
     "material": "Chất liệu",
     "year": "Năm",
@@ -229,8 +310,6 @@
     "dataLoadError": "Không thể tải thông tin hiện vật.",
     "modelLoadError": "Không thể tải mô hình 3D của hiện vật.",
     "retry": "Thử lại",
-    "expandPanel": "Mở rộng bảng thông tin",
-    "collapsePanel": "Thu gọn bảng thông tin",
     "reviewPanel": "Bảng thông tin",
     "resetCamera": "Đặt lại camera",
     "close": "Đóng xem hiện vật",
@@ -263,9 +342,10 @@
     "resetCanvas": "Khởi động lại 3D"
   },
   "footer": {
-    "tagline": "Hành trình gìn giữ và lan tỏa giá trị di sản dân tộc thông qua công nghệ số hiện đại.",
-    "copyright": "© {{year}} VIETNAM VIRTUAL. Hào khí Lạc Việt.",
-    "credits": "Ghi nguồn tài nguyên 3D"
+    "tagline": "Hành trình gìn giữ và lan tỏa giá trị di sản qua công nghệ số.",
+    "copyright": "© {{year}} VIETNAM VIRTUAL",
+    "credits": "Ghi nguồn ảnh và mô hình 3D",
+    "photoSources": "Ảnh: Wikimedia Commons, The Met"
   },
   "toolbar": {
     "label": "Công cụ tham quan",
@@ -321,48 +401,33 @@
     "reset": "Khôi phục mặc định"
   },
   "heritagePage": {
-    "label": "Danh mục",
-    "title": "Di sản",
-    "intro": "Các di tích đã có trong Vietnam Virtual và những địa điểm đang được số hóa.",
-    "viewOnMap": "Xem trên bản đồ",
-    "comingSoonIntro": "Những địa điểm này đang được số hóa và chưa thể tham quan."
+    "label": "Bộ sưu tập · 2026",
+    "title": "Album",
+    "titleAccent": "di sản",
+    "stamped": "tem đã đóng dấu",
+    "postmark": "ĐÃ MỞ CỔNG · VIETNAM VIRTUAL · ",
+    "stops": "{{count}} điểm dừng",
+    "artifacts": "{{count}} hiện vật",
+    "freeRoam": "đi tự do",
+    "sites": {
+      "tu-duc": "Bi Đình và bia Khiêm Cung Ký",
+      "gallery": "Gốm, tượng, trống đồng"
+    },
+    "insideLabel": "Tem phụ · No.{{no}}",
+    "insideTitle": "Trong",
+    "insideAccent": "phòng trưng bày"
   },
   "aboutPage": {
-    "label": "Về website",
-    "title": "Giới thiệu",
-    "intro": "Vietnam Virtual là website tham quan di sản Việt Nam trong không gian 3D, chạy trực tiếp trên trình duyệt. Bạn có thể xem trước một di tích, đi lại tự do và tìm hiểu câu chuyện phía sau trước khi đến tận nơi.",
-    "howTo": {
-      "title": "Cách tham quan",
-      "map": {
-        "title": "Chọn di tích trên bản đồ",
-        "body": "Mở Bản đồ, chọn một địa điểm để bay tới rồi vào không gian 3D."
-      },
-      "walk": {
-        "title": "Đi bộ trong di tích",
-        "body": "Bấm vào cảnh để điều khiển: W A S D để đi, chuột để nhìn quanh, F để xem cận cảnh hiện vật ở gần, Esc để hiện lại con trỏ."
-      },
-      "journal": {
-        "title": "Đi theo hành trình",
-        "body": "Ở di tích có hành trình hướng dẫn, mỗi điểm dừng mở khóa một trang Sổ tay để bạn xem lại."
-      }
-    },
-    "content": {
-      "title": "Nội dung lịch sử",
-      "body": "Thông tin trong các hành trình được đối chiếu với nguồn công khai, trong đó có Bảo tàng Lịch sử Quốc gia.",
-      "sourceLink": "Bảo tàng Lịch sử Quốc gia: Độc đáo tấm bia đá cao và nặng nhất Việt Nam"
-    },
-    "tech": {
-      "title": "Công nghệ",
-      "body": "Website dùng WebGL để hiển thị không gian 3D, có vật lý va chạm, và quản lý dữ liệu di tích trên Firebase."
-    },
-    "thesis": "Đồ án tốt nghiệp · Virtual Tourist based on WebGL",
-    "cta": "Mở bản đồ di sản",
+    "label": "Giới thiệu",
+    "p1": "Vietnam Virtual là website tham quan di tích Việt Nam bằng 3D. Bạn mở bản đồ, chọn một nơi rồi đi bộ trong đó ngay trên trình duyệt, không cần cài đặt.",
+    "p2": "Hiện có Lăng Tự Đức ở Huế và một phòng trưng bày cổ vật. Mỗi hiện vật có mô hình 3D để xoay, phóng to và đọc chú thích.",
+    "p3": "Đây là đồ án tốt nghiệp, dùng ảnh và mô hình 3D của nhiều tác giả. Nguồn được ghi bên dưới.",
+    "cta": "Mở bản đồ",
     "credits": {
       "title": "Ghi nguồn",
-      "body": "Mô hình 3D và texture trong website được sử dụng theo giấy phép của tác giả. Cảm ơn các tác giả và bảo tàng đã chia sẻ.",
       "models": "Mô hình 3D",
       "textures": "Texture",
-      "by": "Tác giả: {{author}}"
+      "photos": "Ảnh"
     }
   },
   "interaction": {
@@ -373,5 +438,21 @@
     "title": "Bản đồ dịch chuyển",
     "close": "Đóng bản đồ dịch chuyển",
     "empty": "Địa điểm này chưa có điểm dịch chuyển. Hãy đi bộ để khám phá."
+  },
+  "mapPage": {
+    "label": "Atlas · tờ 01 · {{count}} cổng đang mở",
+    "title": "Xé vé,",
+    "titleAccent": "vào cổng",
+    "flyTo": "Bay tới",
+    "compass": "Quay bản đồ về hướng Bắc",
+    "zoomIn": "Phóng to",
+    "zoomOut": "Thu nhỏ",
+    "recenter": "Về toàn cảnh"
+  },
+  "tourHud": {
+    "visiting": "Đang tham quan",
+    "leave": "Rời khỏi",
+    "walk": "đi",
+    "cursor": "chuột"
   }
 }
