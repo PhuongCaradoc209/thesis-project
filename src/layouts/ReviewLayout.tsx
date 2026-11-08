@@ -13,30 +13,27 @@ const ReviewLayout = () => {
 
   return (
     <div className='flex min-h-screen flex-col bg-white text-white'>
-      {/* Header - Hidden when inspecting an artifact */}
       {!selectedArtifactId && (
-        <div className='fixed top-0 z-50 w-full border-b border-white/20 bg-white/70 shadow-sm backdrop-blur-md transition-all duration-300'>
-          <div className='flex h-20 w-full max-w-full items-center justify-between px-8 py-4'>
-            <NavLink to={NAV_PATH.HOME} className='font-headline text-xl font-bold tracking-tighter text-red-800 uppercase'>
-              {t('brand.name')}
-            </NavLink>
-
-            <div className='flex items-center gap-8'>
-              {presentation && (
-                <span className='text-primary border-primary border-b-2 p-2 text-lg font-semibold'>{presentation.name}</span>
-              )}
-              <NavLink to={NAV_PATH.MAP}>
-                <button className='bg-primary hover:bg-primary-container flex items-center gap-2 rounded-md px-4 py-2 text-white shadow transition-colors ease-in-out'>
-                  <ArrowLeftIcon size={16} weight='bold' />
-                  {t('actions.backToMap')}
-                </button>
-              </NavLink>
+        <>
+          {presentation && (
+            <div className='bg-surface-bright border-on-background text-on-background fixed top-4 left-4 z-50 min-w-56 border-[1.5px] px-4 pt-3 pb-3.5 md:top-6 md:left-6'>
+              <div className='text-on-surface-variant font-mono text-[11.5px] tracking-[.12em] uppercase'>
+                {t('tourHud.visiting')} · {presentation.city}
+              </div>
+              <h1 className='font-headline mt-1 text-[26px] leading-[1.15] font-extrabold uppercase [font-stretch:75%] md:text-[30px]'>
+                {presentation.name}
+              </h1>
             </div>
-          </div>
-        </div>
+          )}
+          <NavLink
+            to={NAV_PATH.MAP}
+            className='bg-surface-bright border-on-background text-on-background hover:bg-on-background hover:text-background fixed top-4 right-4 z-50 flex items-center gap-2 border-[1.5px] px-3.5 py-2.5 font-mono text-[12.5px] font-semibold tracking-[.06em] uppercase transition-colors md:top-6 md:right-6'>
+            <ArrowLeftIcon size={16} weight='bold' />
+            {t('tourHud.leave')}
+          </NavLink>
+        </>
       )}
 
-      {/* Main Content */}
       <main className='flex-1'>
         <Outlet />
       </main>
