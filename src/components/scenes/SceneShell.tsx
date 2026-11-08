@@ -57,9 +57,16 @@ function WebGLContextEvents({ onLost, onRestored }: WebGLContextEventsProps) {
 function FullCanvasViewport({ active }: { active: boolean }) {
   const gl = useThree((state) => state.gl);
   const size = useThree((state) => state.size);
+  const camera = useThree((state) => state.camera);
 
   useFrame(() => {
     if (!active) return;
+
+    const aspect = size.width / size.height;
+    if (camera instanceof THREE.PerspectiveCamera && Math.abs(camera.aspect - aspect) > 0.001) {
+      camera.aspect = aspect;
+      camera.updateProjectionMatrix();
+    }
 
     gl.setScissorTest(false);
     gl.setViewport(0, 0, size.width, size.height);
