@@ -21,6 +21,7 @@ import BaseScene from '../../components/scenes/BaseScene';
 import IndoorScene from '../../components/scenes/indoor/IndoorScene';
 import { getViewpoint } from '../../components/scenes/indoor/roomLayout';
 import { SettingsPanel } from '../../components/settings/SettingsPanel';
+import ControlsHint from '../../components/tour/ControlsHint';
 import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding';
 import { TourToolbar } from '../../components/tour/TourToolbar';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
@@ -268,6 +269,15 @@ export default function TourPage() {
     }
   };
 
+  const isHudVisible =
+    isLoadingOverlayGone &&
+    guidedStatus !== 'cinematic' &&
+    !isGuidedIntroOpen &&
+    !isGuidedCompletionOpen &&
+    !isGuidedJournalOpen &&
+    !selectedArtifactId &&
+    !selectedSceneAnnotation;
+
   return (
     <div ref={setEventSource} className='relative h-screen w-screen overflow-hidden bg-black text-white'>
       <TeleportTransition />
@@ -358,14 +368,16 @@ export default function TourPage() {
           <motion.div
             role='dialog'
             aria-labelledby='teleport-title'
-            className='text-on-surface absolute right-4 bottom-20 z-30 flex max-h-[28rem] w-80 flex-col overflow-hidden rounded-xl border border-[#b69462]/55 bg-[#f3e7cf] shadow-[0_14px_40px_rgba(20,12,7,0.25)]'
+            className='text-on-surface border-on-background bg-surface-bright absolute right-22 bottom-4 z-30 flex max-h-[28rem] w-80 flex-col overflow-hidden border-[1.5px] md:right-25 md:bottom-6'
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             onClick={(event) => event.stopPropagation()}>
-            <div className='flex items-center justify-between border-b border-amber-950/12 px-4 py-3'>
-              <h2 id='teleport-title' className='font-headline text-primary flex items-center gap-2 text-lg font-semibold'>
+            <div className='border-on-background flex items-center justify-between border-b-[1.5px] px-4 py-3'>
+              <h2
+                id='teleport-title'
+                className='font-headline text-on-background flex items-center gap-2 text-lg font-extrabold uppercase [font-stretch:80%]'>
                 <CompassIcon size={20} />
                 {t('teleport.title')}
               </h2>
@@ -393,8 +405,8 @@ export default function TourPage() {
                           reportGuidedEvent({ type: 'teleport_selected', targetId: point.teleportId });
                           closeTeleportMap();
                         }}
-                        className='flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/40'>
-                        <span className='bg-primary text-on-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-lg'>
+                        className='hover:bg-surface-container-high flex w-full items-center gap-3 px-3 py-3 text-left transition-colors'>
+                        <span className='bg-primary text-on-primary flex h-9 w-9 shrink-0 items-center justify-center'>
                           <MapPinSimpleAreaIcon size={18} />
                         </span>
                         <span className='font-headline text-[15px]'>{t(point.label)}</span>
@@ -410,16 +422,10 @@ export default function TourPage() {
         )}
       </AnimatePresence>
 
+      {isHudVisible && hasSeenControls && !isTeleportMapOpen && <ControlsHint />}
+
       <TourToolbar
-        visible={
-          isLoadingOverlayGone &&
-          guidedStatus !== 'cinematic' &&
-          !isGuidedIntroOpen &&
-          !isGuidedCompletionOpen &&
-          !isGuidedJournalOpen &&
-          !selectedArtifactId &&
-          !selectedSceneAnnotation
-        }
+        visible={isHudVisible}
         shortcutsEnabled={
           isLoadingOverlayGone &&
           guidedStatus !== 'cinematic' &&
