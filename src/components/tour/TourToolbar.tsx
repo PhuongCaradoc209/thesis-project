@@ -33,20 +33,18 @@ function ToolbarButton({ icon: ButtonIcon, label, shortcut, active, onClick }: T
       type='button'
       aria-pressed={active}
       aria-keyshortcuts={shortcut}
-      className={`flex min-h-11 items-center gap-2.5 rounded-lg border px-3.5 py-2.5 text-sm font-semibold shadow-[0_8px_24px_rgba(20,12,7,0.2)] transition-colors ${
-        active
-          ? 'border-primary bg-primary text-on-primary'
-          : 'text-on-surface border-[#b69462]/55 bg-[#f3e7cf] hover:bg-[#f8edd9]'
+      aria-label={label}
+      className={`group border-on-background relative grid size-13 place-items-center border-[1.5px] transition-colors ${
+        active ? 'bg-primary text-on-primary' : 'bg-surface-bright text-on-background hover:bg-surface-container-high'
       }`}
       onClick={onClick}>
-      <ButtonIcon size={20} className={active ? '' : 'text-primary'} />
-      {label}
-      <kbd
-        className={`rounded border px-1.5 font-sans text-[0.7rem] ${
-          active ? 'border-primary-fixed/50 text-primary-fixed' : 'text-on-surface-variant border-amber-950/25'
-        }`}>
+      <ButtonIcon size={22} />
+      <kbd className='bg-surface-bright border-on-background text-on-background absolute -right-1.5 -bottom-1.5 border-[1.5px] border-b-[3px] px-1 font-mono text-[10px] leading-4 font-semibold'>
         {shortcut}
       </kbd>
+      <span className='bg-on-background text-background pointer-events-none absolute right-full mr-2.5 hidden px-2.5 py-1.5 font-mono text-xs whitespace-nowrap group-hover:block group-focus-visible:block'>
+        {label}
+      </span>
     </button>
   );
 }
@@ -86,9 +84,9 @@ export function TourToolbar({
   return (
     <nav
       aria-label={t('toolbar.label')}
-      className={`absolute bottom-4 flex items-center gap-2 ${
+      className={`absolute bottom-4 flex flex-col gap-2.5 md:bottom-6 ${
         // Khi Cài đặt mở: nằm trên lớp phủ, bên trái ngăn kéo rộng 25rem; màn hẹp thì ngăn kéo chiếm hết nên ẩn đi
-        isSettingsOpen ? 'right-106 z-55 max-sm:hidden' : 'right-4 z-30'
+        isSettingsOpen ? 'right-106 z-55 max-sm:hidden' : 'right-4 z-30 md:right-6'
       }`}>
       <ToolbarButton icon={MapTrifoldIcon} label={t('toolbar.map')} shortcut='M' active={isMapOpen} onClick={onToggleMap} />
       {showJournal && (
