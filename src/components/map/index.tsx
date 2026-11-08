@@ -1,25 +1,27 @@
-﻿import { MapPinIcon } from '@phosphor-icons/react';
-import 'maplibre-gl/dist/maplibre-gl.css';
-import { useEffect, useMemo, useRef } from 'react';
+﻿import 'maplibre-gl/dist/maplibre-gl.css';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Map, { Marker, NavigationControl, Popup, Source, type MapRef } from 'react-map-gl/maplibre';
-import { useNavigate } from 'react-router';
+import Map, { Marker, ScaleControl, Source, type MapRef } from 'react-map-gl/maplibre';
 import { MARKER_DATA } from '../../constants/markers';
-import { NAV_PATH } from '../../router/paths';
+import { formatTicketNumber } from '../../constants/siteDetails';
+import Compass from './Compass';
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY as string;
 
 const INITIAL_VIEW_STATE = {
-  longitude: 107.5656,
-  latitude: 16.4326,
-  zoom: 5,
+  longitude: 106.2,
+  latitude: 16.2,
+  zoom: 4.7,
   pitch: 0,
   bearing: 0,
 };
 
+const CONTROL =
+  'bg-surface-bright text-on-background hover:bg-surface-container-high grid size-[38px] place-items-center font-mono text-base font-semibold transition-colors';
+
 type TerrainMapProps = {
   selectedSiteId: string | null;
-  hoveredSiteId: string | null;
+  activeSiteId: string | null;
   onMarkerHoverChange: (id: string | null) => void;
   onMarkerClick: (id: string) => void;
   onMapBackgroundClick: () => void;
@@ -27,38 +29,22 @@ type TerrainMapProps = {
 
 export default function TerrainMap({
   selectedSiteId,
-  hoveredSiteId,
+  activeSiteId,
   onMarkerHoverChange,
   onMarkerClick,
   onMapBackgroundClick,
 }: TerrainMapProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const mapRef = useRef<MapRef | null>(null);
+  const [bearing, setBearing] = useState(0);
   const mapStyle = `https://api.maptiler.com/maps/satellite-v4/style.json?key=${MAPTILER_KEY}`;
   const terrainSourceUrl = useMemo(() => `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`, []);
 
-  const displayedMarker = useMemo(() => {
-    const activeId = hoveredSiteId || selectedSiteId;
-    return MARKER_DATA.find((m) => m.id === activeId);
-  }, [hoveredSiteId, selectedSiteId]);
-
   useEffect(() => {
-    if (!displayedMarker) return;
-
-    const loadingBackground = new Image();
-    loadingBackground.src = displayedMarker.loadingBackground ?? displayedMarker.thumbnail;
-  }, [displayedMarker]);
-
-  useEffect(() => {
-    if (!selectedSiteId) {
-      return;
-    }
+    if (!selectedSiteId) return;
 
     const targetMarker = MARKER_DATA.find((marker) => marker.id === selectedSiteId);
-    if (!targetMarker) {
-      return;
-    }
+    if (!targetMarker) return;
 
     mapRef.current?.flyTo({
       center: [targetMarker.longitude, targetMarker.latitude],
@@ -68,60 +54,92 @@ export default function TerrainMap({
     });
   }, [selectedSiteId]);
 
+  const recenter = () => {
+    mapRef.current?.flyTo({
+      center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
+      zoom: INITIAL_VIEW_STATE.zoom,
+      bearing: 0,
+      pitch: 0,
+      duration: 1800,
+    });
+  };
+
   return (
-    <Map
-      ref={mapRef}
-      reuseMaps
-      initialViewState={INITIAL_VIEW_STATE}
-      mapStyle={mapStyle as any}
-      terrain={{ source: 'maptiler-terrain', exaggeration: 1.5 }}
-      minZoom={4.5}
-      onClick={onMapBackgroundClick}>
-      <NavigationControl position='bottom-left' />
+    <div className='atlas-map relative h-full w-full'>
+      <Map
+        ref={mapRef}
+        reuseMaps
+        initialViewState={INITIAL_VIEW_STATE}
+        mapStyle={mapStyle}
+        terrain={{ source: 'maptiler-terrain', exaggeration: 1.5 }}
+        minZoom={4.5}
+        attributionControl={{ compact: true }}
+        onMove={(event) => setBearing(event.viewState.bearing)}
+        onClick={onMapBackgroundClick}>
+        <ScaleControl position='bottom-left' unit='metric' />
 
-      {MARKER_DATA.map((marker) => (
-        <Marker key={marker.id} longitude={marker.longitude} latitude={marker.latitude} anchor='bottom'>
-          <div
-            onMouseEnter={() => onMarkerHoverChange(marker.id)}
-            onMouseLeave={() => onMarkerHoverChange(null)}
-            onClick={(event) => {
-              event.stopPropagation();
-              onMarkerClick(marker.id);
-            }}
-            className='origin-bottom cursor-pointer text-3xl transition-transform duration-200 ease-out hover:scale-125'
-            style={{ filter: 'drop-shadow(0px 0px 8px rgba(255,255,255,0.2))' }}>
-            <MapPinIcon size={50} weight='fill' className='text-primary-container' />
-          </div>
-        </Marker>
-      ))}
+        {MARKER_DATA.map((marker, index) => {
+          const isActive = marker.id === activeSiteId;
 
-      {displayedMarker && (
-        <Popup
-          longitude={displayedMarker.longitude}
-          latitude={displayedMarker.latitude}
-          anchor='left'
-          offset={[30, -10]}
-          closeButton={false}
-          closeOnClick={false}
-          className='z-10'>
-          <div className='max-w-xs space-y-2 text-neutral-900'>
-            <img
-              src={displayedMarker.thumbnail}
-              alt={t(displayedMarker.nameKey)}
-              className='aspect-video w-full rounded-md object-cover'
-            />
-            <h3 className='text-base font-bold'>{t(displayedMarker.nameKey)}</h3>
-            <p className='line-clamp-3 text-sm'>{t(displayedMarker.descriptionKey)}</p>
-            <button
-              onClick={() => navigate(NAV_PATH.TOUR.replace(':sceneId', displayedMarker.sceneId))}
-              className='bg-primary hover:bg-primary-container w-full rounded-md py-2 text-white transition ease-in-out'>
-              {t('actions.startExploring')}
-            </button>
-          </div>
-        </Popup>
-      )}
+          return (
+            <Marker key={marker.id} longitude={marker.longitude} latitude={marker.latitude} anchor='center'>
+              <button
+                type='button'
+                aria-label={t(marker.nameKey)}
+                onMouseEnter={() => onMarkerHoverChange(marker.id)}
+                onMouseLeave={() => onMarkerHoverChange(null)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onMarkerClick(marker.id);
+                }}
+                className='relative block cursor-pointer'>
+                <span
+                  className={`block rounded-full border-[3px] border-[#fffaf0] transition-all duration-200 ${
+                    isActive ? 'bg-secondary-fixed size-[30px]' : 'bg-primary size-[22px]'
+                  }`}
+                  style={{
+                    boxShadow: isActive ? '0 0 0 2px #2b1d12, 0 0 0 11px rgba(246,196,83,.35)' : '0 0 0 2px #2b1d12',
+                  }}
+                />
+                <span className='bg-surface-bright border-on-background text-on-background absolute top-1/2 left-full ml-3 -translate-y-1/2 border-[1.5px] px-[7px] py-[3px] font-mono text-[11.5px] font-semibold tracking-[.06em] whitespace-nowrap uppercase'>
+                  {formatTicketNumber(index)}
+                  {isActive && ` ${t(marker.nameKey)}`}
+                </span>
+              </button>
+            </Marker>
+          );
+        })}
 
-      <Source id='maptiler-terrain' type='raster-dem' url={terrainSourceUrl} tileSize={512} maxzoom={14} />
-    </Map>
+        <Source id='maptiler-terrain' type='raster-dem' url={terrainSourceUrl} tileSize={512} maxzoom={14} />
+      </Map>
+
+      <div className='atlas-fade pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(43,29,18,.07)_1px,transparent_1px),linear-gradient(90deg,rgba(43,29,18,.07)_1px,transparent_1px)] bg-size-[96px_96px]' />
+
+      <button
+        type='button'
+        aria-label={t('mapPage.compass')}
+        title={t('mapPage.compass')}
+        onClick={() => mapRef.current?.resetNorthPitch({ duration: 800 })}
+        className='absolute top-3 right-3 size-20 md:top-4 md:right-4 md:size-24'>
+        <Compass bearing={bearing} />
+      </button>
+
+      <div className='border-on-background absolute right-3 bottom-12 flex flex-col divide-y-[1.5px] divide-[#2b1d12] border-[1.5px] md:right-4'>
+        <button type='button' aria-label={t('mapPage.zoomIn')} onClick={() => mapRef.current?.zoomIn()} className={CONTROL}>
+          +
+        </button>
+        <button type='button' aria-label={t('mapPage.zoomOut')} onClick={() => mapRef.current?.zoomOut()} className={CONTROL}>
+          −
+        </button>
+        <button
+          type='button'
+          aria-label={t('mapPage.recenter')}
+          title={t('mapPage.recenter')}
+          onClick={recenter}
+          className={CONTROL}>
+          ⌖
+        </button>
+      </div>
+    </div>
   );
 }
