@@ -52,7 +52,7 @@ export function InteractPoint({
               </div>
             )}
             <motion.div
-              className='border-primary/80 flex h-8 w-8 items-center justify-center rounded-full border-[1.5px] bg-[#f3e7cf]/90 shadow-[0_4px_12px_rgba(20,12,7,0.3)]'
+              className='border-primary/80 bg-surface-bright/90 flex h-8 w-8 items-center justify-center rounded-full border-[1.5px]'
               animate={{
                 opacity: isFocused || guidedTarget ? 1 : 0.6,
                 y: [0, -4, 0],
