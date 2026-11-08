@@ -1,51 +1,43 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { MODEL_CREDITS, TEXTURE_CREDITS, getLicenseUrl, type AssetCredit } from '../../constants/credits';
+import { MODEL_CREDITS, PHOTO_CREDITS, TEXTURE_CREDITS, getLicenseUrl, type AssetCredit } from '../../constants/credits';
 import { NAV_PATH } from '../../router/paths';
 
-const STEPS = ['map', 'walk', 'journal'] as const;
-const TECHNOLOGIES = [
-  'React · TypeScript · Vite',
-  'Three.js · React Three Fiber',
-  'Rapier',
-  'Firebase Firestore',
-  'MapLibre · MapTiler',
-];
-const SOURCE_URL = 'https://baotanglichsu.vn/vi/Articles/3096/9778/djoc-djao-tam-bia-dja-cao-va-nang-nhat-viet-nam.html';
-
-function CreditList({ title, credits }: { title: string; credits: AssetCredit[] }) {
-  const { t } = useTranslation();
-
+function CreditGroup({ title, credits }: { title: string; credits: AssetCredit[] }) {
   return (
     <div className='mt-8'>
-      <h3 className='font-label text-secondary mb-2 text-xs tracking-[0.2em] uppercase'>{title}</h3>
-      <ul className='border-outline/20 border-t'>
+      <h3 className='text-on-surface-variant font-mono text-xs tracking-[.1em] uppercase'>
+        {title} · {credits.length}
+      </h3>
+      <ul className='border-on-background mt-2 border-t-[1.5px]'>
         {credits.map((credit) => {
           const licenseUrl = getLicenseUrl(credit.license);
           return (
-            <li key={credit.sourceUrl} className='border-outline/20 border-b py-3'>
+            <li
+              key={credit.sourceUrl}
+              className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-b border-black/10 py-2.5'>
               <a
                 href={credit.sourceUrl}
                 target='_blank'
                 rel='noreferrer'
-                className='text-on-surface font-semibold underline-offset-4 hover:underline'>
-                {credit.name} ↗
+                className='text-on-background hover:text-primary text-[15px] font-medium transition-colors'>
+                {credit.name}
               </a>
-              <p className='text-on-surface-variant mt-1 text-sm'>
-                {t('aboutPage.credits.by', { author: credit.author })} ·{' '}
+              <span className='text-on-surface-variant font-mono text-xs'>
+                {credit.author} ·{' '}
                 {licenseUrl ? (
                   <a
                     href={licenseUrl}
                     target='_blank'
                     rel='noreferrer'
-                    className='text-on-surface-variant underline underline-offset-4 hover:no-underline'>
+                    className='text-primary hover:text-on-background underline underline-offset-2'>
                     {credit.license}
                   </a>
                 ) : (
                   credit.license
                 )}
-              </p>
+              </span>
             </li>
           );
         })}
@@ -63,67 +55,33 @@ const AboutPage = () => {
   }, [hash]);
 
   return (
-    <div className='bg-background text-on-background font-body min-h-screen'>
-      <article className='mx-auto max-w-3xl px-8 pt-36 pb-24'>
-        <span className='font-label text-secondary mb-4 block text-xs tracking-[0.3em] uppercase'>{t('aboutPage.label')}</span>
-        <h1 className='font-headline mb-6 text-5xl font-bold'>{t('aboutPage.title')}</h1>
-        <p className='text-on-surface-variant text-lg leading-relaxed'>{t('aboutPage.intro')}</p>
-
-        <section className='mt-16'>
-          <h2 className='font-headline mb-6 text-2xl font-semibold'>{t('aboutPage.howTo.title')}</h2>
-          <ol className='space-y-6'>
-            {STEPS.map((step, index) => (
-              <li key={step} className='flex gap-5'>
-                <span className='font-headline text-primary w-8 shrink-0 text-2xl'>{index + 1}</span>
-                <div>
-                  <h3 className='mb-1 font-semibold'>{t(`aboutPage.howTo.${step}.title`)}</h3>
-                  <p className='text-on-surface-variant leading-relaxed'>{t(`aboutPage.howTo.${step}.body`)}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className='mt-16'>
-          <h2 className='font-headline mb-4 text-2xl font-semibold'>{t('aboutPage.content.title')}</h2>
-          <p className='text-on-surface-variant mb-4 leading-relaxed'>{t('aboutPage.content.body')}</p>
-          <a
-            href={SOURCE_URL}
-            target='_blank'
-            rel='noreferrer'
-            className='text-primary font-semibold underline underline-offset-4 hover:no-underline'>
-            {t('aboutPage.content.sourceLink')}
-          </a>
-        </section>
-
-        <section className='mt-16'>
-          <h2 className='font-headline mb-4 text-2xl font-semibold'>{t('aboutPage.tech.title')}</h2>
-          <p className='text-on-surface-variant mb-4 leading-relaxed'>{t('aboutPage.tech.body')}</p>
-          <ul className='flex flex-wrap gap-2'>
-            {TECHNOLOGIES.map((tech) => (
-              <li key={tech} className='bg-surface-container text-on-surface rounded-md px-3 py-1.5 text-sm'>
-                {tech}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id='credits' className='mt-16 scroll-mt-28'>
-          <h2 className='font-headline mb-4 text-2xl font-semibold'>{t('aboutPage.credits.title')}</h2>
-          <p className='text-on-surface-variant leading-relaxed'>{t('aboutPage.credits.body')}</p>
-          <CreditList title={t('aboutPage.credits.models')} credits={MODEL_CREDITS} />
-          <CreditList title={t('aboutPage.credits.textures')} credits={TEXTURE_CREDITS} />
-        </section>
-
-        <div className='border-outline/20 mt-16 flex flex-wrap items-center justify-between gap-4 border-t pt-10'>
-          <p className='text-on-surface-variant text-sm'>{t('aboutPage.thesis')}</p>
-          <Link
-            to={NAV_PATH.MAP}
-            className='bg-primary text-on-primary hover:bg-primary-container rounded-md px-5 py-3 text-sm font-semibold transition-colors'>
-            {t('aboutPage.cta')}
-          </Link>
+    <div className='bg-background text-on-background font-body min-h-screen pt-17'>
+      <div className='mx-auto max-w-3xl px-5 pt-16 pb-24 md:px-8'>
+        <div className='text-on-surface-variant font-mono text-xs tracking-[.12em] uppercase'>{t('aboutPage.label')}</div>
+        <h1 className='font-headline mt-3 text-[42px] leading-[1.15] font-extrabold uppercase [font-stretch:75%] md:text-5xl'>
+          {t('brand.name')}
+        </h1>
+        <div className='mt-6 space-y-4 text-lg leading-relaxed'>
+          <p>{t('aboutPage.p1')}</p>
+          <p>{t('aboutPage.p2')}</p>
+          <p className='text-on-surface-variant'>{t('aboutPage.p3')}</p>
         </div>
-      </article>
+
+        <Link
+          to={NAV_PATH.MAP}
+          className='bg-primary text-on-primary hover:bg-on-background hover:text-background mt-8 inline-flex h-12 items-center gap-3 px-6 font-mono text-[13px] font-semibold tracking-[.08em] uppercase transition-colors'>
+          {t('aboutPage.cta')} <span aria-hidden='true'>→</span>
+        </Link>
+
+        <section id='credits' className='mt-20 scroll-mt-24'>
+          <h2 className='font-headline text-3xl leading-[1.15] font-extrabold uppercase [font-stretch:80%]'>
+            {t('aboutPage.credits.title')}
+          </h2>
+          <CreditGroup title={t('aboutPage.credits.models')} credits={MODEL_CREDITS} />
+          <CreditGroup title={t('aboutPage.credits.textures')} credits={TEXTURE_CREDITS} />
+          <CreditGroup title={t('aboutPage.credits.photos')} credits={Object.values(PHOTO_CREDITS)} />
+        </section>
+      </div>
     </div>
   );
 };
