@@ -4,11 +4,11 @@ type InteractionPromptProps = {
 
 export function InteractionPrompt({ label }: InteractionPromptProps) {
   return (
-    <div className='text-on-surface flex w-max max-w-[16rem] items-center gap-2.5 rounded-2xl border border-[#b69462]/55 bg-[#f3e7cf] py-1.5 pr-4 pl-1.5 shadow-[0_8px_24px_rgba(20,12,7,0.25)]'>
-      <kbd className='bg-primary text-on-primary flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-sans text-sm font-bold'>
+    <div className='bg-surface-bright border-on-background text-on-background flex w-max max-w-[16rem] items-center gap-2.5 border-[1.5px] py-1.5 pr-3 pl-1.5'>
+      <kbd className='bg-primary text-on-primary border-on-background flex h-7 min-w-7 shrink-0 items-center justify-center border-[1.5px] border-b-[3px] px-1.5 font-mono text-[13px] font-semibold'>
         F
       </kbd>
-      <span className='font-headline line-clamp-2 text-[15px] leading-snug' title={label}>
+      <span className='line-clamp-2 text-sm leading-snug font-semibold' title={label}>
         {label}
       </span>
     </div>
