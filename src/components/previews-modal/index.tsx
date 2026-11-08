@@ -1,4 +1,4 @@
-import { ArrowCounterClockwiseIcon, CaretLeftIcon, CaretRightIcon, InfoIcon, XIcon } from '@phosphor-icons/react';
+import { ArrowCounterClockwiseIcon, XIcon } from '@phosphor-icons/react';
 import { useGLTF, useProgress, View } from '@react-three/drei';
 import { AnimatePresence, motion } from 'motion/react';
 import { Suspense, useState } from 'react';
@@ -16,11 +16,14 @@ type InspectModalProps = {
   onAnnotationOpen?: (artifactId: string, annotationId: string) => void;
 };
 
+const RETRY_BUTTON =
+  'bg-primary text-on-primary hover:bg-on-background px-5 py-2.5 font-mono text-[13px] font-semibold tracking-[.06em] uppercase transition-colors';
+const ERROR_TITLE = 'font-headline text-on-background text-lg font-extrabold uppercase [font-stretch:80%]';
+
 function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProps) {
   const { t, i18n } = useTranslation();
   const selectedArtifactId = useTourismStore((state) => state.selectedArtifactId);
   const clear = useTourismStore((state) => state.clear);
-  const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
   const [previewAttempt, setPreviewAttempt] = useState(0);
   const [previewError, setPreviewError] = useState<Error | null>(null);
   const [cameraResetRequest, setCameraResetRequest] = useState(0);
@@ -38,6 +41,13 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
   const credit = previewConfig?.credit?.author ? previewConfig.credit : null;
   const licenseUrl = credit ? getLicenseUrl(credit.license) : undefined;
 
+  const title = previewConfig ? t(pickLang(previewConfig.title, i18n.language)) : '';
+  const otherTitle =
+    previewConfig && typeof previewConfig.title === 'object'
+      ? ((i18n.language.startsWith('en') ? previewConfig.title.vi : previewConfig.title.en) ?? '').trim()
+      : '';
+  const showViewerTools = !isLoading && !isError && Boolean(previewConfig) && !previewError && !isModelLoading;
+
   return (
     <AnimatePresence>
       <motion.div
@@ -47,246 +57,185 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
         initial={{ opacity: 0 }}
         onClick={clear}>
         <motion.div
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          className='text-on-surface relative flex h-full w-full flex-col overflow-hidden bg-transparent shadow-2xl'
-          exit={{ opacity: 0, scale: 0.98, y: 18 }}
-          initial={{ opacity: 0, scale: 0.985, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          className='text-on-surface relative flex h-full w-full flex-col overflow-hidden md:flex-row'
+          exit={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           onClick={(event) => event.stopPropagation()}
           onPointerDown={(event) => event.stopPropagation()}>
-          <motion.header
-            animate={{ opacity: 1, y: 0 }}
-            className='relative z-30 flex h-18 items-center justify-between border-b border-amber-950/12 bg-[#f3e7cf] px-4 md:px-6'
-            initial={{ opacity: 0, y: -16 }}
-            transition={{ delay: 0.08, duration: 0.26 }}>
-            <div className='min-w-0'>
-              {previewConfig?.type && (
-                <p className='text-secondary text-[0.7rem] font-semibold tracking-[0.24em] uppercase'>{t(previewConfig.type)}</p>
+          <section className='relative min-h-0 min-w-0 flex-1'>
+            {isLoading ? (
+              <div className='relative h-full'>
+                <ModelLoadingBar label={t('loading.status.preparing')} />
+              </div>
+            ) : isError ? (
+              <div className='bg-surface-bright/90 flex h-full flex-col items-center justify-center gap-4 px-6 text-center'>
+                <p className={ERROR_TITLE}>{t('artifact.dataLoadError')}</p>
+                <button type='button' className={RETRY_BUTTON} onClick={() => void refetch()}>
+                  {t('artifact.retry')}
+                </button>
+              </div>
+            ) : previewConfig ? (
+              <View className='h-full w-full'>
+                <ModelErrorBoundary
+                  resetKey={`${previewConfig.modelUrl}:${previewAttempt}`}
+                  onError={(error) => {
+                    console.error(`[InspectModal] Failed to load artifact model ${selectedArtifactId}`, error);
+                    setPreviewError(error);
+                  }}
+                  fallback={() => null}>
+                  <Suspense fallback={null}>
+                    <ArtifactPreviewScene
+                      modelUrl={previewConfig.modelUrl}
+                      cameraPosition={previewConfig.cameraPosition}
+                      modelPosition={previewConfig.modelPosition}
+                      orbitTarget={previewConfig.orbitTarget}
+                      rotationX={previewConfig.display?.rotationX}
+                      rotationY={previewConfig.display?.rotationY}
+                      annotations={previewAnnotations}
+                      resetRequest={cameraResetRequest}
+                      guidedAnnotationId={guidedAnnotationId}
+                      onAnnotationOpen={(annotationId) => {
+                        if (selectedArtifactId) onAnnotationOpen?.(selectedArtifactId, annotationId);
+                      }}
+                    />
+                  </Suspense>
+                </ModelErrorBoundary>
+              </View>
+            ) : (
+              <div className='text-on-surface-variant bg-surface-bright/90 flex h-full items-center justify-center px-6 text-center'>
+                {t('artifact.missingConfig')}
+              </div>
+            )}
+
+            {!isLoading && previewConfig && previewError && (
+              <div className='bg-surface-bright/90 absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 px-6 text-center'>
+                <p className={ERROR_TITLE}>{t('artifact.modelLoadError')}</p>
+                <button
+                  type='button'
+                  className={RETRY_BUTTON}
+                  onClick={() => {
+                    useGLTF.clear(previewConfig.modelUrl);
+                    setPreviewError(null);
+                    setPreviewAttempt((current) => current + 1);
+                  }}>
+                  {t('artifact.retry')}
+                </button>
+              </div>
+            )}
+
+            <AnimatePresence>
+              {!isLoading && previewConfig && !previewError && isModelLoading && (
+                <motion.div
+                  key='model-loading-bar'
+                  className='pointer-events-none absolute inset-0 z-20'
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}>
+                  <ModelLoadingBar label={t('artifact.loadingModel')} />
+                </motion.div>
               )}
-              <h1 className='font-headline text-primary truncate text-xl font-semibold md:text-2xl'>
-                {previewConfig ? t(pickLang(previewConfig.title, i18n.language)) : ''}
-              </h1>
+            </AnimatePresence>
+
+            {showViewerTools && (
+              <div className='bg-surface-bright border-on-background text-on-background absolute bottom-4 left-4 z-30 flex items-center border-[1.5px] text-[13px] md:bottom-6 md:left-6'>
+                <span className='hidden px-3.5 py-2 sm:block'>{t('previewControls')}</span>
+                <button
+                  type='button'
+                  title={t('artifact.resetCamera')}
+                  className='border-on-background hover:bg-on-background hover:text-background flex items-center gap-1.5 px-3.5 py-2 font-mono text-xs font-semibold tracking-[.06em] uppercase transition-colors sm:border-l-[1.5px]'
+                  onClick={() => setCameraResetRequest((current) => current + 1)}>
+                  <ArrowCounterClockwiseIcon size={15} weight='bold' />
+                  {t('artifact.resetCamera')}
+                </button>
+              </div>
+            )}
+          </section>
+
+          <motion.aside
+            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 32 }}
+            transition={{ delay: 0.08, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className='bg-surface-bright border-on-background text-on-background annotation-scrollbar relative flex max-h-[45%] w-full shrink-0 flex-col overflow-y-auto border-t-[1.5px] px-6 py-6 md:h-full md:max-h-none md:w-[440px] md:border-t-0 md:border-l-[1.5px] md:px-8 md:py-7'>
+            <div className='flex items-start justify-between gap-4'>
+              <div className='text-on-surface-variant pt-1 font-mono text-xs tracking-[.12em] uppercase'>
+                {previewConfig?.type ? t(previewConfig.type) : t('artifact.reviewPanel')}
+              </div>
+              <button
+                type='button'
+                aria-label={t('artifact.close')}
+                className='border-on-background hover:bg-on-background hover:text-background grid size-11 shrink-0 place-items-center border-[1.5px] transition-colors'
+                onClick={clear}>
+                <XIcon size={20} />
+              </button>
             </div>
 
-            <button
-              type='button'
-              aria-label={t('artifact.close')}
-              className='text-on-surface-variant flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-amber-950/5'
-              onClick={clear}>
-              <XIcon size={20} />
-            </button>
-          </motion.header>
-
-          <div className='relative flex min-h-0 flex-1 overflow-hidden'>
-            <motion.section
-              animate={{ opacity: 1, x: 0 }}
-              className='relative min-w-0 flex-1 border-r border-white/8'
-              initial={{ opacity: 0, x: -20 }}
-              transition={{ delay: 0.14, duration: 0.32 }}>
-              <div className='flex h-full min-h-0 flex-col bg-transparent'>
-                <div className='relative min-h-0 flex-1 overflow-hidden border-white/10 bg-transparent'>
-                  {isLoading ? (
-                    <div className='relative h-full'>
-                      <ModelLoadingBar label={t('loading.status.preparing')} />
-                    </div>
-                  ) : isError ? (
-                    <div className='bg-surface/90 text-on-surface flex h-full flex-col items-center justify-center gap-4 px-6 text-center backdrop-blur-sm'>
-                      <p className='font-headline text-primary text-base font-semibold'>{t('artifact.dataLoadError')}</p>
-                      <button
-                        type='button'
-                        className='bg-primary hover:bg-primary-container rounded-md px-5 py-2 font-semibold text-white'
-                        onClick={() => void refetch()}>
-                        {t('artifact.retry')}
-                      </button>
-                    </div>
-                  ) : previewConfig ? (
-                    <View className='h-full w-full'>
-                      <ModelErrorBoundary
-                        resetKey={`${previewConfig.modelUrl}:${previewAttempt}`}
-                        onError={(error) => {
-                          console.error(`[InspectModal] Failed to load artifact model ${selectedArtifactId}`, error);
-                          setPreviewError(error);
-                        }}
-                        fallback={() => null}>
-                        <Suspense fallback={null}>
-                          <ArtifactPreviewScene
-                            modelUrl={previewConfig.modelUrl}
-                            cameraPosition={previewConfig.cameraPosition}
-                            modelPosition={previewConfig.modelPosition}
-                            orbitTarget={previewConfig.orbitTarget}
-                            rotationX={previewConfig.display?.rotationX}
-                            rotationY={previewConfig.display?.rotationY}
-                            annotations={previewAnnotations}
-                            resetRequest={cameraResetRequest}
-                            guidedAnnotationId={guidedAnnotationId}
-                            onAnnotationOpen={(annotationId) => {
-                              if (selectedArtifactId) onAnnotationOpen?.(selectedArtifactId, annotationId);
-                            }}
-                          />
-                        </Suspense>
-                      </ModelErrorBoundary>
-                    </View>
-                  ) : (
-                    <div className='text-on-surface-variant flex h-full items-center justify-center bg-[#f3e7cf]/90 px-6 text-center'>
-                      {t('artifact.missingConfig')}
-                    </div>
-                  )}
-
-                  {!isLoading && previewConfig && previewError && (
-                    <div className='bg-surface/90 text-on-surface absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 px-6 text-center backdrop-blur-sm'>
-                      <p className='font-headline text-primary text-base font-semibold'>{t('artifact.modelLoadError')}</p>
-                      <button
-                        type='button'
-                        className='bg-primary hover:bg-primary-container rounded-md px-5 py-2 font-semibold text-white'
-                        onClick={() => {
-                          useGLTF.clear(previewConfig.modelUrl);
-                          setPreviewError(null);
-                          setPreviewAttempt((current) => current + 1);
-                        }}>
-                        {t('artifact.retry')}
-                      </button>
-                    </div>
-                  )}
-
-                  <AnimatePresence>
-                    {!isLoading && previewConfig && !previewError && isModelLoading && (
-                      <motion.div
-                        key='model-loading-bar'
-                        className='pointer-events-none absolute inset-0 z-20'
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}>
-                        <ModelLoadingBar label={t('artifact.loadingModel')} />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-                {!isLoading && !isError && previewConfig && !previewError && !isModelLoading && (
-                  <div className='text-on-surface-variant relative flex shrink-0 items-center border-t border-amber-950/12 bg-[#ead7b5]/95 px-4 py-2 text-xs'>
-                    <p className='pointer-events-none flex-1 text-center'>{t('previewControls')}</p>
-                    <button
-                      type='button'
-                      aria-label={t('artifact.resetCamera')}
-                      title={t('artifact.resetCamera')}
-                      className='text-primary absolute right-3 flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-semibold transition-colors hover:bg-white/40'
-                      onClick={() => setCameraResetRequest((current) => current + 1)}>
-                      <ArrowCounterClockwiseIcon size={16} />
-                      <span className='hidden sm:inline'>{t('artifact.resetCamera')}</span>
-                    </button>
-                  </div>
-                )}
+            {isLoading ? (
+              <div className='mt-4 animate-pulse space-y-3'>
+                <div className='bg-on-background/10 h-9 w-3/4' />
+                <div className='bg-on-background/10 h-4 w-1/2' />
+                <div className='bg-on-background/10 mt-6 h-4 w-full' />
+                <div className='bg-on-background/10 h-4 w-full' />
               </div>
-            </motion.section>
+            ) : previewConfig ? (
+              <>
+                <h1 className='font-headline mt-3 text-[34px] leading-[1.15] font-extrabold uppercase [font-stretch:75%] md:text-[40px]'>
+                  {title}
+                </h1>
+                {otherTitle && otherTitle !== title.trim() && <p className='text-on-surface-variant mt-1 italic'>{otherTitle}</p>}
 
-            <motion.aside
-              animate={{ width: isPanelCollapsed ? 28 : 360 }}
-              className='relative flex h-full shrink-0 border-l border-[#b69462]/55 bg-[#f3e7cf]'
-              initial={false}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
-              <button
-                aria-label={isPanelCollapsed ? t('artifact.expandPanel') : t('artifact.collapsePanel')}
-                className='text-primary absolute top-1/2 -left-4 z-20 flex h-14 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-[#b69462]/55 bg-[#f3e7cf] shadow-[0_8px_24px_rgba(20,12,7,0.2)] transition-colors hover:bg-[#f8edd9]'
-                onClick={() => setIsPanelCollapsed((previous) => !previous)}>
-                {isPanelCollapsed ? <CaretLeftIcon size={18} /> : <CaretRightIcon size={18} />}
-              </button>
-
-              <AnimatePresence initial={false} mode='wait'>
-                {!isPanelCollapsed ? (
-                  <motion.div
-                    key='panel-open'
-                    animate={{ opacity: 1, x: 0 }}
-                    className='flex h-full w-full min-w-0 flex-col overflow-y-auto p-4 md:p-5'
-                    exit={{ opacity: 0, x: 24 }}
-                    initial={{ opacity: 0, x: 32 }}
-                    transition={{ duration: 0.22 }}>
-                    {isLoading ? (
-                      <div className='animate-pulse space-y-4'>
-                        <div className='h-6 w-1/2 rounded bg-amber-950/10' />
-                        <div className='h-4 w-1/3 rounded bg-amber-950/10' />
-                        <div className='space-y-2'>
-                          <div className='h-4 w-full rounded bg-amber-950/10' />
-                          <div className='h-4 w-full rounded bg-amber-950/10' />
-                          <div className='h-4 w-3/4 rounded bg-amber-950/10' />
-                        </div>
+                {artifactFacts.length > 0 && (
+                  <dl className='border-on-background mt-6 border-t-2 text-[15px]'>
+                    {artifactFacts.map((fact) => (
+                      <div key={fact.label} className='grid grid-cols-[120px_1fr] gap-3 border-b border-black/15 py-2.5'>
+                        <dt className='text-on-surface-variant pt-0.5 font-mono text-[11.5px] tracking-[.1em] uppercase'>
+                          {fact.label}
+                        </dt>
+                        <dd className='font-semibold'>{fact.value}</dd>
                       </div>
-                    ) : previewConfig ? (
-                      <>
-                        <h2 className='font-headline text-primary flex items-center gap-2 text-xl font-semibold'>
-                          <InfoIcon size={20} />
-                          {t('artifact.statistics')}
-                        </h2>
-                        <div className='mt-2 mb-4 flex items-center gap-1.5' aria-hidden='true'>
-                          <span className='bg-secondary h-px w-10' />
-                          <span className='border-secondary h-1.5 w-1.5 rotate-45 border' />
-                        </div>
-                        {/* Chỉ hiện trường có dữ liệu, không in "Chưa rõ" cho từng dòng */}
-                        {artifactFacts.length > 0 && (
-                          <dl className='mb-4 border-t border-amber-950/12'>
-                            {artifactFacts.map((fact) => (
-                              <div
-                                key={fact.label}
-                                className='flex justify-between gap-4 border-b border-amber-950/12 py-2.5 text-sm'>
-                                <dt className='text-on-surface-variant'>{fact.label}</dt>
-                                <dd className='text-right font-semibold'>{fact.value}</dd>
-                              </div>
-                            ))}
-                          </dl>
-                        )}
-                        <p className='text-on-surface-variant mb-6 text-[15px] leading-7'>
-                          {previewConfig.history
-                            ? t(pickLang(previewConfig.history, i18n.language))
-                            : t('artifact.noInformation')}
-                        </p>
-                        {credit && (
-                          <p className='text-on-surface-variant mt-auto border-t border-amber-950/12 pt-3 text-xs leading-5'>
-                            {t('artifact.credit', { author: credit.author })} ·{' '}
-                            {licenseUrl ? (
-                              <a
-                                href={licenseUrl}
-                                target='_blank'
-                                rel='noreferrer'
-                                className='text-on-surface-variant underline underline-offset-2 hover:no-underline'>
-                                {credit.license}
-                              </a>
-                            ) : (
-                              credit.license
-                            )}
-                            {credit.sourceUrl && (
-                              <>
-                                {' · '}
-                                <a
-                                  href={credit.sourceUrl}
-                                  target='_blank'
-                                  rel='noreferrer'
-                                  className='text-primary font-semibold underline underline-offset-2 hover:no-underline'>
-                                  {t('artifact.creditSource')} ↗
-                                </a>
-                              </>
-                            )}
-                          </p>
-                        )}
-                      </>
-                    ) : (
-                      <div className='text-on-surface-variant text-center'>{t('artifact.noDetails')}</div>
-                    )}
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key='panel-collapsed'
-                    animate={{ opacity: 1 }}
-                    className='flex h-full w-full items-center justify-center'
-                    exit={{ opacity: 0 }}
-                    initial={{ opacity: 0 }}
-                    transition={{ duration: 0.18 }}>
-                    <div className='text-on-surface-variant -rotate-90 text-[0.7rem] tracking-[0.35em] whitespace-nowrap uppercase'>
-                      {t('artifact.reviewPanel')}
-                    </div>
-                  </motion.div>
+                    ))}
+                  </dl>
                 )}
-              </AnimatePresence>
-            </motion.aside>
-          </div>
+
+                <p className='text-on-surface-variant mt-5 text-[15px] leading-[1.7]'>
+                  {previewConfig.history ? t(pickLang(previewConfig.history, i18n.language)) : t('artifact.noInformation')}
+                </p>
+
+                {credit && (
+                  <p className='text-on-surface-variant mt-auto border-t border-black/20 pt-3.5 font-mono text-[11.5px] leading-5'>
+                    {t('artifact.credit', { author: credit.author })} ·{' '}
+                    {licenseUrl ? (
+                      <a
+                        href={licenseUrl}
+                        target='_blank'
+                        rel='noreferrer'
+                        className='text-primary hover:text-on-background font-semibold underline underline-offset-2'>
+                        {credit.license}
+                      </a>
+                    ) : (
+                      credit.license
+                    )}
+                    {credit.sourceUrl && (
+                      <>
+                        {' · '}
+                        <a
+                          href={credit.sourceUrl}
+                          target='_blank'
+                          rel='noreferrer'
+                          className='text-on-background hover:text-primary underline underline-offset-2'>
+                          {t('artifact.creditSource')} ↗
+                        </a>
+                      </>
+                    )}
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className='text-on-surface-variant mt-6'>{t('artifact.noDetails')}</p>
+            )}
+          </motion.aside>
         </motion.div>
       </motion.div>
     </AnimatePresence>
