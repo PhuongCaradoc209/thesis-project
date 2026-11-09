@@ -14,6 +14,11 @@ type GuidedTourFeedback = {
   id: number;
 };
 
+type GuidedNarration = {
+  url: string;
+  id: number;
+};
+
 type StoredProgress = {
   tourId: string | null;
   sceneId: string | null;
@@ -31,6 +36,7 @@ type GuidedTourState = StoredProgress & {
   cinematicProgress: number;
   cinematicSkipRequested: boolean;
   feedback: GuidedTourFeedback | null;
+  narration: GuidedNarration | null;
 };
 
 type GuidedTourActions = {
@@ -108,6 +114,7 @@ export const useGuidedTourStore = create<GuidedTourState & GuidedTourActions>((s
   cinematicProgress: 0,
   cinematicSkipRequested: false,
   feedback: null,
+  narration: null,
 
   attachTour: (tour, openIntro) =>
     set((state) => {
@@ -147,6 +154,7 @@ export const useGuidedTourStore = create<GuidedTourState & GuidedTourActions>((s
 
   detachTour: () =>
     set({
+      narration: null,
       tour: null,
       isIntroOpen: false,
       isCompletionOpen: false,
@@ -162,7 +170,9 @@ export const useGuidedTourStore = create<GuidedTourState & GuidedTourActions>((s
   beginTour: (restart = false) =>
     set((state) => {
       const playCinematic = Boolean(state.tour?.intro);
+      const introAudio = playCinematic ? state.tour?.intro?.audioUrl : null;
       return {
+        narration: introAudio ? { url: introAudio, id: Date.now() } : null,
         status: playCinematic ? 'cinematic' : 'active',
         currentStepIndex: restart ? 0 : state.currentStepIndex,
         completedStepIds: restart ? [] : state.completedStepIds,
@@ -181,7 +191,8 @@ export const useGuidedTourStore = create<GuidedTourState & GuidedTourActions>((s
       state.status === 'cinematic' ? { status: 'active', cinematicProgress: 1, cinematicSkipRequested: false } : state,
     ),
 
-  requestCinematicSkip: () => set((state) => (state.status === 'cinematic' ? { cinematicSkipRequested: true } : state)),
+  requestCinematicSkip: () =>
+    set((state) => (state.status === 'cinematic' ? { cinematicSkipRequested: true, narration: null } : state)),
 
   setCinematicProgress: (progress) =>
     set((state) => (state.status === 'cinematic' ? { cinematicProgress: Math.min(1, Math.max(0, progress)) } : state)),
@@ -194,11 +205,12 @@ export const useGuidedTourStore = create<GuidedTourState & GuidedTourActions>((s
       feedback: null,
     })),
 
-  pauseTour: () => set({ status: 'paused', feedback: null }),
+  pauseTour: () => set({ status: 'paused', feedback: null, narration: null }),
   resumeTour: () => set({ status: 'active', isIntroOpen: false, feedback: null }),
 
   exitTour: () =>
     set({
+      narration: null,
       status: 'idle',
       currentStepIndex: 0,
       completedStepIds: [],
@@ -232,13 +244,21 @@ export const useGuidedTourStore = create<GuidedTourState & GuidedTourActions>((s
       status: isLastStep ? 'completed' : 'active',
       completionPending: isLastStep,
       feedback: { kind: step.discovery ? 'discovery-unlocked' : 'step-complete', id: feedbackId },
+      narration: step.audioUrl ? { url: step.audioUrl, id: feedbackId } : state.narration,
     });
   },
 
   showPendingCompletion: () =>
-    set((state) =>
-      state.status === 'completed' && state.completionPending ? { isCompletionOpen: true, completionPending: false } : state,
-    ),
+    set((state) => {
+      if (state.status !== 'completed' || !state.completionPending) return state;
+
+      const completionAudio = state.tour?.completionAudioUrl;
+      return {
+        isCompletionOpen: true,
+        completionPending: false,
+        narration: completionAudio ? { url: completionAudio, id: Date.now() } : state.narration,
+      };
+    }),
 
   closeCompletion: () => set({ isCompletionOpen: false }),
   openJournal: () => set({ isJournalOpen: true }),

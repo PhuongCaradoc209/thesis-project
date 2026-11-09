@@ -9,6 +9,7 @@ import { GalleryExhibits } from '../../components/gallery/GalleryExhibits';
 import { ModelErrorBoundary } from '../../components/3d/ModelErrorBoundary';
 import { InstancedGrassField } from '../../components/grass/InstancedGrassField';
 import { DevelopmentGuidedCameraDirector, GuidedCameraDirector } from '../../components/guided-tour/GuidedCameraDirector';
+import { GuidedNarration } from '../../components/guided-tour/GuidedNarration';
 import { GuidedReachTarget } from '../../components/guided-tour/GuidedReachTarget';
 import { GuidedTourUi } from '../../components/guided-tour/GuidedTourUi';
 import { InteractPoint } from '../../components/interact-point';
@@ -456,7 +457,7 @@ export default function TourPage() {
         !isTeleportMapOpen &&
         guidedStatus !== 'cinematic' &&
         !isGuidedJournalOpen && (
-          <div className='pointer-events-none absolute bottom-28 left-4 z-30 w-[min(24rem,calc(100vw-2rem))] sm:bottom-4'>
+          <div className='pointer-events-none absolute bottom-28 left-4 z-30 w-[min(24rem,calc(100vw-2rem))] sm:bottom-18 md:bottom-20'>
             <TourControlsOnboarding onDismiss={dismissControlsOnboarding} />
           </div>
         )}
@@ -487,6 +488,7 @@ export default function TourPage() {
         )}
       </AnimatePresence>
 
+      <GuidedNarration />
       <GuidedTourUi
         hideHud={Boolean(selectedSceneAnnotation || isTeleportMapOpen)}
         hideLauncher={Boolean(selectedArtifactId || selectedSceneAnnotation || isTeleportMapOpen)}
