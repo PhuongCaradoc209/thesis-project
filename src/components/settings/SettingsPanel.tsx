@@ -114,6 +114,8 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
   const setGraphics = useSettingsStore((state) => state.setGraphics);
   const setWalkSpeed = useSettingsStore((state) => state.setWalkSpeed);
   const setHeadBob = useSettingsStore((state) => state.setHeadBob);
+  const narration = useSettingsStore((state) => state.narration);
+  const setNarration = useSettingsStore((state) => state.setNarration);
   const resetDefaults = useSettingsStore((state) => state.resetDefaults);
   const activePreset = matchGraphicsPreset(graphics);
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(activePreset === 'custom');
@@ -263,6 +265,12 @@ export function SettingsPanel({ onClose, onReplayControls }: SettingsPanelProps)
               hint={t('settings.comfort.headBobHint')}
               checked={headBob}
               onChange={setHeadBob}
+            />
+            <ToggleRow
+              label={t('settings.comfort.narration')}
+              hint={t('settings.comfort.narrationHint')}
+              checked={narration}
+              onChange={setNarration}
             />
           </Section>
         </div>

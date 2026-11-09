@@ -396,7 +396,9 @@
     "comfort": {
       "title": "Thoải mái",
       "headBob": "Rung lắc khi đi",
-      "headBobHint": "Tắt nếu bạn thấy chóng mặt khi di chuyển."
+      "headBobHint": "Tắt nếu bạn thấy chóng mặt khi di chuyển.",
+      "narration": "Thuyết minh bằng giọng đọc",
+      "narrationHint": "Phát lời thuyết minh khi bắt đầu tour và khi bạn hoàn thành từng điểm."
     },
     "reset": "Khôi phục mặc định"
   },

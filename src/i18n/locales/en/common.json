@@ -396,7 +396,9 @@
     "comfort": {
       "title": "Comfort",
       "headBob": "Head bob while walking",
-      "headBobHint": "Turn off if moving makes you feel dizzy."
+      "headBobHint": "Turn off if moving makes you feel dizzy.",
+      "narration": "Voice narration",
+      "narrationHint": "Play spoken narration at the start of a tour and after each stop."
     },
     "reset": "Restore defaults"
   },

@@ -111,6 +111,7 @@ function parseStep(value: unknown, tourId: string): GuidedTourStep | null {
     artifactId: isNonEmptyString(step.artifactId) ? step.artifactId : undefined,
     radius: Number.isFinite(step.radius) && Number(step.radius) > 0 ? Number(step.radius) : undefined,
     discovery: parseDiscovery(step.discovery),
+    audioUrl: isNonEmptyString(step.audioUrl) ? step.audioUrl : undefined,
   };
 }
 
@@ -145,6 +146,7 @@ export const getGuidedToursByScene = async (sceneId: string): Promise<GuidedTour
         description: data.description,
         intro: parseIntro(data.intro, tourDocument.id),
         steps,
+        completionAudioUrl: isNonEmptyString(data.completionAudioUrl) ? data.completionAudioUrl : undefined,
       },
     ];
   });

@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useTourismStore } from '../../store/useTourismStore';
 import { useGuidedTourStore } from '../../store/useGuidedTourStore';
 import { GuidedCinematicOverlay } from './GuidedCinematicOverlay';
+import { GuidedNarrationPlayer } from './GuidedNarrationPlayer';
 import { GuidedTourJournal } from './GuidedTourJournal';
 
 type GuidedTourUiProps = {
@@ -60,6 +61,7 @@ export function GuidedTourUi({ hideHud = false, hideLauncher = false }: GuidedTo
 
   return (
     <>
+      <GuidedNarrationPlayer />
       <AnimatePresence>{status === 'cinematic' && <GuidedCinematicOverlay />}</AnimatePresence>
 
       <AnimatePresence>

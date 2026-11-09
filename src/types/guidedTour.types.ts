@@ -38,6 +38,8 @@ export interface GuidedTourStep {
   artifactId?: string;
   radius?: number;
   discovery?: GuidedTourDiscovery;
+  /** Narration played when the visitor completes this step. */
+  audioUrl?: string;
 }
 
 export interface GuidedTour {
@@ -47,6 +49,8 @@ export interface GuidedTour {
   description: string;
   intro?: GuidedTourIntro;
   steps: GuidedTourStep[];
+  /** Narration played after the last step is completed. */
+  completionAudioUrl?: string;
 }
 
 export type GuidedTourStatus = 'idle' | 'cinematic' | 'active' | 'paused' | 'completed';

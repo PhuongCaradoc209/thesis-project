@@ -23,6 +23,7 @@ export const GRAPHICS_PRESETS: Record<GraphicsPreset, GraphicsSettings> = {
 export const DEFAULT_GRAPHICS_PRESET: GraphicsPreset = 'medium';
 export const DEFAULT_WALK_SPEED: WalkSpeed = 'normal';
 export const DEFAULT_HEAD_BOB = true;
+export const DEFAULT_NARRATION = true;
 
 export const RESOLUTION_DPR: Record<QualityLevel, number> = { low: 0.75, medium: 1, high: 1.5 };
 export const SHADOW_MAP_SIZE: Record<Exclude<ShadowQuality, 'off'>, number> = { medium: 1024, high: 2048 };

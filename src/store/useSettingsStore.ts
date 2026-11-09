@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import {
   DEFAULT_GRAPHICS_PRESET,
   DEFAULT_HEAD_BOB,
+  DEFAULT_NARRATION,
   DEFAULT_WALK_SPEED,
   GRAPHICS_PRESETS,
   QUALITY_LEVELS,
@@ -19,6 +20,7 @@ type StoredSettings = {
   graphics: GraphicsSettings;
   walkSpeed: WalkSpeed;
   headBob: boolean;
+  narration: boolean;
 };
 
 type SettingsState = StoredSettings & {
@@ -30,6 +32,7 @@ type SettingsActions = {
   setGraphics: (changes: Partial<GraphicsSettings>) => void;
   setWalkSpeed: (walkSpeed: WalkSpeed) => void;
   setHeadBob: (headBob: boolean) => void;
+  setNarration: (narration: boolean) => void;
   resetDefaults: () => void;
   openSettings: () => void;
   closeSettings: () => void;
@@ -39,6 +42,7 @@ const defaultSettings: StoredSettings = {
   graphics: GRAPHICS_PRESETS[DEFAULT_GRAPHICS_PRESET],
   walkSpeed: DEFAULT_WALK_SPEED,
   headBob: DEFAULT_HEAD_BOB,
+  narration: DEFAULT_NARRATION,
 };
 
 function pickOption<T extends string>(value: unknown, options: T[], fallback: T): T {
@@ -62,6 +66,7 @@ function readStoredSettings(): StoredSettings {
       },
       walkSpeed: pickOption(stored.walkSpeed, WALK_SPEEDS, defaultSettings.walkSpeed),
       headBob: typeof stored.headBob === 'boolean' ? stored.headBob : defaultSettings.headBob,
+      narration: typeof stored.narration === 'boolean' ? stored.narration : defaultSettings.narration,
     };
   } catch {
     return defaultSettings;
@@ -76,6 +81,7 @@ export const useSettingsStore = create<SettingsState & SettingsActions>((set) =>
   setGraphics: (changes) => set((state) => ({ graphics: { ...state.graphics, ...changes } })),
   setWalkSpeed: (walkSpeed) => set({ walkSpeed }),
   setHeadBob: (headBob) => set({ headBob }),
+  setNarration: (narration) => set({ narration }),
   resetDefaults: () => set(defaultSettings),
   openSettings: () => set({ isSettingsOpen: true }),
   closeSettings: () => set({ isSettingsOpen: false }),
@@ -86,6 +92,7 @@ useSettingsStore.subscribe((state) => {
     graphics: state.graphics,
     walkSpeed: state.walkSpeed,
     headBob: state.headBob,
+    narration: state.narration,
   };
 
   try {
