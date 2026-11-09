@@ -140,7 +140,7 @@ function InspectModal({ guidedAnnotationId, onAnnotationOpen }: InspectModalProp
             </AnimatePresence>
 
             {showViewerTools && (
-              <div className='bg-surface-bright border-on-background text-on-background absolute bottom-4 left-4 z-30 flex items-center border-[1.5px] text-[13px] md:bottom-6 md:left-6'>
+              <div className='bg-surface-bright border-on-background text-on-background absolute bottom-4 left-18 z-30 flex items-center border-[1.5px] text-[13px] md:bottom-6 md:left-21'>
                 <span className='hidden px-3.5 py-2 sm:block'>{t('previewControls')}</span>
                 <button
                   type='button'

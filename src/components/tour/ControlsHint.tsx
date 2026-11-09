@@ -7,7 +7,7 @@ export default function ControlsHint() {
   const { t } = useTranslation();
 
   return (
-    <div className='bg-surface-bright/90 border-on-background text-on-background pointer-events-none absolute bottom-4 left-4 z-30 hidden items-center gap-4 border-[1.5px] px-3.5 py-2 text-[13px] md:bottom-6 md:left-6 md:flex'>
+    <div className='bg-surface-bright/90 border-on-background text-on-background pointer-events-none absolute bottom-4 left-18 z-30 hidden items-center gap-4 border-[1.5px] px-3.5 py-2 text-[13px] md:bottom-6 md:left-21 md:flex'>
       <span className='flex items-center gap-1'>
         {['W', 'A', 'S', 'D'].map((key) => (
           <kbd key={key} className={KBD}>
