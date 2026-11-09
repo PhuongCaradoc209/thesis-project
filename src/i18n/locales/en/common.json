@@ -454,5 +454,9 @@
     "leave": "Leave",
     "walk": "walk",
     "cursor": "cursor"
+  },
+  "music": {
+    "on": "Turn music on",
+    "off": "Turn music off"
   }
 }
