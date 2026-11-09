@@ -29,7 +29,6 @@ type ResolvedOrbitSettings = {
 const DEFAULT_ORBIT_RADIUS = 10;
 const DEFAULT_ORBIT_HEIGHT = 8;
 const DEFAULT_ORBIT_DURATION = 5;
-const DEFAULT_ROTATION_SPEED = 14;
 
 function toVector3(value: number[], fallback: [number, number, number]) {
   if (value.length < 3 || value.slice(0, 3).some((coordinate) => !Number.isFinite(coordinate))) {
@@ -39,9 +38,6 @@ function toVector3(value: number[], fallback: [number, number, number]) {
 }
 
 function resolveOrbitSettings(intro: GuidedTourIntro, reduceMotion: boolean): ResolvedOrbitSettings {
-  const angleDistance = Math.abs(intro.endAngle - intro.startAngle);
-  const durationFromSpeed = intro.rotationSpeed ? angleDistance / intro.rotationSpeed : intro.duration;
-
   return {
     center: toVector3(intro.orbitCenter, [0, 0, 0]),
     target: toVector3(intro.lookAt, [0, 1.5, 0]),
@@ -49,7 +45,7 @@ function resolveOrbitSettings(intro: GuidedTourIntro, reduceMotion: boolean): Re
     height: intro.height,
     startAngle: THREE.MathUtils.degToRad(intro.startAngle),
     endAngle: THREE.MathUtils.degToRad(intro.endAngle),
-    duration: reduceMotion ? Math.min(3, durationFromSpeed) : durationFromSpeed,
+    duration: reduceMotion ? Math.min(3, intro.duration) : intro.duration,
   };
 }
 
@@ -163,19 +159,12 @@ export function DevelopmentGuidedCameraDirector() {
     height: { value: intro?.height ?? DEFAULT_ORBIT_HEIGHT, min: -20, max: 100, step: 0.5 },
     startAngle: { value: intro?.startAngle ?? -70, min: -360, max: 360, step: 1 },
     endAngle: { value: intro?.endAngle ?? 70, min: -360, max: 360, step: 1 },
-    rotationSpeed: {
-      value: intro?.rotationSpeed ?? DEFAULT_ROTATION_SPEED,
-      min: 1,
-      max: 90,
-      step: 1,
-      label: 'Speed (deg/s)',
-    },
     duration: {
       value: intro?.duration ?? DEFAULT_ORBIT_DURATION,
       min: 1,
       max: 60,
       step: 0.5,
-      label: 'Duration fallback (s)',
+      label: 'Duration (s)',
     },
   });
 
@@ -189,7 +178,6 @@ export function DevelopmentGuidedCameraDirector() {
       height: controls.height,
       startAngle: controls.startAngle,
       endAngle: controls.endAngle,
-      rotationSpeed: controls.rotationSpeed,
       duration: controls.duration,
     };
   }, [controls, intro]);

@@ -14,7 +14,6 @@ export interface GuidedTourIntro {
   startAngle: number;
   endAngle: number;
   duration: number;
-  rotationSpeed?: number;
   title: string;
   caption?: string;
   audioUrl?: string | null;
@@ -37,6 +36,7 @@ export interface GuidedTourStep {
   hint: string;
   artifactId?: string;
   radius?: number;
+  audioUrl?: string;
   discovery?: GuidedTourDiscovery;
 }
 
@@ -46,6 +46,7 @@ export interface GuidedTour {
   title: string;
   description: string;
   intro?: GuidedTourIntro;
+  completionAudioUrl?: string;
   steps: GuidedTourStep[];
 }
 
