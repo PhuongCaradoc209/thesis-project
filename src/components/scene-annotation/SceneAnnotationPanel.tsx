@@ -38,7 +38,7 @@ export function SceneAnnotationPanel({ annotation, onClose }: SceneAnnotationPan
 
   return (
     <motion.div
-      className='pointer-events-none absolute inset-0 z-30 flex justify-end bg-[#170f09]/15'
+      className='pointer-events-none fixed inset-0 z-55 flex justify-end bg-[#170f09]/15'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
