@@ -440,6 +440,8 @@
     "empty": "This site has no teleport points yet. Walk around to explore."
   },
   "mapPage": {
+    "searchPlaceholder": "Search for a site…",
+    "noResults": "No sites match this name.",
     "label": "Atlas · sheet 01 · {{count}} gates open",
     "title": "Tear the ticket,",
     "titleAccent": "step inside",

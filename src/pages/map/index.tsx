@@ -1,5 +1,6 @@
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TerrainMap from '../../components/map';
 import { MapTicket, MapTicketStrip } from '../../components/map/MapTicket';
@@ -8,12 +9,37 @@ import { formatTicketNumber } from '../../constants/siteDetails';
 
 const TICKET_SPRING = { type: 'spring', stiffness: 320, damping: 30 } as const;
 
+const SEARCH_LANGUAGES = ['vi', 'en'] as const;
+
+// Bỏ dấu tiếng Việt và chữ hoa để "tu duc" khớp với "Tự Đức"
+const normalizeSearchValue = (value: string) =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\u0111/g, 'd')
+    .replace(/\u0110/g, 'D')
+    .toLocaleLowerCase()
+    .trim();
+
 function MapPage() {
   const { t } = useTranslation();
   const [hoveredSiteId, setHoveredSiteId] = useState<string | null>(null);
   const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
+  const [searchKeyword, setSearchKeyword] = useState('');
 
-  const ticketSiteId = selectedSiteId ?? MARKER_DATA[0].id;
+  const filteredSites = useMemo(() => {
+    const keyword = normalizeSearchValue(searchKeyword);
+    if (!keyword) return MARKER_DATA;
+    // So khớp cả tên tiếng Việt và tiếng Anh, không phụ thuộc ngôn ngữ đang chọn
+    return MARKER_DATA.filter((site) =>
+      SEARCH_LANGUAGES.some((lng) => normalizeSearchValue(t(site.nameKey, { lng })).includes(keyword)),
+    );
+  }, [searchKeyword, t]);
+
+  const ticketSiteId =
+    selectedSiteId && filteredSites.some((site) => site.id === selectedSiteId)
+      ? selectedSiteId
+      : (filteredSites[0]?.id ?? selectedSiteId ?? MARKER_DATA[0].id);
   const activeSiteId = hoveredSiteId ?? ticketSiteId;
 
   useEffect(() => {
@@ -41,8 +67,29 @@ function MapPage() {
           <span className='text-primary'>{t('mapPage.titleAccent')}</span>
         </h1>
 
-        <div className='mt-6 flex flex-col gap-3.5'>
-          {MARKER_DATA.map((marker, index) => {
+        <label className='border-on-background bg-surface-bright focus-within:bg-surface-container-high mt-6 flex items-center gap-2.5 border-[1.5px] px-3.5 py-2.5 transition-colors'>
+          <MagnifyingGlassIcon size={18} className='text-on-surface-variant shrink-0' aria-hidden />
+          <input
+            type='search'
+            value={searchKeyword}
+            onChange={(event) => setSearchKeyword(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && filteredSites[0]) setSelectedSiteId(filteredSites[0].id);
+            }}
+            placeholder={t('mapPage.searchPlaceholder')}
+            aria-label={t('mapPage.searchPlaceholder')}
+            className='placeholder:text-on-surface-variant w-full bg-transparent font-mono text-sm tracking-[.04em] outline-none'
+          />
+        </label>
+
+        <div className='mt-3.5 flex flex-col gap-3.5'>
+          {filteredSites.length === 0 && (
+            <p className='text-on-surface-variant border-on-background/40 border-[1.5px] border-dashed px-4 py-5 font-mono text-[13px]'>
+              {t('mapPage.noResults')}
+            </p>
+          )}
+          {filteredSites.map((marker) => {
+            const index = MARKER_DATA.indexOf(marker);
             const isOpen = marker.id === ticketSiteId;
 
             return (
