@@ -3,6 +3,8 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { CapsuleCollider, RigidBody, useRapier } from '@react-three/rapier';
 import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { WALK_SPEED_MPS } from '../../constants/settings';
+import { useSettingsStore } from '../../store/useSettingsStore';
 import { useTourismStore } from '../../store/useTourismStore';
 
 type PlayerProps = {
@@ -38,7 +40,10 @@ function Player({ active = true, initialPosition = [-6, 0, 0], killY = DEFAULT_K
   const frontVector = new THREE.Vector3();
   const sideVector = new THREE.Vector3();
 
-  const SPEED = 2;
+  // Tốc độ đi và head-bob lấy từ Settings (slow 1.5 / normal 2 / fast 3 m/s)
+  const walkSpeed = useSettingsStore((state) => state.walkSpeed);
+  const headBob = useSettingsStore((state) => state.headBob);
+  const SPEED = WALK_SPEED_MPS[walkSpeed];
 
   /**
    * Jump logic
@@ -107,7 +112,7 @@ function Player({ active = true, initialPosition = [-6, 0, 0], killY = DEFAULT_K
     const isMoving = Math.abs(velocity.x) > 0.1 || Math.abs(velocity.z) > 0.1;
 
     let bobbingOffset = 0;
-    if (isMoving) {
+    if (headBob && isMoving) {
       const speedFactor = 8;
       const amplitude = 0.04;
       bobbingOffset = Math.sin(state.clock.elapsedTime * speedFactor) * amplitude;

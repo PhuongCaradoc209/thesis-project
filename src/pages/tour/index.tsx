@@ -27,6 +27,7 @@ import TourControlsOnboarding from '../../components/tour/TourControlsOnboarding
 import { TourToolbar } from '../../components/tour/TourToolbar';
 import TeleportTransition from '../../components/transitions/TeleportTransition';
 import { SCENE_IDS } from '../../constants/markers';
+import { GRASS_INSTANCE_COUNT } from '../../constants/settings';
 import { useGalleryArtifacts } from '../../hooks/useArtifacts';
 import { useGuidedTours } from '../../hooks/useGuidedTours';
 import { useSceneData } from '../../hooks/useScenes';
@@ -41,6 +42,7 @@ const CONTROLS_ONBOARDING_KEY = 'tour-controls-onboarding-seen:v1';
 
 export default function TourPage() {
   const { t, i18n } = useTranslation();
+  const grassDensity = useSettingsStore((state) => state.graphics.grassDensity);
   const { sceneId } = useParams<{ sceneId: string }>();
   const { data, isLoading, isError } = useSceneData(sceneId || null);
   const { data: guidedTours = [], isError: isGuidedToursError } = useGuidedTours(sceneId || null);
@@ -299,7 +301,7 @@ export default function TourPage() {
             fallback={() => null}
             onError={(error) => console.error('[Grass] Failed to create the grass field.', error)}>
             <Suspense fallback={null}>
-              <InstancedGrassField config={scene.floorConfig} />
+              <InstancedGrassField config={scene.floorConfig} count={GRASS_INSTANCE_COUNT[grassDensity]} />
             </Suspense>
           </ModelErrorBoundary>
         )}

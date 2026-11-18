@@ -440,6 +440,8 @@
     "empty": "Địa điểm này chưa có điểm dịch chuyển. Hãy đi bộ để khám phá."
   },
   "mapPage": {
+    "searchPlaceholder": "Tìm địa điểm…",
+    "noResults": "Không tìm thấy địa điểm phù hợp.",
     "label": "Atlas · tờ 01 · {{count}} cổng đang mở",
     "title": "Xé vé,",
     "titleAccent": "vào cổng",

@@ -95,7 +95,9 @@ function FirstFrameReporter({ onFirstFrame }: { onFirstFrame?: () => void }) {
 
 function DevelopmentPerf() {
   const { perfVisible } = useControls('Environment', { perfVisible: { value: true } });
-  return perfVisible ? <Perf position='bottom-left' /> : null;
+  return perfVisible ? (
+    <Perf position='top-left' style={{ top: 'auto', bottom: 24, left: '50%', transform: 'translateX(-50%)' }} />
+  ) : null;
 }
 
 /**
